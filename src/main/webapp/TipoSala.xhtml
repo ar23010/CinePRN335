@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: alexander
+  Date: 17/9/24
+  Time: 10:30
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+    <title>Tipo Sala</title>
+
+    <style type="text/css">
+        table {
+            border-collapse: collapse;
+            background-color: white;
+            overflow: hidden;
+            width: 500px;
+            border-radius: 10px;
+        }
+        th, td {
+            font-family: 'Motnserrat', sans-serif;
+            text-align: left;
+            font-size: 12px;
+            padding: 10px;
+        }
+        th {
+            background-color: #7691ab;
+            color: white;
+        }
+    </style>
+
+</h:head>
+
+<h:body>
+
+    <h1>Tipo Sala</h1>
+
+    <h:form id="frmTabla">
+
+    <h:dataTable value="#{frmTipoSala.registros}" var="r">
+        <h:column>
+
+            <f:facet name="header">
+                Id
+            </f:facet>
+            <h:outputText value="#{r.idTipoSala}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                Nombre
+            </f:facet>
+            <h:outputText value="#{r.nombre}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                Estado
+            </f:facet>
+            <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                Expresión Regular
+            </f:facet>
+            <h:outputText value="#{r.expresionRegular}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                Comentarios
+            </f:facet>
+            <h:outputText value="#{r.comentarios}"/>
+        </h:column>
+        <h:column>
+            <h:commandButton value="Seleccionar" actionListener="#{frmTipoSala.btnSeleccionarRegistroHandler}"/>
+        </h:column>
+    </h:dataTable>
+        </h:form>
+
+
+    <h:panelGroup>
+<h:panelGrid columns="2" rendered="#{not empty frmTipoSala.registro}">
+    <h:outputLabel value="ID" for="txtId"/>
+    <h:inputText id="txtId" value="#{frmTipoSala.registro.idTipoSala}" readonly="true" disabled="id"/>
+    <h:outputLabel value="Nombre" for="txtNombre"/>
+    <h:inputText size="70" id="txtNombre" value="#{frmTipoSala.registro.nombre}"/>
+    <h:outputLabel for="chkActivo" value="Activo"/>
+    <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoSala.registro.activo}"/>
+    <h:outputLabel for="txtExpresionRegular" value="Expresion Regular"/>
+    <h:outputText id="txtExpresionRegular" value="#{frmTipoSala.registro.expresionRegular}"/>
+    <h:outputLabel for="txtComentarios" value="Comentarios"/>
+    <h:outputText id="txtComentarios" value="#{frmTipoSala.registro.comentarios}"/>
+
+</h:panelGrid>
+</h:panelGroup>
+
+</h:body>
+
+</html>
