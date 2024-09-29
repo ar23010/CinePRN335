@@ -63,5 +63,43 @@ public abstract class AbstractDataPersist<T> {
         return query.getResultList();
     }
 
+
+    public T update(T entity) throws IllegalStateException, IllegalArgumentException {
+        EntityManager em = null;
+        if (entity == null) {
+            throw new IllegalArgumentException("La entidad a persistir no puede ser nula");
+        }
+        try {
+            em = getEntityManager();
+            if(em == null){
+                throw new IllegalStateException("Error al acceder al repositorio");
+            }
+         return  em.merge(entity);
+        } catch(Exception e){
+            throw new IllegalStateException("Error al aaceder al repositorio", e);
+        }
+
+
+    }
+
+
+    public void delete(T entity) throws IllegalStateException, IllegalArgumentException {
+        EntityManager em = null;
+        if (entity == null) {
+            throw new IllegalArgumentException("La entidad a persistir no puede ser nula");
+        }
+        try {
+            em = getEntityManager();
+            if(em == null){
+                throw new IllegalStateException("Error al acceder al repositorio");
+            }
+            em.remove(em.merge(entity));
+        } catch(Exception e){
+            throw new IllegalStateException("Error al aaceder al repositorio", e);
+        }
+
+    }
+
+
 }
 

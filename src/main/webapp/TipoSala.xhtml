@@ -5,13 +5,12 @@
   Date: 17/9/24
   Time: 10:30
 -->
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+
 <h:head>
     <title>Tipo Sala</title>
 
@@ -76,14 +75,24 @@
             <h:outputText value="#{r.comentarios}"/>
         </h:column>
         <h:column>
-            <h:commandButton value="Seleccionar" actionListener="#{frmTipoSala.btnSeleccionarRegistroHandler}"/>
+            <h:commandButton value="Seleccionar" actionListener="#{frmTipoSala.btnSeleccionarRegistroHandler(r.idTipoSala)}" >
+            <f:ajax render="pnlDetalle" execute="@form"/>
+            </h:commandButton>
         </h:column>
     </h:dataTable>
+
+        <h:panelGroup>
+            <h:commandButton value='Cancelar' actionListener="#{frmTipoSala.btnCancelarHandler}"/>
+            <h:commandButton value='Nuevo' actionListener="#{frmTipoSala.btnNuevoHandler}"/>
+        </h:panelGroup>
+
+
         </h:form>
 
 
-    <h:panelGroup>
-<h:panelGrid columns="2" rendered="#{not empty frmTipoSala.registro}">
+    <h:panelGroup id="pnlDetalle">
+        <h:form id="frmDetalle" rendered="#{not empty frmTipoSala.registro}">
+<h:panelGrid columns="2" >
     <h:outputLabel value="ID" for="txtId"/>
     <h:inputText id="txtId" value="#{frmTipoSala.registro.idTipoSala}" readonly="true" disabled="id"/>
     <h:outputLabel value="Nombre" for="txtNombre"/>
@@ -91,11 +100,17 @@
     <h:outputLabel for="chkActivo" value="Activo"/>
     <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoSala.registro.activo}"/>
     <h:outputLabel for="txtExpresionRegular" value="Expresion Regular"/>
-    <h:outputText id="txtExpresionRegular" value="#{frmTipoSala.registro.expresionRegular}"/>
+    <h:inputText id="txtExpresionRegular" value="#{frmTipoSala.registro.expresionRegular}"/>
     <h:outputLabel for="txtComentarios" value="Comentarios"/>
-    <h:outputText id="txtComentarios" value="#{frmTipoSala.registro.comentarios}"/>
-
+    <h:inputTextarea id="txtComentarios" value="#{frmTipoSala.registro.comentarios}" cols="70" rows="3"/>
 </h:panelGrid>
+        <h:panelGrid>
+            <h:messages showSummary="true" showDetail="true"/>
+            <h:commandButton value="Guardar" actionListener="#{frmTipoSala.btnGuardarHandler}" rendered="#{frmTipoSala.estado=='CREAR'}"/>
+            <h:commandButton value="Modificar" actionListener="#{frmTipoSala.btnModificarHandler}" rendered="#{frmTipoSala.estado=='MODIFICAR'}"/>
+            <h:commandButton value="Eliminar" actionListener="#{frmTipoSala.btnEliminarHandler}" rendered="#{frmTipoSala.estado=='MODIFICAR'}"/>
+        </h:panelGrid>
+        </h:form>
 </h:panelGroup>
 
 </h:body>
