@@ -7,7 +7,7 @@
 
     <persistence-unit name="CinePU" transaction-type="JTA">
         <jta-data-source>jdbc/cineprn335</jta-data-source>
-        <class>sv.edu.ues.occ.ingenieria.prn335_2024.cineprn335.entity.TipoSala</class>
+        <class>sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.TipoSala</class>
 
     </persistence-unit>
 </persistence>
