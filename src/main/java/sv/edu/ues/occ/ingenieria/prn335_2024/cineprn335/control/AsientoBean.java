@@ -5,13 +5,12 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cineprn335.entity.Asiento;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cineprn335.entity.Pelicula;
 
 import java.io.Serializable;
 
 @Stateless
 @LocalBean
-public class AsientoBean extends AbstractDataPersist<Asiento> implements Serializable {
+public class AsientoBean extends AbstractDataPersistence<Asiento> implements Serializable {
     @PersistenceContext(unitName = "CinePU")
     EntityManager em;
 

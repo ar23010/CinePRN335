@@ -1,21 +1,22 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cineprn335.control;
 
-import jakarta.enterprise.inject.Typed;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
+
 import java.util.List;
 
-public abstract class AbstractDataPersist<T> {
+public abstract class AbstractDataPersistence<T> {
 
     public abstract EntityManager getEntityManager();
 
     Class tipoDatos;
 
-    public AbstractDataPersist(Class tipoDatos) {
+    public AbstractDataPersistence(Class tipoDatos) {
         this.tipoDatos = tipoDatos;
     }
 
@@ -52,16 +53,26 @@ public abstract class AbstractDataPersist<T> {
         return (T) em.find(tipoDatos, id);
     }
 
-    public List<T> findRange(int first, int max) throws IllegalStateException, IllegalArgumentException {
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        CriteriaQuery q = cb.createQuery(tipoDatos);
-        Root<T> raíz = q.from(tipoDatos);
-        CriteriaQuery cq = q.select(raíz);
-        TypedQuery query = getEntityManager().createQuery(cq);
-        query.setFirstResult(first);
-        query.setMaxResults(max);
-        return query.getResultList();
-    }
+   public List<T> findRange(int first, int max) throws IllegalArgumentException, IllegalStateException {
+        EntityManager em = null;
+        if (first < 0 || first > max) {
+            throw new IllegalArgumentException("First no puede ser negativo ni mayor que max");
+        }
+        try{
+            em = getEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(tipoDatos);
+            Root<T> root = cq.from(tipoDatos);
+            cq.select(root);
+            TypedQuery<T> q = em.createQuery(cq);
+            q.setFirstResult(first);
+            q.setMaxResults(max);
+            return q.getResultList();
+        }catch(Exception e){
+            throw new IllegalStateException("Error al acceder al repositorio", e);
+        }
+   }
+
 
 
     public T update(T entity) throws IllegalStateException, IllegalArgumentException {
@@ -93,11 +104,38 @@ public abstract class AbstractDataPersist<T> {
             if(em == null){
                 throw new IllegalStateException("Error al acceder al repositorio");
             }
-            em.remove(em.merge(entity));
+            em.remove(entity);
         } catch(Exception e){
             throw new IllegalStateException("Error al aaceder al repositorio", e);
         }
 
+    }
+
+    public Long count() throws IllegalStateException, IllegalArgumentException {
+        EntityManager em = null;
+
+        try{
+            em = getEntityManager();
+
+            if(em == null){
+                throw new IllegalStateException("Error al acceder al repositorio");
+            }
+            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+            Root<T> raiz = cq.from(tipoDatos);
+            cq.select(cb.count(raiz));
+
+            TypedQuery<Long> q = em.createQuery(cq);
+            return q.getSingleResult();
+        } catch(Exception e){
+            throw new IllegalStateException("Error al aaceder al repositorio", e);
+        }
+
+    }
+
+
+    public String imprimirCarnet() {
+        return "AR23010";
     }
 
 

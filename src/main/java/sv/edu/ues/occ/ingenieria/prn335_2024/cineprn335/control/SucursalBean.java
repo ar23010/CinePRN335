@@ -4,14 +4,13 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cineprn335.entity.Pelicula;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cineprn335.entity.Sucursal;
 
 import java.io.Serializable;
 
 @Stateless
 @LocalBean
-public class SucursalBean extends AbstractDataPersist<Sucursal> implements Serializable {
+public class SucursalBean extends AbstractDataPersistence<Sucursal> implements Serializable {
     @PersistenceContext(unitName = "CinePU")
     EntityManager em;
 
