@@ -1,118 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Created by IntelliJ IDEA.
-  User: alexander
-  Date: 17/9/24
-  Time: 10:30
--->
-
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-
-
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Tipo Sala</title>
-
-    <style type="text/css">
-        table {
-            border-collapse: collapse;
-            background-color: white;
-            overflow: hidden;
-            width: 500px;
-            border-radius: 10px;
-        }
-        th, td {
-            font-family: 'Motnserrat', sans-serif;
-            text-align: left;
-            font-size: 12px;
-            padding: 10px;
-        }
-        th {
-            background-color: #7691ab;
-            color: white;
-        }
-    </style>
-
 </h:head>
-
 <h:body>
-
-    <h1>Tipo Sala</h1>
-
-    <h:form id="frmTabla">
-
-    <h:dataTable value="#{frmTipoSala.registros}" var="r">
-        <h:column>
-
-            <f:facet name="header">
-                Id
-            </f:facet>
-            <h:outputText value="#{r.idTipoSala}"/>
-        </h:column>
-        <h:column>
-            <f:facet name="header">
-                Nombre
-            </f:facet>
-            <h:outputText value="#{r.nombre}"/>
-        </h:column>
-        <h:column>
-            <f:facet name="header">
-                Estado
-            </f:facet>
-            <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
-        </h:column>
-        <h:column>
-            <f:facet name="header">
-                Expresión Regular
-            </f:facet>
-            <h:outputText value="#{r.expresionRegular}"/>
-        </h:column>
-        <h:column>
-            <f:facet name="header">
-                Comentarios
-            </f:facet>
-            <h:outputText value="#{r.comentarios}"/>
-        </h:column>
-        <h:column>
-            <h:commandButton value="Seleccionar" actionListener="#{frmTipoSala.btnSeleccionarRegistroHandler(r.idTipoSala)}" >
-            <f:ajax render="pnlDetalle" execute="@form"/>
-            </h:commandButton>
-        </h:column>
-    </h:dataTable>
-
-        <h:panelGroup>
-            <h:commandButton value='Cancelar' actionListener="#{frmTipoSala.btnCancelarHandler}"/>
-            <h:commandButton value='Nuevo' actionListener="#{frmTipoSala.btnNuevoHandler}"/>
-        </h:panelGroup>
-
-
-        </h:form>
-
-
-    <h:panelGroup id="pnlDetalle">
-        <h:form id="frmDetalle" rendered="#{not empty frmTipoSala.registro}">
-<h:panelGrid columns="2" >
-    <h:outputLabel value="ID" for="txtId"/>
-    <h:inputText id="txtId" value="#{frmTipoSala.registro.idTipoSala}" readonly="true" disabled="id"/>
-    <h:outputLabel value="Nombre" for="txtNombre"/>
-    <h:inputText size="70" id="txtNombre" value="#{frmTipoSala.registro.nombre}"/>
-    <h:outputLabel for="chkActivo" value="Activo"/>
-    <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoSala.registro.activo}"/>
-    <h:outputLabel for="txtExpresionRegular" value="Expresion Regular"/>
-    <h:inputText id="txtExpresionRegular" value="#{frmTipoSala.registro.expresionRegular}"/>
-    <h:outputLabel for="txtComentarios" value="Comentarios"/>
-    <h:inputTextarea id="txtComentarios" value="#{frmTipoSala.registro.comentarios}" cols="70" rows="3"/>
-</h:panelGrid>
-        <h:panelGrid>
-            <h:messages showSummary="true" showDetail="true"/>
-            <h:commandButton value="Guardar" actionListener="#{frmTipoSala.btnGuardarHandler}" rendered="#{frmTipoSala.estado=='CREAR'}"/>
-            <h:commandButton value="Modificar" actionListener="#{frmTipoSala.btnModificarHandler}" rendered="#{frmTipoSala.estado=='MODIFICAR'}"/>
-            <h:commandButton value="Eliminar" actionListener="#{frmTipoSala.btnEliminarHandler}" rendered="#{frmTipoSala.estado=='MODIFICAR'}"/>
+    <h:form id="frmTable">
+        <p:dataTable
+                value="#{frmTipoSala.modelo}"
+                var="r"
+                rows="10"
+                lazy="true"
+                selectionMode="single"
+                selection="#{frmTipoSala.registro}"
+                paginator="true"
+        >
+            <p:ajax event="rowSelect" update=":pnlDetalle" process="@this"/>
+            <p:column headerText="ID">
+                <h:outputText value="#{r.idTipoSala}"/>
+            </p:column>
+            <p:column headerText="Nombre">
+                <h:outputText value="#{r.nombre}"/>
+            </p:column>
+            <p:column headerText="Comentarios">
+                <h:outputText value="#{r.comentarios}"/>
+            </p:column>
+        </p:dataTable>
+        <h:panelGrid columns="3">
+            <p:commandButton ajax="true"
+                             value="Nuevo"
+                             process="@this"
+                             update=":pnlDetalle"
+                             actionListener="#{frmTipoSala.btnNuevoHandler}"
+            />
+            <p:commandButton
+                    value="Cancelar"
+                    ajax="true"
+                    actionListener="#{frmTipoSala.btnCancelarHandler}"
+                    update=":pnlDetalle"
+                    process="@this"/>
         </h:panelGrid>
+    </h:form>
+    <h:panelGroup id="pnlDetalle" styleClass="detalle">
+        <h:form id="frmDetalle" styleClass="detalle" rendered="#{not empty frmTipoSala.registro}">
+            <p:panelGrid columns="2">
+                <p:outputLabel value="ID" for="txtIdTipoReserva"/>
+                <h:inputText id="txtIdTipoReserva"
+                             value="#{frmTipoSala.registro.idTipoSala}" readonly="true" disabled="true"/>
+                <p:outputLabel value="Nombre" for="txtNombre"/>
+                <h:inputText size="70" id="txtNombre"
+                             value="#{frmTipoSala.registro.nombre}"/>
+                <p:outputLabel for="chkActivo" value="Activo"/>
+                <h:selectBooleanCheckbox id="chkActivo"
+                                         value="#{frmTipoSala.registro.activo}"/>
+                <p:outputLabel for="txtComentarios" value="Comentarios"/>
+                <h:inputTextarea id="txtComentarios"
+                                 value="#{frmTipoSala.registro.comentarios}" cols="70" rows="3"/>
+            </p:panelGrid>
+            <h:panelGrid columns="3">
+                <p:commandButton value="Guarda" ajax="true"
+                                 process="@form"
+                                 update=":pnlDetalle :frmTable"
+                                 actionListener="#{frmTipoSala.btnCrearHandler}"
+                                 rendered="#{frmTipoSala.estado == 'CREAR'}"
+                />
+                <p:commandButton value="Modificar" ajax="true"
+                                 process="@form"
+                                 update=":pnlDetalle :frmTable"
+                                 rendered="#{frmTipoSala.estado == 'MODIFICAR'}"
+                                 actionListener="#{frmTipoSala.btnModificarHandler}"/>
+                <p:commandButton value="Eliminar" ajax="true"
+                                 process="@form"
+                                 update=":pnlDetalle :frmTable"
+                                 rendered="#{frmTipoSala.estado == 'MODIFICAR'}"
+                                 actionListener="#{frmTipoSala.btnEliminarHandler}"/>
+            </h:panelGrid>
         </h:form>
-</h:panelGroup>
-
+    </h:panelGroup>
 </h:body>
-
 </html>

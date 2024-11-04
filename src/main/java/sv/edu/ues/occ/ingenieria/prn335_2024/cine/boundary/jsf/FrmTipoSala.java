@@ -1,25 +1,52 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.TipoSalaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.TipoSala;
-
 import java.io.Serializable;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Named
 @ViewScoped
-public class FrmTipoSala implements Serializable {
+public class FrmTipoSala extends AbstractForm<TipoSala> implements Serializable {
+
+   @Inject
+   TipoSalaBean tsBean;
 
 
-    @Inject
+   @Inject
+   FacesContext facesContext;
+
+
+    @Override
+    public Object getId(TipoSala Object) {
+        return Object.getIdTipoSala();
+    }
+
+    @Override
+    public AbstractDataPersistence<TipoSala> getDataBean() {
+        return tsBean;
+    }
+
+    @Override
+    public FacesContext facesContext() {
+        return facesContext;
+    }
+
+    @Override
+    public TipoSala createNewRegistro() {
+        return new TipoSala();
+    }
+
+
+
+
+   /*@Inject
     TipoSalaBean tsBean;
 
     @Inject
@@ -134,5 +161,5 @@ public class FrmTipoSala implements Serializable {
         this.estado=ESTADO_CRUD.NINGUNO;
         this.registros=tsBean.findRange(0, 100000000);
 
-    }
+    }*/
 }
