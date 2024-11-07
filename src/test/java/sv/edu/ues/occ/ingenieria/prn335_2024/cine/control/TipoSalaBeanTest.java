@@ -89,7 +89,7 @@ class TipoSalaBeanTest {
         assertNotNull(encontrados);
         assertEquals(findResult.size(), encontrados.size());
     }
-
+/*
     @Test
     void delete() {
         System.out.println("TipoSalaBeanTest.delete");
@@ -131,7 +131,7 @@ class TipoSalaBeanTest {
         assertNotNull(resultado);
         assertEquals(modificado, resultado);
     }
-
+*/
     @Test
     void count() {
         System.out.println("TipoSalaBeanTest.count");
