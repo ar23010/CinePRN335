@@ -104,7 +104,7 @@ public abstract class AbstractDataPersistence<T> {
             if(em == null){
                 throw new IllegalStateException("Error al acceder al repositorio");
             }
-            em.remove(entity);
+            em.remove(em.merge(entity));
         } catch(Exception e){
             throw new IllegalStateException("Error al aaceder al repositorio", e);
         }
