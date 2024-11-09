@@ -35,11 +35,11 @@
         <h:panelGrid columns="#{cc.attrs.frm.estado!='NINGUNO'?'2':'1'}">
             <p:commandButton ajax="true"
                              actionListener="#{cc.attrs.frm.btnNuevoHandler}"
-                             value=" Nuevo "
+                             value=" #{abstractform['abstractform.new']} "
                              process="@this" update="#{cc.attrs.actualizar}"/>
             <p:commandButton ajax="true"
                              actionListener="#{cc.attrs.frm.btnCancelarHandler}"
-                             value=" Cancelar "
+                             value=" #{abstractform['abstractform.cancel']} "
                              process="@this" update="#{cc.attrs.actualizar}"
                              rendered="#{cc.attrs.frm.estado!='NINGUNO'}"
             />

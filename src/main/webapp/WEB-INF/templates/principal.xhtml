@@ -32,6 +32,17 @@
             </h:form>
         </div>
         <div class="ui-g-12 ui-md-10 ui-g-nopad">
+            <div class="ui-g-12" id="session">
+                <p:toolbar>
+                    <p:toolbarGroup align="right">
+                        <p:selectOneMenu>
+                            <c:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Idioma"/>
+                        </p:selectOneMenu>
+                        <p:commandButton type="button" icon="pi pi-user" styleClass="mr-2"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+            </div>
+
             <div class="ui-g-12">
                 <h1>
                     <f:insert name="titulo">
@@ -48,9 +59,11 @@
         </div>
         </div>
 
-        <div class="ui-g-12" id="piedepagina">
+
+        <div class="ui-g-12" id="piedepagina" align="center">
             Todos los derechos reservados por la empresa... @2024
         </div>
+
     </div>
 
     <f:insert name="extras">
