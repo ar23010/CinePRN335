@@ -1,83 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="primefaces">
-<h:head>
-    <title>Tipo Producto</title>
-</h:head>
-<h:body>
-    <h:form id="frmTable">
-        <p:dataTable
-                value="#{frmTipoProducto.modelo}"
-                var="r"
-                rows="10"
-                lazy="true"
-                selectionMode="single"
-                selection="#{frmTipoProducto.registro}"
-                paginator="true"
-        >
-            <p:ajax event="rowSelect" update=":pnlDetalle" process="@this"/>
-            <p:column headerText="ID">
-                <h:outputText value="#{r.idTipoProducto}"/>
-            </p:column>
-            <p:column headerText="Nombre">
-                <h:outputText value="#{r.nombre}"/>
-            </p:column>
-            <p:column headerText="Comentarios">
-                <h:outputText value="#{r.comentarios}"/>
-            </p:column>
-        </p:dataTable>
-        <h:panelGrid columns="3">
-            <p:commandButton ajax="true"
-                             value="Nuevo"
-                             process="@this"
-                             update=":pnlDetalle"
-                             actionListener="#{frmTipoProducto.btnNuevoHandler}"
-            />
-            <p:commandButton
-                    value="Cancelar"
-                    ajax="true"
-                    actionListener="#{frmTipoProducto.btnCancelarHandler}"
-                    update=":pnlDetalle"
-                    process="@this"/>
+
+
+
+<f:composition xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:f="jakarta.faces.facelets"
+               xmlns:h="jakarta.faces.html"
+               xmlns:p="primefaces"
+               xmlns:crud="jakarta.faces.composite/crud"
+               template="WEB-INF/templates/principal.xhtml"
+>
+    <f:define name="titulo">
+        Tipo de Producto
+    </f:define>
+
+    <f:define name="cuerpo">
+
+        <h:panelGrid>
+            <h:panelGroup id="pnlTabla">
+                <h:form id="frmTabla">
+                    <h:panelGrid>
+                        <p:dataTable value="#{frmTipoProducto.modelo}"
+                                     rows="10"
+                                     selection="#{frmTipoProducto.registro}"
+                                     rendered="#{frmTipoProducto.estado=='NINGUNO'}"
+                                     var="r"
+                                     lazy="true" paginator="true" selectionMode="single"
+
+                        >
+                            <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"/>
+                            <p:column headerText="ID">
+                                <h:outputText value="#{r.idTipoProducto}"/>
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{r.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Estado">
+                                <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <h:panelGrid>
+                            <crud:botonesTop frm="#{frmTipoProducto}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:form>
+            </h:panelGroup>
+
+            <h:panelGroup id="pnlDetalle">
+                <h:panelGrid>
+                    <h:form id="frmDetalle" rendered="#{frmTipoProducto.estado!='NINGUNO'}">
+                        <h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="ID" for="txtId"/>
+                                <p:inputText id="txtId" disabled="true" readonly="true"
+                                             value="#{frmTipoProducto.registro.idTipoProducto}"/>
+                                <p:outputLabel value="Nombre" for="txtNombre"/>
+                                <p:inputText id="txtNombre" value="#{frmTipoProducto.registro.nombre}" size="70"/>
+                                <p:outputLabel value="Activo" for="chkActivo"/>
+                                <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoProducto.registro.activo}"/>
+                                <p:outputLabel value="Comentarios" for="txtComentarios"/>
+                                <h:inputTextarea id="txtComentarios" value="#{frmTipoProducto.registro.comentarios}" cols="70" rows="3"/>
+                            </h:panelGrid>
+                            <p:messages/>
+                            <h:panelGrid columns="#{frmTipoProducto.estado=='CREAR'?'1':'2'}">
+                                <p:commandButton value="Guardar Tipo de Producto" ajax="true"
+                                                 process="@form" update=":pnlDetalle :pnlTabla"
+                                                 rendered="#{frmTipoProducto.estado=='CREAR'}"
+                                                 actionListener="#{frmTipoProducto.btnCrearHandler}"/>
+
+                                <p:commandButton value="Modificar Tipo de Producto" ajax="true"
+                                                 process="@form" update=":pnlDetalle :pnlTabla"
+                                                 rendered="#{frmTipoProducto.estado=='MODIFICAR'}"
+                                                 actionListener="#{frmTipoProducto.btnModificarHandler}"/>
+
+                                <p:commandButton value="Eliminar Tipo de Producto" ajax="true"
+                                                 process="@form" update=":pnlDetalle :pnlTabla"
+                                                 rendered="#{frmTipoProducto.estado=='MODIFICAR'}"
+                                                 actionListener="#{frmTipoProducto.btnEliminarHandler}"/>
+
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>
+                </h:panelGrid>
+            </h:panelGroup>
         </h:panelGrid>
-    </h:form>
-    <h:panelGroup id="pnlDetalle" styleClass="detalle">
-        <h:form id="frmDetalle" styleClass="detalle" rendered="#{not empty frmTipoProducto.registro}">
-            <p:panelGrid columns="2">
-                <p:outputLabel value="ID" for="txtIdTipoReserva"/>
-                <h:inputText id="txtIdTipoReserva"
-                             value="#{frmTipoProducto.registro.idTipoProducto}" readonly="true" disabled="true"/>
-                <p:outputLabel value="Nombre" for="txtNombre"/>
-                <h:inputText size="70" id="txtNombre"
-                             value="#{frmTipoProducto.registro.nombre}"/>
-                <p:outputLabel for="chkActivo" value="Activo"/>
-                <h:selectBooleanCheckbox id="chkActivo"
-                                         value="#{frmTipoProducto.registro.activo}"/>
-                <p:outputLabel for="txtComentarios" value="Comentarios"/>
-                <h:inputTextarea id="txtComentarios"
-                                 value="#{frmTipoProducto.registro.comentarios}" cols="70" rows="3"/>
-            </p:panelGrid>
-            <h:panelGrid columns="3">
-                <p:commandButton value="Guarda" ajax="true"
-                                 process="@form"
-                                 update=":pnlDetalle :frmTable"
-                                 actionListener="#{frmTipoProducto.btnCrearHandler}"
-                                 rendered="#{frmTipoProducto.estado == 'CREAR'}"
-                />
-                <p:commandButton value="Modificar" ajax="true"
-                                 process="@form"
-                                 update=":pnlDetalle :frmTable"
-                                 rendered="#{frmTipoProducto.estado == 'MODIFICAR'}"
-                                 actionListener="#{frmTipoProducto.btnModificarHandler}"/>
-                <p:commandButton value="Eliminar" ajax="true"
-                                 process="@form"
-                                 update=":pnlDetalle :frmTable"
-                                 rendered="#{frmTipoProducto.estado == 'MODIFICAR'}"
-                                 actionListener="#{frmTipoProducto.btnEliminarHandler}"/>
-            </h:panelGrid>
-        </h:form>
-    </h:panelGroup>
-</h:body>
-</html>
+    </f:define>
+</f:composition>
