@@ -35,10 +35,18 @@
             <div class="ui-g-12" id="session">
                 <p:toolbar>
                     <p:toolbarGroup align="right">
-                        <p:selectOneMenu>
+                        <h:form id="frmIdioma">
+                        <p:selectOneMenu value="${sesionUsuario.idiomaSeleccionado}"
+                                    valueChangeListener="#{sesionUsuario.cambiarIdioma}"
+                        >
                             <c:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Idioma"/>
+                            <c:selectItems value="#{sesionUsuario.idiomas.entrySet()}" var="idioma"
+                                           itemLabel="#{idioma.key}"
+                                           itemValue="#{idioma.key}"/>
+                            <c:ajax execute="@form" render="@all"/>
                         </p:selectOneMenu>
                         <p:commandButton type="button" icon="pi pi-user" styleClass="mr-2"/>
+                        </h:form>
                     </p:toolbarGroup>
                 </p:toolbar>
             </div>

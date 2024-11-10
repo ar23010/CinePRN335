@@ -1,6 +1,5 @@
 body{
-    background-color: #857d71;
-    color: #FFFFFF;
+    background-image: url("https://articles-img.sftcdn.net/auto-mapping-folder/sites/2/2023/03/fondo-paisaje-blanco-y-negro.jpg");
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
@@ -9,5 +8,5 @@ body{
 
 h1{
     text-align: center;
-    color: #FFFFFF;
+    color: #000000;
 }

@@ -23,6 +23,7 @@ public abstract class AbstractForm<T> implements Serializable {
     protected abstract T createNewRegistro();
     protected LazyDataModel<T> modelo;
 
+
     @PostConstruct
     public void inicializar() {
         estado = ESTADO_CRUD.NINGUNO;

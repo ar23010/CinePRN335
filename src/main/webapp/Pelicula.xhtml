@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<f:composition xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:f="jakarta.faces.facelets"
+               xmlns:h="jakarta.faces.html"
+               xmlns:p="primefaces"
+               xmlns:c="jakarta.faces.core"
+               xmlns:crud="jakarta.faces.composite/crud"
+               template="WEB-INF/templates/principal.xhtml"
+>
+    <f:define name="titulo">
+        Pelicula
+    </f:define>
+
+    <f:define name="cuerpo">
+
+        <h:panelGrid>
+            <h:panelGroup id="pnlTabla">
+                <h:form id="frmTabla">
+                    <h:panelGrid>
+                        <p:dataTable value="#{frmPelicula.modelo}"
+                                     rows="10"
+                                     selection="#{frmPelicula.registro}"
+                                     rendered="#{frmPelicula.estado=='NINGUNO'}"
+                                     var="r"
+                                     lazy="true" paginator="true" selectionMode="single"
+
+                        >
+                            <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"/>
+                            <p:column headerText="ID">
+                                <h:outputText value="#{r.idPelicula}"/>
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{r.nombre}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <h:panelGrid>
+                            <crud:botonesTop frm="#{frmPelicula}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:form>
+            </h:panelGroup>
+
+            <h:panelGroup id="pnlDetalle">
+
+                <p:tabView id="tabDetalle" cache="false" dynamic="true" rendered="#{frmPelicula.estado!='NINGUNO'}">
+                    <p:ajax process="@this" event="tabChange" listener="#{frmPelicula.cambiarTab}"/>
+                    <p:tab title="Generalidades" closable="false">
+                        <h:panelGrid>
+                            <h:form id="frmDetalle" >
+                                <h:panelGrid>
+                                    <h:panelGrid columns="2">
+                                        <p:outputLabel value="ID" for="txtId"/>
+                                        <p:inputText id="txtId" disabled="true" readonly="true"
+                                                     value="#{frmPelicula.registro.idPelicula}"/>
+                                        <p:outputLabel value="Nombre" for="txtNombre"/>
+                                        <p:inputText id="txtNombre" value="#{frmPelicula.registro.nombre}" size="70"/>
+                                        <p:outputLabel value="Sipnosis" for="txtSipnosis"/>
+                                        <h:inputTextarea id="txtSipnosis" value="#{frmPelicula.registro.sinopsis}" cols="70" rows="3"/>
+                                    </h:panelGrid>
+                                    <p:messages/>
+                                    <h:panelGrid columns="#{frmPelicula.estado=='CREAR'?'1':'2'}">
+                                        <p:commandButton value="Guardar pelicula" ajax="true"
+                                                         process="@form" update=":pnlDetalle :pnlTabla"
+                                                         rendered="#{frmPelicula.estado=='CREAR'}"
+                                                         actionListener="#{frmPelicula.btnCrearHandler}"/>
+
+                                        <p:commandButton value="Modificar Pelicula" ajax="true"
+                                                         process="@form" update=":pnlDetalle :pnlTabla"
+                                                         rendered="#{frmPelicula.estado=='MODIFICAR'}"
+                                                         actionListener="#{frmPelicula.btnModificarHandler}"/>
+
+                                        <p:commandButton value="Eliminar Pelicula" ajax="true"
+                                                         process="@form" update=":pnlDetalle :pnlTabla"
+                                                         rendered="#{frmPelicula.estado=='MODIFICAR'}"
+                                                         actionListener="#{frmPelicula.btnEliminarHandler}"/>
+
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </h:form>
+                        </h:panelGrid>
+
+
+                    </p:tab>
+                    <p:tab title="Tipos" disabled="#{frmPelicula.estado!='MODIFICAR'}">
+                        <h:panelGrid>
+                        <h:panelGroup id="pnlTablaC">
+                        <h:form id="frmTablaC">
+                        <h:panelGrid>
+                        <p:dataTable value="#{frmPelicula.frmPeliculaCaracteristica.modelo}"
+                                     rows="10"
+                                     selection="#{frmPelicula.frmPeliculaCaracteristica.registro}"
+                                     rendered="#{frmPelicula.frmPeliculaCaracteristica.estado=='NINGUNO'}"
+                                     var="rc"
+                                     lazy="true" paginator="true" selectionMode="single"
+
+                        >
+                        <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC" process="@this"/>
+                        <p:column headerText="ID">
+                            <h:outputText value="#{rc.idPeliculaCaracteristica}"/>
+                        </p:column>
+                            <p:column headerText="Tipo de Pelicula">
+                                <h:outputText value="#{rc.idTipoPelicula.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Valor">
+                                <h:outputText value="#{rc.valor}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                            <h:panelGrid>
+                                <crud:botonesTop frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        </h:form>
+                        </h:panelGroup>
+                            <h:panelGroup id="pnlDetalleC">
+                                <h:panelGrid rendered="#{frmPelicula.frmPeliculaCaracteristica.estado!='NINGUNO'}">
+                                    <h:form id="frmDetalleC" >
+                                        <h:panelGrid>
+                                            <h:panelGrid columns="2">
+                                                <p:outputLabel value="ID" for="txtId"/>
+                                                <p:inputText id="txtIdPeliculaCaracteristica" disabled="true" readonly="true"
+                                                             value="#{frmPelicula.frmPeliculaCaracteristica.registro.idPeliculaCaracteristica}"/>
+                                                <p:outputLabel value="Tipo de Pelicula" for="lstTipoPelicula"/>
+                                                <h:selectOneMenu id="lstTipoPelicula" valuie="#{frmPelicula.frmPeliculaCaracteristica.idTipoPeliculaSeleccionado}">
+                                                    <!-- Cambiar C por f y f por ui -->
+                                                    <c:selectItems value="#{frmPelicula.frmPeliculaCaracteristica.tipoPeliculaList}" var="tp"
+                                                                        itemLabel="#{tp.nombre}" itemValue="#{tp.idTipoPelicula}"/>
+                                                    <c:ajax execute="@this" render="txtValor"/>
+                                                </h:selectOneMenu>
+
+                                                <p:outputLabel value="valor" for="txtValor"/>
+                                                <h:inputTextarea id="txtValor"
+                                                                 validator="#{frmPelicula.frmPeliculaCaracteristica.validarValor}"
+                                                                 value="#{frmPelicula.frmPeliculaCaracteristica.registro.valor}" cols="70" rows="3"/>
+                                            </h:panelGrid>
+                                            <p:messages/>
+                                            <h:panelGrid columns="#{frmPelicula.frmPeliculaCaracteristica.estado=='CREAR'?'1':'2'}">
+                                                <p:commandButton value="Guardar pelicula" ajax="true"
+                                                                 process="@form" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"
+                                                                 rendered="#{frmPelicula.frmPeliculaCaracteristica.estado=='CREAR'}"
+                                                                 actionListener="#{frmPelicula.frmPeliculaCaracteristica.btnCrearHandler}"/>
+
+                                                <p:commandButton value="Modificar Pelicula" ajax="true"
+                                                                 process="@form" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"
+                                                                 rendered="#{frmPelicula.frmPeliculaCaracteristica.estado=='MODIFICAR'}"
+                                                                 actionListener="#{frmPelicula.frmPeliculaCaracteristica.btnModificarHandler}"/>
+
+                                                <p:commandButton value="Eliminar Pelicula" ajax="true"
+                                                                 process="@form" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"
+                                                                 rendered="#{frmPelicula.frmPeliculaCaracteristica.estado=='MODIFICAR'}"
+                                                                 actionListener="#{frmPelicula.frmPeliculaCaracteristica.btnEliminarHandler}"/>
+
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                    </h:form>
+                                </h:panelGrid>
+
+
+                            </h:panelGroup>
+
+                            
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+
+
+
+            </h:panelGroup>
+        </h:panelGrid>
+    </f:define>
+</f:composition>

@@ -70,6 +70,8 @@ public class FrmMenu implements Serializable {
 
 
         model.getElements().add(tipos);
+
+
     }
 
 
