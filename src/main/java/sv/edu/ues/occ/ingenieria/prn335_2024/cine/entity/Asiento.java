@@ -6,8 +6,8 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "asiento")
-public class        Asiento {
+@Table(name = "asiento", schema = "public")
+public class Asiento {
     @Id
     @Column(name = "id_asiento", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

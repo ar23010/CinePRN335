@@ -3,15 +3,15 @@
 
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-               xmlns:ui="jakarta.faces.facelets"
-               xmlns:f="jakarta.faces.core"
-               xmlns:h="jakarta.faces.html"
-               xmlns:p="primefaces"
-               xmlns:crud="jakarta.faces.composite/crud"
-               template="WEB-INF/templates/principal.xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:h="jakarta.faces.html"
+                xmlns:p="primefaces"
+                xmlns:crud="jakarta.faces.composite/crud"
+                template="WEB-INF/templates/principal.xhtml"
 >
     <ui:define name="titulo">
-        Tipo de Sala
+        Sucursal
     </ui:define>
 
     <ui:define name="cuerpo">
@@ -20,17 +20,17 @@
             <h:panelGroup id="pnlTabla">
                 <h:form id="frmTabla">
                     <h:panelGrid>
-                        <p:dataTable value="#{frmTipoSala.modelo}"
+                        <p:dataTable value="#{frmSucursal.modelo}"
                                      rows="10"
-                                     selection="#{frmTipoSala.registro}"
-                                     rendered="#{frmTipoSala.estado=='NINGUNO'}"
+                                     selection="#{frmSucursal.registro}"
+                                     rendered="#{frmSucursal.estado=='NINGUNO'}"
                                      var="r"
                                      lazy="true" paginator="true" selectionMode="single"
 
                         >
                             <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"/>
                             <p:column headerText="ID">
-                                <h:outputText value="#{r.idTipoSala}"/>
+                                <h:outputText value="#{r.idSucursal}"/>
                             </p:column>
                             <p:column headerText="Nombre">
                                 <h:outputText value="#{r.nombre}"/>
@@ -39,10 +39,11 @@
                                 <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
                             </p:column>
 
+
                         </p:dataTable>
 
                         <h:panelGrid>
-                            <crud:botonesTop frm="#{frmTipoSala}"/>
+                            <crud:botonesTop frm="#{frmSucursal}"/>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:form>
@@ -50,35 +51,42 @@
 
             <h:panelGroup id="pnlDetalle">
                 <h:panelGrid>
-                    <h:form id="frmDetalle" rendered="#{frmTipoSala.estado!='NINGUNO'}">
+                    <h:form id="frmDetalle" rendered="#{frmSucursal.estado!='NINGUNO'}">
                         <h:panelGrid>
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="ID" for="txtId"/>
                                 <p:inputText id="txtId" disabled="true" readonly="true"
-                                             value="#{frmTipoSala.registro.idTipoSala}"/>
+                                             value="#{frmSucursal.registro.idSucursal}"/>
                                 <p:outputLabel value="Nombre" for="txtNombre"/>
-                                <p:inputText id="txtNombre" value="#{frmTipoSala.registro.nombre}" size="70"/>
+                                <p:inputText id="txtNombre" value="#{frmSucursal.registro.nombre}" size="70"/>
                                 <p:outputLabel value="Activo" for="chkActivo"/>
-                                <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoSala.registro.activo}"/>
+                                <h:selectBooleanCheckbox id="chkActivo" value="#{frmSucursal.registro.activo}"/>
+
+                                <p:outputLabel value="Longitud" for="txtLongitud"/>
+                                <p:inputText id="txtLongitud" value="#{frmSucursal.registro.longitud}" size="70"/>
+
+                                <p:outputLabel value="Latitud" for="txtLatitud"/>
+                                <p:inputText id="txtLatitud" value="#{frmSucursal.registro.latitud}" size="70"/>
+
                                 <p:outputLabel value="Comentarios" for="txtComentarios"/>
-                                <h:inputTextarea id="txtComentarios" value="#{frmTipoSala.registro.comentarios}" cols="70" rows="3"/>
+                                <h:inputTextarea id="txtComentarios" value="#{frmSucursal.registro.comentarios}" cols="70" rows="3"/>
                             </h:panelGrid>
                             <p:messages/>
                             <h:panelGrid columns="#{frmTipoSala.estado=='CREAR'?'1':'2'}">
-                                <p:commandButton value="Guardar Tipo de Sala" ajax="true"
+                                <p:commandButton value="Guardar Sucursal" ajax="true"
                                                  process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoSala.estado=='CREAR'}"
-                                                 actionListener="#{frmTipoSala.btnCrearHandler}"/>
+                                                 rendered="#{frmSucursal.estado=='CREAR'}"
+                                                 actionListener="#{frmSucursal.btnCrearHandler}"/>
 
-                                <p:commandButton value="Modificar Tipo de Sala" ajax="true"
+                                <p:commandButton value="Modificar Sucursal" ajax="true"
                                                  process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoSala.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmTipoSala.btnModificarHandler}"/>
+                                                 rendered="#{frmSucursal.estado=='MODIFICAR'}"
+                                                 actionListener="#{frmSucursal.btnModificarHandler}"/>
 
-                                <p:commandButton value="Eliminar Tipo de Sala" ajax="true"
+                                <p:commandButton value="Eliminar Sucursal" ajax="true"
                                                  process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoSala.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmTipoSala.btnEliminarHandler}"/>
+                                                 rendered="#{frmSucursal.estado=='MODIFICAR'}"
+                                                 actionListener="#{frmSucursal.btnEliminarHandler}"/>
 
                             </h:panelGrid>
                         </h:panelGrid>

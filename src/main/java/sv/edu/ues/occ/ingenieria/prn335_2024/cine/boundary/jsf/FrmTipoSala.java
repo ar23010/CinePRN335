@@ -42,4 +42,6 @@ public class FrmTipoSala extends AbstractForm<TipoSala> implements Serializable 
     public TipoSala createNewRegistro() {
         return new TipoSala();
     }
+
+
 }

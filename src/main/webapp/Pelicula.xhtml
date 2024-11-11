@@ -2,19 +2,19 @@
 
 
 
-<f:composition xmlns="http://www.w3.org/1999/xhtml"
-               xmlns:f="jakarta.faces.facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:ui="jakarta.faces.facelets"
                xmlns:h="jakarta.faces.html"
                xmlns:p="primefaces"
-               xmlns:c="jakarta.faces.core"
+               xmlns:f="jakarta.faces.core"
                xmlns:crud="jakarta.faces.composite/crud"
                template="WEB-INF/templates/principal.xhtml"
 >
-    <f:define name="titulo">
+    <ui:define name="titulo">
         Pelicula
-    </f:define>
+    </ui:define>
 
-    <f:define name="cuerpo">
+    <ui:define name="cuerpo">
 
         <h:panelGrid>
             <h:panelGroup id="pnlTabla">
@@ -62,24 +62,7 @@
                                         <p:outputLabel value="Sipnosis" for="txtSipnosis"/>
                                         <h:inputTextarea id="txtSipnosis" value="#{frmPelicula.registro.sinopsis}" cols="70" rows="3"/>
                                     </h:panelGrid>
-                                    <p:messages/>
-                                    <h:panelGrid columns="#{frmPelicula.estado=='CREAR'?'1':'2'}">
-                                        <p:commandButton value="Guardar pelicula" ajax="true"
-                                                         process="@form" update=":pnlDetalle :pnlTabla"
-                                                         rendered="#{frmPelicula.estado=='CREAR'}"
-                                                         actionListener="#{frmPelicula.btnCrearHandler}"/>
-
-                                        <p:commandButton value="Modificar Pelicula" ajax="true"
-                                                         process="@form" update=":pnlDetalle :pnlTabla"
-                                                         rendered="#{frmPelicula.estado=='MODIFICAR'}"
-                                                         actionListener="#{frmPelicula.btnModificarHandler}"/>
-
-                                        <p:commandButton value="Eliminar Pelicula" ajax="true"
-                                                         process="@form" update=":pnlDetalle :pnlTabla"
-                                                         rendered="#{frmPelicula.estado=='MODIFICAR'}"
-                                                         actionListener="#{frmPelicula.btnEliminarHandler}"/>
-
-                                    </h:panelGrid>
+                                  <crud:botonesBottom frm="#{frmPelicula}"/>
                                 </h:panelGrid>
                             </h:form>
                         </h:panelGrid>
@@ -126,11 +109,11 @@
                                                 <p:inputText id="txtIdPeliculaCaracteristica" disabled="true" readonly="true"
                                                              value="#{frmPelicula.frmPeliculaCaracteristica.registro.idPeliculaCaracteristica}"/>
                                                 <p:outputLabel value="Tipo de Pelicula" for="lstTipoPelicula"/>
-                                                <h:selectOneMenu id="lstTipoPelicula" valuie="#{frmPelicula.frmPeliculaCaracteristica.idTipoPeliculaSeleccionado}">
+                                                <h:selectOneMenu id="lstTipoPelicula" value="#{frmPelicula.frmPeliculaCaracteristica.idTipoPeliculaSeleccionado}">
                                                     <!-- Cambiar C por f y f por ui -->
-                                                    <c:selectItems value="#{frmPelicula.frmPeliculaCaracteristica.tipoPeliculaList}" var="tp"
+                                                    <f:selectItems value="#{frmPelicula.frmPeliculaCaracteristica.tipoPeliculaList}" var="tp"
                                                                         itemLabel="#{tp.nombre}" itemValue="#{tp.idTipoPelicula}"/>
-                                                    <c:ajax execute="@this" render="txtValor"/>
+                                                    <f:ajax execute="@this" render="txtValor"/>
                                                 </h:selectOneMenu>
 
                                                 <p:outputLabel value="valor" for="txtValor"/>
@@ -138,24 +121,7 @@
                                                                  validator="#{frmPelicula.frmPeliculaCaracteristica.validarValor}"
                                                                  value="#{frmPelicula.frmPeliculaCaracteristica.registro.valor}" cols="70" rows="3"/>
                                             </h:panelGrid>
-                                            <p:messages/>
-                                            <h:panelGrid columns="#{frmPelicula.frmPeliculaCaracteristica.estado=='CREAR'?'1':'2'}">
-                                                <p:commandButton value="Guardar pelicula" ajax="true"
-                                                                 process="@form" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"
-                                                                 rendered="#{frmPelicula.frmPeliculaCaracteristica.estado=='CREAR'}"
-                                                                 actionListener="#{frmPelicula.frmPeliculaCaracteristica.btnCrearHandler}"/>
-
-                                                <p:commandButton value="Modificar Pelicula" ajax="true"
-                                                                 process="@form" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"
-                                                                 rendered="#{frmPelicula.frmPeliculaCaracteristica.estado=='MODIFICAR'}"
-                                                                 actionListener="#{frmPelicula.frmPeliculaCaracteristica.btnModificarHandler}"/>
-
-                                                <p:commandButton value="Eliminar Pelicula" ajax="true"
-                                                                 process="@form" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"
-                                                                 rendered="#{frmPelicula.frmPeliculaCaracteristica.estado=='MODIFICAR'}"
-                                                                 actionListener="#{frmPelicula.frmPeliculaCaracteristica.btnEliminarHandler}"/>
-
-                                            </h:panelGrid>
+                                                <crud:botonesBottom frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar=":pnlDetalleC :pnlTablaC"/>
                                         </h:panelGrid>
                                     </h:form>
                                 </h:panelGrid>
@@ -172,5 +138,5 @@
 
             </h:panelGroup>
         </h:panelGrid>
-    </f:define>
-</f:composition>
+    </ui:define>
+</ui:composition>

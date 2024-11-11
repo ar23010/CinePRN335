@@ -1,5 +1,8 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.control;
 
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
+import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -11,7 +14,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+@Stateless
+@LocalBean
 public class SalaBean extends AbstractDataPersistence<Sala> implements Serializable {
 
 @PersistenceContext(unitName = "CinePU")
@@ -24,11 +28,11 @@ public class SalaBean extends AbstractDataPersistence<Sala> implements Serializa
 
     @Override
     public EntityManager getEntityManager() {
-        return null;
+        return em;
     }
 
 
-    public List<Sala> findByIdTipoSala(Integer idTipoSala, int first, int max){
+   public List<Sala> findByIdTipoSala(Integer idTipoSala, int first, int max){
         if (idTipoSala != null){
           try{
               if(em != null){

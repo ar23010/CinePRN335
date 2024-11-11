@@ -31,6 +31,10 @@ public class FrmMenu implements Serializable {
                 .label("Tipos")
                 .expanded(true)
                 .build();
+        DefaultSubMenu cine = DefaultSubMenu.builder()
+                .label("Cine")
+                .expanded(true)
+                .build();
         DefaultMenuItem item = DefaultMenuItem.builder()
                 .value("Asiento")
                 .ajax(true)
@@ -61,15 +65,33 @@ public class FrmMenu implements Serializable {
                 .ajax(true)
                 .command("#{frmMenu.navegar('TipoSala.jsf')}")
                 .build();
+        DefaultMenuItem itemCine = DefaultMenuItem.builder()
+                .value("Pelicula")
+                .ajax(true)
+                .command("#{frmMenu.navegar('Pelicula.jsf')}")
+                .build();
+        DefaultMenuItem itemCine2 = DefaultMenuItem.builder()
+                .value("Sala")
+                .ajax(true)
+                .command("#{frmMenu.navegar('Sala.jsf')}")
+                .build();
+        DefaultMenuItem itemCine3 = DefaultMenuItem.builder()
+                .value("Sucursal")
+                .ajax(true)
+                .command("#{frmMenu.navegar('Sucursal.jsf')}")
+                .build();
         tipos.getElements().add(item);
         tipos.getElements().add(item2);
         tipos.getElements().add(item3);
         tipos.getElements().add(item4);
         tipos.getElements().add(item5);
         tipos.getElements().add(item6);
-
+        cine.getElements().add(itemCine);
+        cine.getElements().add(itemCine2);
+        cine.getElements().add(itemCine3);
 
         model.getElements().add(tipos);
+        model.getElements().add(cine);
 
 
     }

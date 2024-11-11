@@ -17,7 +17,7 @@ import java.util.UUID;
 public class FrmWebSocket implements Serializable {
 
 
-
+/*
     @Inject
     @Push(channel = "CanalOcc")
     PushContext pushContext;
@@ -49,5 +49,5 @@ public class FrmWebSocket implements Serializable {
             }
         }
     }
-
+*/
 }

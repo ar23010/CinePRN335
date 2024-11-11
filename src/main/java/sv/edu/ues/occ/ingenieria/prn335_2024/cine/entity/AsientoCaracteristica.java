@@ -3,7 +3,11 @@ package sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "asiento_caracteristica")
+@Table(name = "asiento_caracteristica", schema ="public")
+@NamedQueries({
+        @NamedQuery(name = "AsientoCaracteristica.findByIdAsiento", query = "SELECT ac FROM AsientoCaracteristica ac WHERE ac.idAsiento.idAsiento=:idAsiento ORDER BY ac.idTipoAsiento.nombre ASC"),
+        @NamedQuery(name = "AsientoCaracteristica.countByIdAsiento", query = "SELECT COUNT(ac.idAsientoCaracteristica) FROM AsientoCaracteristica ac WHERE ac.idAsiento.idAsiento=:idAsiento")
+})
 public class AsientoCaracteristica {
     @Id
     @Column(name = "id_asiento_caracteristica", nullable = false)

@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 @Named
 @Dependent
 public class FrmPeliculaCaracteristica extends AbstractForm<PeliculaCaracteristica> implements Serializable {
+
     @Inject
     PeliculaCaracteristicaBean pcBean;
 
