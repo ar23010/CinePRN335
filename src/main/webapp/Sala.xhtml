@@ -59,7 +59,7 @@
                                                      value="#{frmSala.registro.idSala}"/>
                                         <p:outputLabel value="Nombre" for="txtNombre"/>
                                         <p:inputText id="txtNombre" value="#{frmSala.registro.nombre}" size="70"/>
-                                        <p:outputLabel value="Sipnosis" for="txtObservaciones"/>
+                                        <p:outputLabel value="Observaciones" for="txtObservaciones"/>
                                         <h:inputTextarea id="txtObservaciones" value="#{frmSala.registro.observaciones}" cols="70" rows="3"/>
                                     </h:panelGrid>
                                     <crud:botonesBottom frm="#{frmSala}"/>
@@ -112,8 +112,8 @@
                                                 <p:outputLabel value="Tipo de Sala" for="lstTipoSala"/>
                                                 <h:selectOneMenu id="lstTipoSala" value="#{frmSala.frmSalaCaracteristica.idTipoSalaSeleccionado}">
                                                     <f:selectItems value="#{frmSala.frmSalaCaracteristica.tipoSalaList}" var="tp"
-                                                                   itemLabel="#{tp.nombre}" itemValue="#{tp.idTipoSala}"/>
-                                                    <f:ajax execute="@this" render="txtValor"/>
+                                                                   itemLabel="#{tp.nombre}" itemValue="#{tp.idTipoSala}" />
+                                                    <f:ajax execute="@this" render="txtValor" />
                                                 </h:selectOneMenu>
 
                                                 <p:outputLabel value="valor" for="txtValor"/>

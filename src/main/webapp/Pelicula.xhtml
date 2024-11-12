@@ -35,6 +35,9 @@
                             <p:column headerText="Nombre">
                                 <h:outputText value="#{r.nombre}"/>
                             </p:column>
+                            <p:column headerText="Sinopsis">
+                                <h:outputText value="#{r.sinopsis}"/>
+                            </p:column>
 
                         </p:dataTable>
 
@@ -59,8 +62,8 @@
                                                      value="#{frmPelicula.registro.idPelicula}"/>
                                         <p:outputLabel value="Nombre" for="txtNombre"/>
                                         <p:inputText id="txtNombre" value="#{frmPelicula.registro.nombre}" size="70"/>
-                                        <p:outputLabel value="Sipnosis" for="txtSipnosis"/>
-                                        <h:inputTextarea id="txtSipnosis" value="#{frmPelicula.registro.sinopsis}" cols="70" rows="3"/>
+                                        <p:outputLabel value="Sinopsis" for="txtSinopsis"/>
+                                        <h:inputTextarea id="txtSinopsis" value="#{frmPelicula.registro.sinopsis}" cols="70" rows="3"/>
                                     </h:panelGrid>
                                   <crud:botonesBottom frm="#{frmPelicula}"/>
                                 </h:panelGrid>
@@ -124,7 +127,7 @@
                                                 <p:tooltip for="txtValor" value="#{frmPelicula.frmPeliculaCaracteristica.registro.idTipoPelicula.expresionRegular}" position="right"/>
 
                                             </h:panelGrid>
-                                                <crud:botonesBottom frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar="::tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
+                                                <crud:botonesBottom frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
                                         </h:panelGrid>
                                     </h:form>
                                 </h:panelGrid>
