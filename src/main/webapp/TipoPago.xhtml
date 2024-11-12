@@ -10,7 +10,7 @@
                 template="WEB-INF/templates/principal.xhtml"
 >
 <f:define name="titulo">
-    Tipo de Pago
+    #{frmTipoPago.tituloDePagina}
 </f:define>
 
 <f:define name="cuerpo">
@@ -20,7 +20,7 @@
             <h:form id="frmTabla">
                 <h:panelGrid>
                     <p:dataTable value="#{frmTipoPago.modelo}"
-                                rows="10"
+                                rows="#{frmTipoPago.registrosPorPagina}"
                                  selection="#{frmTipoPago.registro}"
                                  rendered="#{frmTipoPago.estado=='NINGUNO'}"
                                  var="r"
@@ -60,24 +60,7 @@
                             <p:outputLabel value="Activo" for="chkActivo"/>
                             <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoPago.registro.activo}"/>
                         </h:panelGrid>
-                        <p:messages/>
-                        <h:panelGrid columns="#{frmTipoPago.estado=='CREAR'?'1':'2'}">
-                            <p:commandButton value="Guardar Tipo de Pago" ajax="true"
-                                             process="@form" update=":pnlDetalle :pnlTabla"
-                                             rendered="#{frmTipoPago.estado=='CREAR'}"
-                                             actionListener="#{frmTipoPago.btnCrearHandler}"/>
-
-                            <p:commandButton value="Modificar Tipo de Pago" ajax="true"
-                                             process="@form" update=":pnlDetalle :pnlTabla"
-                                             rendered="#{frmTipoPago.estado=='MODIFICAR'}"
-                                             actionListener="#{frmTipoPago.btnModificarHandler}"/>
-
-                            <p:commandButton value="Eliminar Tipo de Pago" ajax="true"
-                                             process="@form" update=":pnlDetalle :pnlTabla"
-                                             rendered="#{frmTipoPago.estado=='MODIFICAR'}"
-                                             actionListener="#{frmTipoPago.btnEliminarHandler}"/>
-
-                        </h:panelGrid>
+                       <crud:botonesBottom frm="#{frmTipoPago}"/>
                     </h:panelGrid>
                 </h:form>
             </h:panelGrid>

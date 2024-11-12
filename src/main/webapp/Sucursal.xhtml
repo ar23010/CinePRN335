@@ -11,7 +11,7 @@
                 template="WEB-INF/templates/principal.xhtml"
 >
     <ui:define name="titulo">
-        Sucursal
+        #{frmSucursal.tituloDePagina}
     </ui:define>
 
     <ui:define name="cuerpo">
@@ -21,7 +21,7 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmSucursal.modelo}"
-                                     rows="10"
+                                     rows="#{frmSucursal.registrosPorPagina}"
                                      selection="#{frmSucursal.registro}"
                                      rendered="#{frmSucursal.estado=='NINGUNO'}"
                                      var="r"
@@ -70,25 +70,9 @@
 
                                 <p:outputLabel value="Comentarios" for="txtComentarios"/>
                                 <h:inputTextarea id="txtComentarios" value="#{frmSucursal.registro.comentarios}" cols="70" rows="3"/>
-                            </h:panelGrid>
-                            <p:messages/>
-                            <h:panelGrid columns="#{frmTipoSala.estado=='CREAR'?'1':'2'}">
-                                <p:commandButton value="Guardar Sucursal" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmSucursal.estado=='CREAR'}"
-                                                 actionListener="#{frmSucursal.btnCrearHandler}"/>
-
-                                <p:commandButton value="Modificar Sucursal" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmSucursal.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmSucursal.btnModificarHandler}"/>
-
-                                <p:commandButton value="Eliminar Sucursal" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmSucursal.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmSucursal.btnEliminarHandler}"/>
 
                             </h:panelGrid>
+                            <crud:botonesBottom frm="#{frmSucursal}"/>
                         </h:panelGrid>
                     </h:form>
                 </h:panelGrid>

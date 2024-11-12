@@ -41,4 +41,19 @@ public class FrmTipoReserva extends AbstractForm<TipoReserva> implements Seriali
     protected TipoReserva createNewRegistro() {
         return new TipoReserva();
     }
+
+    @Override
+    public String buscarIdPorRegistro(TipoReserva entity) {
+        return "";
+    }
+
+    @Override
+    public TipoReserva buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Tipo de Reserva";
+    }
 }

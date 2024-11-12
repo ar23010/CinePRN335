@@ -55,6 +55,30 @@ public class FrmPelicula extends AbstractForm<Pelicula> implements Serializable 
         return new Pelicula();
     }
 
+    @Override
+    public String buscarIdPorRegistro(Pelicula entity) {
+        if (entity != null && entity.getIdPelicula() != null) {
+            return entity.getIdPelicula().toString();
+        }
+        return null;
+    }
+
+    @Override
+    public Pelicula buscarRegistroPorId(String id) {
+        if (id != null && this.modelo != null) {
+            return this.modelo.getWrappedData().stream()
+                    .filter(r -> r.getIdPelicula().toString().equals(id))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Pelicula";
+    }
+
 
     public FrmPeliculaCaracteristica getFrmPeliculaCaracteristica() {
         return frmPeliculaCaracteristica;

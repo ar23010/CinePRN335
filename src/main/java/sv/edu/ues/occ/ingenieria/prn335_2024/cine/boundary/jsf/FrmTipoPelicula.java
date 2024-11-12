@@ -41,4 +41,19 @@ public class FrmTipoPelicula extends AbstractForm<TipoPelicula> implements Seria
     protected TipoPelicula createNewRegistro() {
         return new TipoPelicula();
     }
+
+    @Override
+    public String buscarIdPorRegistro(TipoPelicula entity) {
+        return "";
+    }
+
+    @Override
+    public TipoPelicula buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Tipo de Pelicula";
+    }
 }

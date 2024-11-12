@@ -42,4 +42,19 @@ public class FrmTipoProducto extends AbstractForm<TipoProducto> implements Seria
     protected TipoProducto createNewRegistro() {
         return new TipoProducto();
     }
+
+    @Override
+    public String buscarIdPorRegistro(TipoProducto entity) {
+        return "";
+    }
+
+    @Override
+    public TipoProducto buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Tipo de Producto";
+    }
 }

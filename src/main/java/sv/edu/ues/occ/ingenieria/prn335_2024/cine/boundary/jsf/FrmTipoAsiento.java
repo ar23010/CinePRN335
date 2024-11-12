@@ -41,4 +41,19 @@ public class FrmTipoAsiento extends AbstractForm<TipoAsiento> implements Seriali
     protected TipoAsiento createNewRegistro() {
         return new TipoAsiento();
     }
+
+    @Override
+    public String buscarIdPorRegistro(TipoAsiento entity) {
+        return "";
+    }
+
+    @Override
+    public TipoAsiento buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Tipo de Asiento";
+    }
 }

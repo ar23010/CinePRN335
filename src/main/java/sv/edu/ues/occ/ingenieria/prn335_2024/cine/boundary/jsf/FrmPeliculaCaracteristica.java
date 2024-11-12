@@ -49,12 +49,12 @@ public class FrmPeliculaCaracteristica extends AbstractForm<PeliculaCaracteristi
             this.tipoPeliculaList = tpBean.findRange(0, Integer.MAX_VALUE);
         }catch (Exception e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            //enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
+            enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
         }
     }
 
-    //@Override
-    public List<PeliculaCaracteristica> load(int firstResult, int maxResults){
+    @Override
+    public List<PeliculaCaracteristica> cargarDatos(int firstResult, int maxResults){
         try{
             if(this.idPelicula != null && pcBean!=null){
                 return pcBean.findByIdPelicula(this.idPelicula,firstResult,maxResults);
@@ -65,8 +65,9 @@ public class FrmPeliculaCaracteristica extends AbstractForm<PeliculaCaracteristi
         return List.of();
     }
 
-    //@Override
-    public int count(){
+
+    @Override
+    public int contar(){
         try{
             if(idPelicula != null && pcBean!=null){
                 return pcBean.countPelicula(this.idPelicula);
@@ -103,6 +104,30 @@ public class FrmPeliculaCaracteristica extends AbstractForm<PeliculaCaracteristi
             pc.setIdTipoPelicula(tipoPeliculaList.getFirst());
         }
         return pc;
+    }
+
+    @Override
+    public String buscarIdPorRegistro(PeliculaCaracteristica entity) {
+        if (entity != null && entity.getIdPeliculaCaracteristica() != null) {
+            return entity.getIdPeliculaCaracteristica().toString();
+        }
+        return null;
+    }
+
+    @Override
+    public PeliculaCaracteristica buscarRegistroPorId(String id) {
+        if (id != null && this.modelo != null) {
+            return this.modelo.getWrappedData().stream()
+                    .filter(r -> r.getIdPeliculaCaracteristica().toString().equals(id))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Pelicula Caracteristica";
     }
 
 
@@ -147,5 +172,8 @@ public class FrmPeliculaCaracteristica extends AbstractForm<PeliculaCaracteristi
                 }
         }
                 input.setValid(false);
+                FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Advertencia", "Valor ingresado inválidoS."));
+
     }
 }

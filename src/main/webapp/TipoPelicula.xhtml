@@ -10,7 +10,7 @@
                template="WEB-INF/templates/principal.xhtml"
 >
     <f:define name="titulo">
-        Tipo de Pelicula
+        #{frmTipoPelicula.tituloDePagina}
     </f:define>
 
     <f:define name="cuerpo">
@@ -20,7 +20,7 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmTipoPelicula.modelo}"
-                                     rows="10"
+                                     rows="#{frmTipoPelicula.registrosPorPagina}"
                                      selection="#{frmTipoPelicula.registro}"
                                      rendered="#{frmTipoPelicula.estado=='NINGUNO'}"
                                      var="r"
@@ -61,25 +61,11 @@
                                 <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoPelicula.registro.activo}"/>
                                 <p:outputLabel value="Comentarios" for="txtComentarios"/>
                                 <h:inputTextarea id="txtComentarios" value="#{frmTipoPelicula.registro.comentarios}" cols="70" rows="3"/>
-                            </h:panelGrid>
-                            <p:messages/>
-                            <h:panelGrid columns="#{frmTipoPelicula.estado=='CREAR'?'1':'2'}">
-                                <p:commandButton value="Guardar Tipo de Pelicula" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoPelicula.estado=='CREAR'}"
-                                                 actionListener="#{frmTipoPelicula.btnCrearHandler}"/>
-
-                                <p:commandButton value="Modificar Tipo de Pelicula" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoPelicula.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmTipoPelicula.btnModificarHandler}"/>
-
-                                <p:commandButton value="Eliminar Tipo de Pelicula" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoPelicula.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmTipoPelicula.btnEliminarHandler}"/>
+                                <p:outputLabel value="ExpresionRegular" for="txtExpresionRegular"/>
+                                <h:inputTextarea  id="txtExpresionRegular" value="#{frmTipoPelicula.registro.expresionRegular}"/>
 
                             </h:panelGrid>
+                           <crud:botonesBottom frm="#{frmTipoPelicula}"/>
                         </h:panelGrid>
                     </h:form>
                 </h:panelGrid>

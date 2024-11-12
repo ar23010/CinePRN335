@@ -2,6 +2,7 @@ package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.Dependent;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIInput;
 import jakarta.faces.context.FacesContext;
@@ -46,7 +47,7 @@ public class FrmAsientoCaracteristica extends AbstractForm<AsientoCaracteristica
             this.tipoAsientoList = taBean.findRange(0, Integer.MAX_VALUE);
         }catch (Exception e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            //enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
+            enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
         }
     }
 
@@ -76,6 +77,21 @@ public class FrmAsientoCaracteristica extends AbstractForm<AsientoCaracteristica
             ac.setIdTipoAsiento(tipoAsientoList.getFirst());
         }
         return ac;
+    }
+
+    @Override
+    public String buscarIdPorRegistro(AsientoCaracteristica entity) {
+        return "";
+    }
+
+    @Override
+    public AsientoCaracteristica buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Asiento Caracteristica";
     }
 
     public Long getIdAsiento() {

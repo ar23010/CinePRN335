@@ -10,7 +10,7 @@
                template="WEB-INF/templates/principal.xhtml"
 >
     <f:define name="titulo">
-        Tipo de Reserva
+        #{frmTipoReserva.tituloDePagina}
     </f:define>
 
     <f:define name="cuerpo">
@@ -20,7 +20,7 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmTipoReserva.modelo}"
-                                     rows="10"
+                                     rows="#{frmTipoReserva.registrosPorPagina}"
                                      selection="#{frmTipoReserva.registro}"
                                      rendered="#{frmTipoReserva.estado=='NINGUNO'}"
                                      var="r"
@@ -61,25 +61,9 @@
                                 <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoReserva.registro.activo}"/>
                                 <p:outputLabel value="Comentarios" for="txtComentarios"/>
                                 <h:inputTextarea id="txtComentarios" value="#{frmTipoReserva.registro.comentarios}" cols="70" rows="3"/>
-                            </h:panelGrid>
-                            <p:messages/>
-                            <h:panelGrid columns="#{frmTipoReserva.estado=='CREAR'?'1':'2'}">
-                                <p:commandButton value="Guardar Tipo de Reserva" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoReserva.estado=='CREAR'}"
-                                                 actionListener="#{frmTipoReserva.btnCrearHandler}"/>
-
-                                <p:commandButton value="Modificar Tipo de Reserva" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoReserva.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmTipoReserva.btnModificarHandler}"/>
-
-                                <p:commandButton value="Eliminar Tipo de Reserva" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoReserva.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmTipoReserva.btnEliminarHandler}"/>
 
                             </h:panelGrid>
+                           <crud:botonesBottom frm="#{frmTipoReserva}"/>
                         </h:panelGrid>
                     </h:form>
                 </h:panelGrid>

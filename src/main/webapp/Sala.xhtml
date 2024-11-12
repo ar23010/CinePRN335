@@ -11,7 +11,7 @@
                 template="WEB-INF/templates/principal.xhtml"
 >
     <ui:define name="titulo">
-        Sala
+        #{frmSala.tituloDePagina}
     </ui:define>
 
     <ui:define name="cuerpo">
@@ -21,7 +21,7 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmSala.modelo}"
-                                     rows="10"
+                                     rows="#{frmSala.registrosPorPagina}"
                                      selection="#{frmSala.registro}"
                                      rendered="#{frmSala.estado=='NINGUNO'}"
                                      var="r"
@@ -59,10 +59,10 @@
                                                      value="#{frmSala.registro.idSala}"/>
                                         <p:outputLabel value="Nombre" for="txtNombre"/>
                                         <p:inputText id="txtNombre" value="#{frmSala.registro.nombre}" size="70"/>
-                                        <p:outputLabel value="Observaciones" for="txtObservaciones"/>
+                                        <p:outputLabel value="Sipnosis" for="txtObservaciones"/>
                                         <h:inputTextarea id="txtObservaciones" value="#{frmSala.registro.observaciones}" cols="70" rows="3"/>
                                     </h:panelGrid>
-                                   <crud:botonesBottom frm="#{frmSala}"/>
+                                    <crud:botonesBottom frm="#{frmSala}"/>
                                 </h:panelGrid>
                             </h:form>
                         </h:panelGrid>
@@ -70,7 +70,6 @@
 
                     </p:tab>
                     <p:tab title="Caracteristicas" disabled="#{frmSala.estado!='MODIFICAR'}">
-                        <h2>Caracteristicas de #{frmSala.registro.nombre}</h2>
                         <h:panelGrid>
                             <h:panelGroup id="pnlTablaC">
                                 <h:form id="frmTablaC">
@@ -83,7 +82,8 @@
                                                      lazy="true" paginator="true" selectionMode="single"
 
                                         >
-                                            <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC" process="@this"/>
+                                            <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC" process="@this"
+                                                    listener="#{frmSala.frmSalaCaracteristica.cambiarSeleccion}"/>
                                             <p:column headerText="ID">
                                                 <h:outputText value="#{rc.idSalaCaracteristica}"/>
                                             </p:column>
@@ -121,7 +121,7 @@
                                                                  validator="#{frmSala.frmSalaCaracteristica.validarValor}"
                                                                  value="#{frmSala.frmSalaCaracteristica.registro.valor}" cols="70" rows="3"/>
                                             </h:panelGrid>
-                                           <crud:botonesBottom frm="#{frmSala.frmSalaCaracteristica}" actualizar=":pnlDetalleC :pnlTablaC"/>
+                                            <crud:botonesBottom frm="#{frmSala.frmSalaCaracteristica}" actualizar=":pnlDetalleC :pnlTablaC"/>
                                         </h:panelGrid>
                                     </h:form>
                                 </h:panelGrid>
@@ -132,9 +132,22 @@
 
                         </h:panelGrid>
                     </p:tab>
-                    <p:tab title="Asientos" closable="false" disabled="#{frmSala.estado!='MODIFICAR'}"> <!--DIOSSSSSSSS-->
-                        <h2>Asientos de #{frmSala.registro.nombre}</h2>
-                       <!-- <h:panelGrid>
+                </p:tabView>
+
+
+
+            </h:panelGroup>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>
+
+
+
+
+
+                 <!--   <p:tab title="Asientos" closable="false" disabled="#{frmSala.estado!='MODIFICAR'}"> DIOSSSSSSSS-->
+                        <!--<h2>Asientos de #{frmSala.registro.nombre}</h2>-->
+                       <!--<h:panelGrid>
                         <h:panelGroup id="pnlTablaA">
                             <h:form id="frmTablaA">
                                 <h:panelGrid>
@@ -251,16 +264,3 @@
                         </p:tabView>
                         </h:panelGroup>
                         </h:panelGrid>-->
-                    </p:tab>
-
-                    <p:tab title="Funciones" closable="false" disabled="#{frmSala.estado!='MODIFICAR'}">
-                        Funciones(Pendiente)
-                    </p:tab>
-                </p:tabView>
-
-
-
-            </h:panelGroup>
-        </h:panelGrid>
-    </ui:define>
-</ui:composition>

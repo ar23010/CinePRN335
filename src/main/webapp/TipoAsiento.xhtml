@@ -10,7 +10,7 @@
                template="WEB-INF/templates/principal.xhtml"
 >
    <f:define name="titulo">
-      Tipo de Asiento
+      #{frmTipoAsiento.tituloDePagina}
    </f:define>
 
    <f:define name="cuerpo">
@@ -20,7 +20,7 @@
             <h:form id="frmTabla">
                <h:panelGrid>
                   <p:dataTable value="#{frmTipoAsiento.modelo}"
-                               rows="10"
+                               rows="#{frmTipoAsiento.registrosPorPagina}"
                                selection="#{frmTipoAsiento.registro}"
                                rendered="#{frmTipoAsiento.estado=='NINGUNO'}"
                                var="r"
@@ -61,25 +61,10 @@
                         <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoAsiento.registro.activo}"/>
                         <p:outputLabel value="Comentarios" for="txtComentarios"/>
                         <h:inputTextarea id="txtComentarios" value="#{frmTipoAsiento.registro.comentarios}" cols="70" rows="3"/>
+                        <p:outputLabel value="ExpresionRegular" for="txtExpresionRegular"/>
+                        <h:inputTextarea  id="txtExpresionRegular" value="#{frmTipoAsiento.registro.expresionRegular}"/>
                      </h:panelGrid>
-                     <p:messages/>
-                     <h:panelGrid columns="#{frmTipoAsiento.estado=='CREAR'?'1':'2'}">
-                        <p:commandButton value="Guardar Tipo de Asiento" ajax="true"
-                                         process="@form" update=":pnlDetalle :pnlTabla"
-                                         rendered="#{frmTipoAsiento.estado=='CREAR'}"
-                                         actionListener="#{frmTipoAsiento.btnCrearHandler}"/>
-
-                        <p:commandButton value="Modificar Tipo de Asiento" ajax="true"
-                                         process="@form" update=":pnlDetalle :pnlTabla"
-                                         rendered="#{frmTipoAsiento.estado=='MODIFICAR'}"
-                                         actionListener="#{frmTipoAsiento.btnModificarHandler}"/>
-
-                        <p:commandButton value="Eliminar Tipo de Asiento" ajax="true"
-                                         process="@form" update=":pnlDetalle :pnlTabla"
-                                         rendered="#{frmTipoAsiento.estado=='MODIFICAR'}"
-                                         actionListener="#{frmTipoAsiento.btnEliminarHandler}"/>
-
-                     </h:panelGrid>
+                     <crud:botonesBottom frm="#{frmTipoAsiento}"/>
                   </h:panelGrid>
                </h:form>
             </h:panelGrid>

@@ -26,13 +26,12 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
     @Inject
     FrmSalaCaracteristica frmSalaCaracteristica;
 
-    @Inject
-    FrmAsiento frmAsiento;
+
 
 
 
     public void cambiarTab(TabChangeEvent tce){
-        if(tce.getTab().getTitle().equals("Tipos")){
+        if(tce.getTab().getTitle().equals("Caracteristicas")){
             if(this.registro!=null && this.frmSalaCaracteristica!=null){
                 this.frmSalaCaracteristica.setIdSala(this.registro.getIdSala());
             }
@@ -61,8 +60,32 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
         return new Sala();
     }
 
+    @Override
+    public String buscarIdPorRegistro(Sala entity) {
+        if (entity != null && entity.getIdSala() != null) {
+            return entity.getIdSala().toString();
+        }
+        return null;
+    }
+
+    @Override
+    public Sala buscarRegistroPorId(String id) {
+        if (id != null && this.modelo != null) {
+            return this.modelo.getWrappedData().stream()
+                    .filter(r -> r.getIdSala().toString().equals(id))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Sala";
+    }
+
 
     public FrmSalaCaracteristica getFrmSalaCaracteristica() {return frmSalaCaracteristica;}
 
-    public FrmAsiento getFrmAsiento() {return frmAsiento;}
+
 }

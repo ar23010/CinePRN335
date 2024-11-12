@@ -11,7 +11,7 @@
                template="WEB-INF/templates/principal.xhtml"
 >
     <ui:define name="titulo">
-        Pelicula
+        #{frmPelicula.tituloDePagina}
     </ui:define>
 
     <ui:define name="cuerpo">
@@ -21,7 +21,7 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmPelicula.modelo}"
-                                     rows="10"
+                                     rows="#{frmPelicula.registrosPorPagina}"
                                      selection="#{frmPelicula.registro}"
                                      rendered="#{frmPelicula.estado=='NINGUNO'}"
                                      var="r"
@@ -82,7 +82,8 @@
                                      lazy="true" paginator="true" selectionMode="single"
 
                         >
-                        <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC" process="@this"/>
+                        <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC" process="@this"
+                                listener="#{frmPelicula.frmPeliculaCaracteristica.cambiarSeleccion}"/>
                         <p:column headerText="ID">
                             <h:outputText value="#{rc.idPeliculaCaracteristica}"/>
                         </p:column>
@@ -110,16 +111,18 @@
                                                              value="#{frmPelicula.frmPeliculaCaracteristica.registro.idPeliculaCaracteristica}"/>
                                                 <p:outputLabel value="Tipo de Pelicula" for="lstTipoPelicula"/>
                                                 <h:selectOneMenu id="lstTipoPelicula" value="#{frmPelicula.frmPeliculaCaracteristica.idTipoPeliculaSeleccionado}">
-                                                    <!-- Cambiar C por f y f por ui -->
                                                     <f:selectItems value="#{frmPelicula.frmPeliculaCaracteristica.tipoPeliculaList}" var="tp"
                                                                         itemLabel="#{tp.nombre}" itemValue="#{tp.idTipoPelicula}"/>
                                                     <f:ajax execute="@this" render="txtValor"/>
                                                 </h:selectOneMenu>
 
                                                 <p:outputLabel value="valor" for="txtValor"/>
-                                                <h:inputTextarea id="txtValor"
-                                                                 validator="#{frmPelicula.frmPeliculaCaracteristica.validarValor}"
-                                                                 value="#{frmPelicula.frmPeliculaCaracteristica.registro.valor}" cols="70" rows="3"/>
+                                                <h:inputTextarea id="txtValor" required="true"
+                                                                 validatorMessage="#{frmPelicula.frmPeliculaCaracteristica.validarValor}"
+                                                                 value="#{frmPelicula.frmPeliculaCaracteristica.registro.valor}" cols="70" rows="3"
+                                                />
+                                                <p:tooltip for="txtValor" value="#{frmPelicula.frmPeliculaCaracteristica.registro.idTipoPelicula.expresionRegular}" position="right"/>
+
                                             </h:panelGrid>
                                                 <crud:botonesBottom frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar=":pnlDetalleC :pnlTablaC"/>
                                         </h:panelGrid>
@@ -129,7 +132,7 @@
 
                             </h:panelGroup>
 
-                            
+
                         </h:panelGrid>
                     </p:tab>
                 </p:tabView>

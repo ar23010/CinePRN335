@@ -43,5 +43,20 @@ public class FrmTipoSala extends AbstractForm<TipoSala> implements Serializable 
         return new TipoSala();
     }
 
+    @Override
+    public String buscarIdPorRegistro(TipoSala entity) {
+        return "";
+    }
+
+    @Override
+    public TipoSala buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Tipo de Sala";
+    }
+
 
 }

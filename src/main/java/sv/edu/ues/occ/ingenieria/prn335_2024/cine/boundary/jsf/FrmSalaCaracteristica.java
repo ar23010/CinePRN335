@@ -2,6 +2,7 @@ package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.Dependent;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIInput;
 import jakarta.faces.context.FacesContext;
@@ -44,11 +45,12 @@ public class FrmSalaCaracteristica extends AbstractForm<SalaCaracteristica> impl
             this.tipoSalaList = tsBean.findRange(0, Integer.MAX_VALUE);
         }catch (Exception e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            //enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
+            enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
         }
     }
 
-    public List<SalaCaracteristica> load(int firstResult, int maxResults){
+    @Override
+    public List<SalaCaracteristica> cargarDatos(int firstResult, int maxResults){
         try{
             if(this.idSala != null && scBean!=null){
                 return scBean.findByIdSala(this.idSala,firstResult,maxResults);
@@ -59,8 +61,8 @@ public class FrmSalaCaracteristica extends AbstractForm<SalaCaracteristica> impl
         return List.of();
     }
 
-    //@Override
-    public int count() {
+    @Override
+    public int contar() {
         try {
             if (idSala != null && scBean != null) {
                 return scBean.countSala(this.idSala);
@@ -99,6 +101,30 @@ public class FrmSalaCaracteristica extends AbstractForm<SalaCaracteristica> impl
             sc.setIdTipoSala(tipoSalaList.getFirst());
         }
         return sc;
+    }
+
+    @Override
+    public String buscarIdPorRegistro(SalaCaracteristica entity) {
+        if (entity != null && entity.getIdSalaCaracteristica() != null) {
+            return entity.getIdSalaCaracteristica().toString();
+        }
+        return null;
+    }
+
+    @Override
+    public SalaCaracteristica buscarRegistroPorId(String id) {
+        if (id != null && this.modelo != null) {
+            return this.modelo.getWrappedData().stream()
+                    .filter(r -> r.getIdSalaCaracteristica().toString().equals(id))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Sala Caracteristica";
     }
 
 

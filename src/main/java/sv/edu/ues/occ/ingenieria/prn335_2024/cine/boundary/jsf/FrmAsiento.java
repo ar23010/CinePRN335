@@ -53,6 +53,21 @@ public class FrmAsiento extends AbstractForm<Asiento> implements Serializable {
         return new Asiento();
     }
 
+    @Override
+    public String buscarIdPorRegistro(Asiento entity) {
+        return "";
+    }
+
+    @Override
+    public Asiento buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Asiento";
+    }
+
 
     public FrmAsientoCaracteristica getFrmAsientoCaracteristica() {
         return frmAsientoCaracteristica;

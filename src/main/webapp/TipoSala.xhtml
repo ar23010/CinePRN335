@@ -11,7 +11,7 @@
                template="WEB-INF/templates/principal.xhtml"
 >
     <ui:define name="titulo">
-        Tipo de Sala
+        #{frmTipoSala.tituloDePagina}
     </ui:define>
 
     <ui:define name="cuerpo">
@@ -21,7 +21,7 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmTipoSala.modelo}"
-                                     rows="10"
+                                     rows="#{frmTipoSala.registrosPorPagina}"
                                      selection="#{frmTipoSala.registro}"
                                      rendered="#{frmTipoSala.estado=='NINGUNO'}"
                                      var="r"
@@ -62,25 +62,11 @@
                                 <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoSala.registro.activo}"/>
                                 <p:outputLabel value="Comentarios" for="txtComentarios"/>
                                 <h:inputTextarea id="txtComentarios" value="#{frmTipoSala.registro.comentarios}" cols="70" rows="3"/>
-                            </h:panelGrid>
-                            <p:messages/>
-                            <h:panelGrid columns="#{frmTipoSala.estado=='CREAR'?'1':'2'}">
-                                <p:commandButton value="Guardar Tipo de Sala" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoSala.estado=='CREAR'}"
-                                                 actionListener="#{frmTipoSala.btnCrearHandler}"/>
-
-                                <p:commandButton value="Modificar Tipo de Sala" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoSala.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmTipoSala.btnModificarHandler}"/>
-
-                                <p:commandButton value="Eliminar Tipo de Sala" ajax="true"
-                                                 process="@form" update=":pnlDetalle :pnlTabla"
-                                                 rendered="#{frmTipoSala.estado=='MODIFICAR'}"
-                                                 actionListener="#{frmTipoSala.btnEliminarHandler}"/>
+                                <p:outputLabel value="ExpresionRegular" for="txtExpresionRegular"/>
+                                <h:inputTextarea  id="txtExpresionRegular" value="#{frmTipoSala.registro.expresionRegular}"/>
 
                             </h:panelGrid>
+                           <crud:botonesBottom frm="#{frmTipoSala}"/>
                         </h:panelGrid>
                     </h:form>
                 </h:panelGrid>

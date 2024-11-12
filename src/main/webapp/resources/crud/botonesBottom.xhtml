@@ -25,17 +25,17 @@
     <cc:implementation>
         <p:messages/>
         <h:panelGrid columns="#{cc.attrs.frm.estado=='CREAR'?'1':'2'}">
-            <p:commandButton value="#{abstractform['abstractform.create']}" ajax="true"
+            <p:commandButton value="#{abstractform['abstractform.create']} #{cc.attrs.frm.tituloDePagina}" ajax="true"
                              process="#{cc.attrs.procesar}" update="#{cc.attrs.actualizar}"
                              rendered="#{cc.attrs.frm.estado=='CREAR'}"
                              actionListener="#{cc.attrs.frm.btnCrearHandler}"/>
 
-            <p:commandButton value="#{abstractform['abstractform.update']}" ajax="true"
+            <p:commandButton value="#{abstractform['abstractform.update']} #{cc.attrs.frm.tituloDePagina}" ajax="true"
                              process="#{cc.attrs.procesar}" update="#{cc.attrs.actualizar}"
                              rendered="#{cc.attrs.frm.estado=='MODIFICAR'}"
                              actionListener="#{cc.attrs.frm.btnModificarHandler}"/>
 
-            <p:commandButton value="#{abstractform['abstractform.Delete']}" ajax="true"
+            <p:commandButton value="#{abstractform['abstractform.Delete']} #{cc.attrs.frm.tituloDePagina}" ajax="true"
                              process="#{cc.attrs.procesar}" update="#{cc.attrs.actualizar}"
                              rendered="#{cc.attrs.frm.estado=='MODIFICAR'}"
                              actionListener="#{cc.attrs.frm.btnEliminarHandler}"/>

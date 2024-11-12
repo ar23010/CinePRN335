@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
@@ -23,6 +24,14 @@ public abstract class AbstractForm<T> implements Serializable {
     protected abstract T createNewRegistro();
     protected LazyDataModel<T> modelo;
 
+
+    public abstract String buscarIdPorRegistro(T entity);
+
+    public abstract T buscarRegistroPorId(String id);
+
+    public abstract String getTituloDePagina();
+
+    protected int registrosPorPagina = 10;
 
     @PostConstruct
     public void inicializar() {
@@ -54,7 +63,8 @@ public abstract class AbstractForm<T> implements Serializable {
             @Override
             public int count(Map<String, FilterMeta> map) {
                 try {
-                    return getDataBean().count().intValue();
+                    int contando = contar();
+                    return contando;
                 } catch (Exception e) {
                     FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo contar los registros.");
                     facesContext().addMessage(null, message);
@@ -66,7 +76,8 @@ public abstract class AbstractForm<T> implements Serializable {
             @Override
             public List<T> load(int desde, int max, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filters) {
                 try {
-                    return getDataBean().findRange(desde, max);
+                    List<T> datos = cargarDatos(desde, max);
+                    return datos;
                 } catch (Exception e) {
                     FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudieron cargar los datos.");
                     facesContext().addMessage(null, message);
@@ -75,6 +86,29 @@ public abstract class AbstractForm<T> implements Serializable {
                 return List.of();
             }
         };
+        modelo.setPageSize(registrosPorPagina);
+    }
+    public List<T> cargarDatos(int firstResult, int maxResult) {
+        try {
+            return getDataBean().findRange(firstResult, maxResult);
+        } catch (Exception e) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudieron cargar los datos.");
+            facesContext().addMessage(null, message);
+            e.printStackTrace();
+        }
+        return List.of();
+    }
+
+
+    public int contar() {
+        try {
+            return getDataBean().count().intValue();
+        } catch (Exception e) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo contar los registros.");
+            facesContext().addMessage(null, message);
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public void btnCrearHandler(ActionEvent actionEvent) {
@@ -136,6 +170,32 @@ public abstract class AbstractForm<T> implements Serializable {
         this.registro = createNewRegistro();
         this.estado = ESTADO_CRUD.CREAR;
     }
+
+    public void cambiarSeleccion(SelectEvent<T> event) {
+        if (event != null && event.getObject() != null) {
+            this.registro = event.getObject();
+            this.estado = ESTADO_CRUD.MODIFICAR;
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "No se ha seleccionado ningún registro."));
+        }
+    }
+
+    public void enviarMensaje(String titulo, String detalle, FacesMessage.Severity severidad) {
+        FacesMessage mensaje = new FacesMessage(severidad, titulo, detalle);
+        FacesContext contexto = FacesContext.getCurrentInstance();
+        if (contexto != null) {
+            contexto.addMessage(null, mensaje);
+        }
+    }
+
+
+
+    public int getRegistrosPorPagina() {
+        return registrosPorPagina;
+    }
+
+
 
     public T getRegistro() {
         return registro;

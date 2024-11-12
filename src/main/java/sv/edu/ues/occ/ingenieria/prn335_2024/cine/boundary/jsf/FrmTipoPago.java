@@ -42,4 +42,19 @@ public class FrmTipoPago extends AbstractForm<TipoPago> implements Serializable 
     protected TipoPago createNewRegistro() {
         return new TipoPago();
     }
+
+    @Override
+    public String buscarIdPorRegistro(TipoPago entity) {
+        return "";
+    }
+
+    @Override
+    public TipoPago buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Tipo de Pago";
+    }
 }

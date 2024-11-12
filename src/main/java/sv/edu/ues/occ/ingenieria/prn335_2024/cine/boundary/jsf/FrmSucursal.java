@@ -41,4 +41,19 @@ public class FrmSucursal extends AbstractForm<Sucursal> implements Serializable 
     protected Sucursal createNewRegistro() {
         return new Sucursal();
     }
+
+    @Override
+    public String buscarIdPorRegistro(Sucursal entity) {
+        return "";
+    }
+
+    @Override
+    public Sucursal buscarRegistroPorId(String id) {
+        return null;
+    }
+
+    @Override
+    public String getTituloDePagina() {
+        return "Sucursal";
+    }
 }
