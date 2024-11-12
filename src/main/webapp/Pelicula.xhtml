@@ -118,13 +118,13 @@
 
                                                 <p:outputLabel value="valor" for="txtValor"/>
                                                 <h:inputTextarea id="txtValor" required="true"
-                                                                 validatorMessage="#{frmPelicula.frmPeliculaCaracteristica.validarValor}"
+                                                                 validator="#{frmPelicula.frmPeliculaCaracteristica.validarValor}"
                                                                  value="#{frmPelicula.frmPeliculaCaracteristica.registro.valor}" cols="70" rows="3"
                                                 />
                                                 <p:tooltip for="txtValor" value="#{frmPelicula.frmPeliculaCaracteristica.registro.idTipoPelicula.expresionRegular}" position="right"/>
 
                                             </h:panelGrid>
-                                                <crud:botonesBottom frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar=":pnlDetalleC :pnlTablaC"/>
+                                                <crud:botonesBottom frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar="::tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
                                         </h:panelGrid>
                                     </h:form>
                                 </h:panelGrid>

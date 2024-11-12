@@ -120,8 +120,9 @@
                                                 <h:inputTextarea id="txtValor"
                                                                  validator="#{frmSala.frmSalaCaracteristica.validarValor}"
                                                                  value="#{frmSala.frmSalaCaracteristica.registro.valor}" cols="70" rows="3"/>
+                                                <p:tooltip for="txtValor" value="#{frmSala.frmSalaCaracteristica.registro.idTipoSala.expresionRegular}" position="right"/>
                                             </h:panelGrid>
-                                            <crud:botonesBottom frm="#{frmSala.frmSalaCaracteristica}" actualizar=":pnlDetalleC :pnlTablaC"/>
+                                            <crud:botonesBottom frm="#{frmSala.frmSalaCaracteristica}" actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
                                         </h:panelGrid>
                                     </h:form>
                                 </h:panelGrid>
