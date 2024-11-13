@@ -9,7 +9,7 @@ import org.primefaces.event.TabChangeEvent;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SalaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Sala;
-
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Asiento;
 import java.io.Serializable;
 
 @Named
@@ -26,6 +26,8 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
     @Inject
     FrmSalaCaracteristica frmSalaCaracteristica;
 
+    @Inject
+    FrmAsiento frmAsiento;
 
 
 
@@ -87,5 +89,7 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
 
     public FrmSalaCaracteristica getFrmSalaCaracteristica() {return frmSalaCaracteristica;}
 
+
+    public Object getFrmAsiento() {return frmAsiento;}
 
 }
