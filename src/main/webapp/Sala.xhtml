@@ -158,7 +158,7 @@
                                         >
 
 
-                                            <p:ajax event="rowSelect" update=" :tabDetalle :pnlDetalleA :tabDetalle :pnlTablaA" process="@this"/>
+                                            <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleA :tabDetalle:pnlTablaA" process="@this"/>
                                             <p:column headerText="ID">
                                                 <h:outputText value="#{ra.idAsiento}"/>
                                             </p:column>
@@ -204,8 +204,7 @@
 
                                     </p:tab>
 
-                                    <p:tab title="Caracteristicas"
-                                           disabled="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado!='MODIFICAR'}">
+                                    <p:tab title="Caracteristicas" closable="false">  <!-- disabled="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado!='MODIFICAR'}"-->
                                         <h:panelGrid>
                                             <h:panelGroup id="pnlTablaAC">
                                                 <h:form id="frmTablaAC">
