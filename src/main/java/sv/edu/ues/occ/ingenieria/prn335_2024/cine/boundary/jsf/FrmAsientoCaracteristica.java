@@ -139,5 +139,6 @@ public class FrmAsientoCaracteristica extends AbstractForm<AsientoCaracteristica
         }
         input.setValid(false);
     }
+
 }
 
