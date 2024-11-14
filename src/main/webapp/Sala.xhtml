@@ -23,7 +23,7 @@
                                      lazy="true" paginator="true" selectionMode="single"
 
                         >
-                            <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"/>
+                            <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla  :tabDetalle" process="@this"/>
                             <p:column headerText="ID">
                                 <h:outputText value="#{r.idSala}"/>
                             </p:column>
@@ -284,12 +284,61 @@
 
 
                                     </p:tab>
+
+
                                 </p:tabView>
                             </h:panelGroup>
                         </h:panelGrid>
                     </p:tab>
 
+                    <p:tab title="Funciones" closable="false" disabled="#{frmSala.estado!='MODIFICAR'}" id="tabFunciones">
+                        <h2>Programacion de #{frmSala.registro.nombre} </h2>
+                                <h:panelGrid id="panelFunciones">
+                                   <h:form id="formFunciones">
+                                       <p:growl id="messages" showDetail="true"/>
 
+                                     <!--  <p:schedule id="schedule" value="#{frmSala.frmProgramacion.scheduleJava8View.agregarProgramacion(frmSala.frmProgramacion.cargarDatos(0,100),frmSala.registro.idSala)}" widgetVar="myschedule"
+                                                   timeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}" clientTimeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}">-->
+                                       <p:schedule id="schedule" value="#{frmSala.cargarProgramcion()}" widgetVar="myschedule"
+                                                   timeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}" clientTimeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}">
+                                           <p:ajax event="dateSelect" listener="#{scheduleJava8View.onDateSelect}" update="eventDetails"
+                                                   oncomplete="PF('eventDialog').show();"/>
+                                           <p:ajax event="eventSelect" listener="#{scheduleJava8View.onEventSelect}" update="eventDetails"
+                                                   oncomplete="PF('eventDialog').show();"/>
+                                           <p:ajax event="eventMove" listener="#{scheduleJava8View.onEventMove}" update="messages"/>
+                                           <p:ajax event="eventResize" listener="#{scheduleJava8View.onEventResize}" update="messages"/>
+                                       </p:schedule>
+
+                                       <p:dialog widgetVar="eventDialog" header="Programación" showEffect="fade" hideEffect="fade">
+                                           <h:panelGrid id="eventDetails" columns="2" cellpadding="7">
+                                               <p:outputLabel value="ID" for="txtID"  styleClass="font-bold"/>
+                                               <p:inputText id="txtID" value="#{scheduleJava8View.event.title}" required="true"/>
+
+                                               <p:outputLabel  value="Pelicula" for="txtPelicula" styleClass="font-bold"/>
+                                               <p:inputText id="txtPelicula" value="#{scheduleJava8View.event.title}" required="true"/>
+
+                                               <p:outputLabel value="Inicio" for="txtInicio" styleClass="font-bold"/>
+                                               <p:datePicker id="txtInicio" value="#{scheduleJava8View.event.startDate}" pattern="dd/MM/yyyy"
+                                                             showTime="true" appendTo="@(body)"/>
+
+                                               <p:outputLabel value="Fin" for="txtFin"  styleClass="font-bold"/>
+                                               <p:datePicker id="txtFin" value="#{scheduleJava8View.event.endDate}" pattern="dd/MM/yyyy"
+                                                             showTime="true" appendTo="@(body)"/>
+
+
+                                           </h:panelGrid>
+
+                                           <div class="flex justify-content-between mt-3">
+                                               <p:commandButton value="create" id="save" action="#{scheduleJava8View.addEvent}"
+                                                                oncomplete="PF('myschedule').update();PF('eventDialog').hide();"/>
+                                           </div>
+                                       </p:dialog>
+
+                                   </h:form>
+
+                                </h:panelGrid>
+
+                                </p:tab>
 
 
 

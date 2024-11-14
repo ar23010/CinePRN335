@@ -6,6 +6,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.ScheduleModel;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SalaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Sala;
@@ -29,6 +30,10 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
     @Inject
     FrmAsiento frmAsiento;
 
+    @Inject
+    FrmProgramacion frmProgramacion;
+
+
 
 
 
@@ -39,6 +44,8 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
             }
         }
     }
+
+
 
 
 
@@ -90,6 +97,15 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
     public FrmSalaCaracteristica getFrmSalaCaracteristica() {return frmSalaCaracteristica;}
 
 
-    public Object getFrmAsiento() {return frmAsiento;}
+    public FrmAsiento getFrmAsiento() {return frmAsiento;}
 
+    public FrmProgramacion getFrmProgramacion() {
+        return frmProgramacion;
+    }
+
+
+    public ScheduleModel cargarProgramcion(){
+        return  frmProgramacion.scheduleJava8View.agregarProgramacion(frmProgramacion.cargarDatos(0,1000),this.registro.getIdSala());
+
+    }
 }
