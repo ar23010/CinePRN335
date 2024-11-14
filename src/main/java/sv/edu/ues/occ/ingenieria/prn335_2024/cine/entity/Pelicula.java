@@ -55,6 +55,10 @@ public class Pelicula {
         return sinopsis;
     }
 
+    public List<PeliculaCaracteristica> getPeliculaCaracteristicaList() {
+        return PeliculaCaracteristicaList;
+    }
+
     public void setSinopsis(String sinopsis) {
         this.sinopsis = sinopsis;
     }

@@ -175,6 +175,7 @@ public abstract class AbstractForm<T> implements Serializable {
         if (event != null && event.getObject() != null) {
             this.registro = event.getObject();
             this.estado = ESTADO_CRUD.MODIFICAR;
+
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "No se ha seleccionado ningún registro."));

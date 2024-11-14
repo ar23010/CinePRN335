@@ -36,4 +36,6 @@ public class PeliculaBean extends AbstractDataPersistence<Pelicula> implements S
         }
         return List.of();
     }
+
+
 }

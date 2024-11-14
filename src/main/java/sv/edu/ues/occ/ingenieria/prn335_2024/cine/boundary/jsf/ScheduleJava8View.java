@@ -1,6 +1,8 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.AjaxBehaviorEvent;
@@ -8,14 +10,13 @@ import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.persistence.EntityManager;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.schedule.ScheduleEntryMoveEvent;
 import org.primefaces.event.schedule.ScheduleEntryResizeEvent;
 import org.primefaces.event.schedule.ScheduleRangeEvent;
 import org.primefaces.model.*;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.ProgramacionBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.PeliculaCaracteristica;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Programacion;
 
 import java.io.Serializable;
@@ -75,7 +76,8 @@ public class ScheduleJava8View implements Serializable {
     private String columnHeaderFormat = "";
     private String view = "timeGridWeek";
     private String height = "auto";
-    private String txt2;
+    private String nomPelicula;
+    private Pelicula pelicula;
 
     private String extenderCode = "// Write your code here or select an example from above";
     private String selectedExtenderExample = "";
@@ -85,6 +87,9 @@ public class ScheduleJava8View implements Serializable {
 
     @Inject
     FrmProgramacion frmProgramacion;
+
+    @Inject
+    FrmSala frmSala;
 
     @Inject
     FrmPelicula frmPelicula;
@@ -98,6 +103,8 @@ public class ScheduleJava8View implements Serializable {
     @PostConstruct
     public void init() {
         eventModel = new DefaultScheduleModel();
+
+
 
         lazyEventModel = new LazyScheduleModel() {
 
@@ -115,27 +122,43 @@ public class ScheduleJava8View implements Serializable {
         };
 
     }
-    public Long sumar(){
+
+    public void obtenerFechaFin(){
 
 
-        if(frmPelicula.frmPeliculaCaracteristica.registro.getIdTipoPelicula().getNombre().equals("DURACION")) {
-       return Long.parseLong(frmPelicula.frmPeliculaCaracteristica.registro.getValor());
+        System.out.println("Esta funcionando");
+        List<Pelicula> peliculas = frmProgramacion.frmPelicula.cargarDatos(0, 100000);
+        for(Pelicula p: peliculas){
+            if(p.getNombre().equals(nomPelicula)){
+                for(PeliculaCaracteristica pc: p.getPeliculaCaracteristicaList()) {
+                    if (pc.getIdTipoPelicula().getNombre().toUpperCase().equals("DURACION")) {
+                        event.setEndDate( event.getStartDate().plusMinutes(Long.parseLong(pc.getValor())));
+
+
+                    }
+                }
+
+            }
 
         }
 
-        return null;
     }
+
 
     public FrmPelicula getFrmPelicula() {
         return frmPelicula;
     }
 
-    public String getTxt2() {
-        return txt2;
+    public FrmSala getFrmSala() {
+        return frmSala;
     }
 
-    public void setTxt2(String txt2) {
-        this.txt2 = txt2;
+    public String getNomPelicula() {
+        return nomPelicula;
+    }
+
+    public void setNomPelicula(String nomPelicula) {
+        this.nomPelicula = nomPelicula;
     }
 
     public List<String> completeText(String query) {
@@ -151,15 +174,15 @@ public class ScheduleJava8View implements Serializable {
 
 
 
-        public ScheduleModel agregarProgramacion(List<Programacion> programaciones,Integer idSala) {
+        public ScheduleModel agregarProgramacion(List<Programacion> programaciones, Integer idSala) {
         eventModel = new DefaultScheduleModel();
         for(Programacion p:programaciones){
         if(p.getIdSala().getIdSala().equals(idSala)) {
             DefaultScheduleEvent<?> event = DefaultScheduleEvent.builder()
+                    .id(p.getIdProgramacion().toString())
                     .title(p.getIdPelicula().getNombre())
                     .startDate(p.getDesde().toLocalDateTime())
                     .endDate(p.getHasta().toLocalDateTime())
-                    .description(p.getComentarios())
                     .borderColor("blue")
                     .build();
             eventModel.addEvent(event);
@@ -182,6 +205,7 @@ public class ScheduleJava8View implements Serializable {
     }
 
     public ScheduleModel getEventModel() {
+        agregarProgramacion(frmProgramacion.cargarDatos(0,100), frmSala.getRegistro().getIdSala());
         return eventModel;
     }
 
