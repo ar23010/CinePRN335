@@ -15,11 +15,13 @@ import org.primefaces.event.schedule.ScheduleEntryResizeEvent;
 import org.primefaces.event.schedule.ScheduleRangeEvent;
 import org.primefaces.model.*;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.ProgramacionBean;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Programacion;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -73,6 +75,7 @@ public class ScheduleJava8View implements Serializable {
     private String columnHeaderFormat = "";
     private String view = "timeGridWeek";
     private String height = "auto";
+    private String txt2;
 
     private String extenderCode = "// Write your code here or select an example from above";
     private String selectedExtenderExample = "";
@@ -82,6 +85,9 @@ public class ScheduleJava8View implements Serializable {
 
     @Inject
     FrmProgramacion frmProgramacion;
+
+    @Inject
+    FrmPelicula frmPelicula;
 
 
 
@@ -109,10 +115,43 @@ public class ScheduleJava8View implements Serializable {
         };
 
     }
+    public Long sumar(){
+
+
+        if(frmPelicula.frmPeliculaCaracteristica.registro.getIdTipoPelicula().getNombre().equals("DURACION")) {
+       return Long.parseLong(frmPelicula.frmPeliculaCaracteristica.registro.getValor());
+
+        }
+
+        return null;
+    }
+
+    public FrmPelicula getFrmPelicula() {
+        return frmPelicula;
+    }
+
+    public String getTxt2() {
+        return txt2;
+    }
+
+    public void setTxt2(String txt2) {
+        this.txt2 = txt2;
+    }
+
+    public List<String> completeText(String query) {
+        String queryLowerCase = query.toLowerCase();
+        List<String> peliculaList = new ArrayList<>();
+        List<Pelicula> pelicula = frmProgramacion.frmPelicula.cargarDatos(0, 100000);
+        for (Pelicula pelicula1 : pelicula) {
+            peliculaList.add(pelicula1.getNombre());
+        }
+        return peliculaList.stream().filter(t -> t.toLowerCase().startsWith(queryLowerCase)).collect(Collectors.toList());
+    }
 
 
 
-    public ScheduleModel agregarProgramacion(List<Programacion> programaciones,Integer idSala) {
+
+        public ScheduleModel agregarProgramacion(List<Programacion> programaciones,Integer idSala) {
         eventModel = new DefaultScheduleModel();
         for(Programacion p:programaciones){
         if(p.getIdSala().getIdSala().equals(idSala)) {

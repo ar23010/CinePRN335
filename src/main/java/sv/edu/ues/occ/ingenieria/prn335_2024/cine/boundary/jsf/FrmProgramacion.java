@@ -21,6 +21,7 @@ import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.SalaCaracteristica;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,9 @@ public class FrmProgramacion extends AbstractForm<Programacion> implements Seria
 
     @Inject
     ScheduleJava8View scheduleJava8View;
+
+    @Inject
+    FrmPelicula frmPelicula;
 
 
     private ScheduleModel eventModel;
@@ -108,21 +112,14 @@ public class FrmProgramacion extends AbstractForm<Programacion> implements Seria
     }
 
 
-
-
-    public PeliculaBean getpBean() {
-        return pBean;
+    public FrmPelicula getFrmPelicula() {
+        return frmPelicula;
     }
-
-    public void setpBean(PeliculaBean pBean) {
-        this.pBean = pBean;
-    }
-
-    public List<Pelicula> getPeliculaList(){return peliculaList;}
 
     public ScheduleJava8View getScheduleJava8View() {
         return scheduleJava8View;
     }
+
 
 
 

@@ -9,8 +9,12 @@ import org.primefaces.event.TabChangeEvent;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.PeliculaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Programacion;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Named
 @ViewScoped
@@ -82,6 +86,18 @@ public class FrmPelicula extends AbstractForm<Pelicula> implements Serializable 
 
     public FrmPeliculaCaracteristica getFrmPeliculaCaracteristica() {
         return frmPeliculaCaracteristica;
+    }
+
+    @Override
+    public List<Pelicula> cargarDatos(int firstResult, int maxResults){
+        try{
+            if(peliBean!=null){
+                return peliBean.findAll(firstResult,maxResults);
+            }
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+        return List.of();
     }
 
 
