@@ -4,6 +4,7 @@ package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -168,6 +169,30 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
 
     public FrmProgramacion getFrmProgramacion() {
         return frmProgramacion;
+    }
+
+
+    String tooltip;
+
+    public String getTooltip() {
+        return tooltip;
+    }
+
+    public void setTooltip(String tooltip) {
+        this.tooltip = tooltip;
+    }
+
+    public void actualizarTooltip(AjaxBehaviorEvent event) {
+        TipoAsiento tipoSeleccionado = frmAsiento.frmAsientoCaracteristica.tipoAsientoList.stream()
+                .filter(tp -> tp.getIdTipoAsiento().equals(frmAsiento.frmAsientoCaracteristica.getIdTipoAsientoSeleccionado()))
+                .findFirst()
+                .orElse(null);
+
+        if (tipoSeleccionado != null) {
+            this.tooltip = tipoSeleccionado.getExpresionRegular();
+        } else {
+            this.tooltip = "No hay expresión regular disponible";
+        }
     }
 
 

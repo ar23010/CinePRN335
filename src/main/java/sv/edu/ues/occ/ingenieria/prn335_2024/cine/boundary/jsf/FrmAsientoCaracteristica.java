@@ -6,6 +6,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIInput;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
@@ -76,6 +77,8 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
 
         return 0;
     }
+
+
 
 
     @Override
