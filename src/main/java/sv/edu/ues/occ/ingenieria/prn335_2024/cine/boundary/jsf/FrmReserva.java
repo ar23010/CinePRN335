@@ -1,6 +1,7 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 import jakarta.annotation.ManagedBean;
 import jakarta.annotation.PostConstruct;
+import jakarta.el.MethodExpression;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -29,6 +30,11 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
 
     @Inject
     FacesContext facesContext;
+
+    @Inject
+    FrmAsiento frmAsiento;
+
+    public FrmAsiento getFrmAsiento() {return frmAsiento;}
 
     @Override
     protected Object getId(Reserva Object) {
@@ -105,7 +111,7 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
         return tiposReserva;
     }
 
-    public String onflowProces (FlowEvent event) {
+    public String onFlowProcess(FlowEvent event) {
         String pasoAnterior = event.getOldStep();
         String pasoNuevo = event.getNewStep();
 
@@ -118,11 +124,4 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
     }
 
 
-
-
-
-    @Inject
-    FrmAsiento frmAsiento;
-
-    public FrmAsiento getFrmAsiento() {return frmAsiento;}
 }
