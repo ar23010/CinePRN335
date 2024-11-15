@@ -51,6 +51,32 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
         }
     }
 
+    @Override
+    public List<AsientoCaracteristica> cargarDatos(int firstResult, int maxResults){
+        try{
+            if(this.idAsiento != null && acBean!=null){
+                return acBean.findByIdAsiento(this.idAsiento,firstResult,maxResults);
+            }
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+        return List.of();
+    }
+
+
+    @Override
+    public int contarRegistros(){
+        try{
+            if(idAsiento != null && acBean!=null){
+                return acBean.countAsiento(this.idAsiento);
+            }
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+
+        return 0;
+    }
+
 
     @Override
     protected Object getId(AsientoCaracteristica Object) {
@@ -81,11 +107,20 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
 
     @Override
     public String buscarIdPorRegistro(AsientoCaracteristica entity) {
-        return "";
+        if (entity != null && entity.getIdAsientoCaracteristica() != null) {
+            return entity.getIdAsientoCaracteristica().toString();
+        }
+        return null;
     }
 
     @Override
     public AsientoCaracteristica buscarRegistroPorId(String id) {
+        if (id != null && this.modelo != null) {
+            return this.modelo.getWrappedData().stream()
+                    .filter(r -> r.getIdAsientoCaracteristica().toString().equals(id))
+                    .findFirst()
+                    .orElse(null);
+        }
         return null;
     }
 

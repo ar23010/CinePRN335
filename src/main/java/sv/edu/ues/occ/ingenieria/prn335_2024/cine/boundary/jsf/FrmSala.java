@@ -1,6 +1,8 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -9,9 +11,13 @@ import org.primefaces.event.TabChangeEvent;
 
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SalaBean;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SucursalBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.*;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @Named
@@ -21,6 +27,9 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
 
     @Inject
     SalaBean salaBean;
+
+    @Inject
+    SucursalBean sucursalBean;
 
     @Inject
     FacesContext facesContext;
@@ -37,11 +46,45 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
     @Inject
     FrmSucursal frmSucursal;
 
+    List<Sucursal> sucursalList;
+
+    Integer idSucursal;
+
+
+    @PostConstruct
+    @Override
+    public void inicializar(){
+        super.inicializar();
+        try{
+            this.sucursalList = sucursalBean.findRange(0, Integer.MAX_VALUE);
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
+        }
+    }
+
+    @Override
+    public List<Sala> cargarDatos(int firstResult, int maxResults){
+        try{
+            if(salaBean!=null){
+                return salaBean.findAll(firstResult,maxResults);
+            }
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+        return List.of();
+    }
+
 
     public void cambiarTab(TabChangeEvent tce){
         if(tce.getTab().getTitle().equals("Caracteristicas")){
             if(this.registro!=null && this.frmSalaCaracteristica!=null){
                 this.frmSalaCaracteristica.setIdSala(this.registro.getIdSala());
+            }
+        }
+        if(tce.getTab().getTitle().equals("Asientos")){
+            if(this.registro!=null && this.frmAsiento!=null){
+                this.frmAsiento.setIdSala(this.registro.getIdSala());
             }
         }
     }
@@ -65,7 +108,14 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
 
     @Override
     protected Sala createNewRegistro() {
-        return new Sala();
+        Sala pc = new Sala();
+        if(idSucursal!=null){
+            pc.setIdSucursal(new Sucursal(idSucursal));
+        }
+        return pc;
+
+
+
     }
 
     @Override
@@ -92,6 +142,24 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
         return "Sala";
     }
 
+
+    public Integer getIdSucursalSeleccionado() {
+        if(this.registro!=null && this.registro.getIdSucursal()!=null){
+            return this.registro.getIdSucursal().getIdSucursal();
+        }
+        return null;
+    }
+
+
+    public void setIdSucursalSeleccionado(final Integer idSucursall) {
+        if(this.registro!=null && this.sucursalList!=null && !this.sucursalList.isEmpty()){
+            this.registro.setIdSucursal(this.sucursalList.stream().filter(r->r.getIdSucursal().equals(idSucursall)).findFirst().orElse(null));
+        }
+    }
+
+    public List<Sucursal> getSucursalList() {
+        return sucursalList;
+    }
 
     public FrmSalaCaracteristica getFrmSalaCaracteristica() {return frmSalaCaracteristica;}
 

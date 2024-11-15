@@ -29,6 +29,7 @@ public class SalaCaracteristicaBean extends AbstractDataPersistence<SalaCaracter
         try{
             TypedQuery<SalaCaracteristica> q = em.createNamedQuery("SalaCaracteristica.findByIdSala", SalaCaracteristica.class);
             q.setParameter("idSala", idSala);
+            System.out.println("idSala" + idSala);
             q.setFirstResult(first);
             q.setMaxResults(max);
             return q.getResultList();

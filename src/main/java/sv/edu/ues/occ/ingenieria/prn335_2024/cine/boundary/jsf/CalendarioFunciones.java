@@ -1,9 +1,11 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.*;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
@@ -94,7 +96,7 @@ public class CalendarioFunciones implements Serializable {
                 frmProgramacion.prBean.create(programacion);
                 agregarProgramacion(frmProgramacion.cargarDatos(0, 100), frmSala.getRegistro().getIdSala());
             }else{
-                System.out.println("La fecha fin es anterior a la fecha inicio");
+                mensajeAdvertencia("La fecha Fin no puede ser menor a la fecha de Inicio");
             }
         }
         } catch (Exception e) {
@@ -116,7 +118,7 @@ public class CalendarioFunciones implements Serializable {
 
                     agregarProgramacion(frmProgramacion.cargarDatos(0, 100), frmSala.getRegistro().getIdSala());
                 }else{
-                    System.out.println("La fecha fin es anterior a la fecha inicio");
+                    mensajeAdvertencia("La fecha Fin no puede ser menor a la fecha de Inicio");
                 }
             }
         } catch (Exception e) {
@@ -176,6 +178,12 @@ public class CalendarioFunciones implements Serializable {
         return eventModel;
     }
 
+    //Lanza un mensaje si la Fecha fin es menor que fecha inicio
+    public void mensajeAdvertencia(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia", mensaje);
+
+        PrimeFaces.current().dialog().showMessageDynamic(message);
+    }
 
 
     public ScheduleModel getEventModel() {

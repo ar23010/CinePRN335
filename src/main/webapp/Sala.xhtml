@@ -57,7 +57,7 @@
                         <h:panelGrid>
                             <h:form id="frmDetalle">
                                 <h:panelGrid>
-                                    <h:panelGrid columns="2">
+                                    <h:panelGrid columns="1">
                                         <p:outputLabel value="ID" for="txtId"/>
                                         <p:inputText id="txtId" disabled="true" readonly="true"
                                                      value="#{frmSala.registro.idSala}"/>
@@ -66,6 +66,11 @@
                                         <p:inputText id="txtNombre" value="#{frmSala.registro.nombre}" size="70"/>
 
                                         <p:outputLabel value="Sucursal" for="listaSucursal"/><!--Areglar esto-->
+                                        <h:selectOneMenu id="listaSucursal" value="#{frmSala.idSucursalSeleccionado}">
+                                            <f:selectItems value="#{frmSala.sucursalList}" var="tp"
+                                                           itemLabel="#{tp.nombre}" itemValue="#{tp.idSucursal}"/>
+                                            <f:ajax execute="@this" />
+                                        </h:selectOneMenu>
 
                                         <p:outputLabel value="Activo" for="chkActivo"/>
                                         <h:selectBooleanCheckbox id="chkActivo" value="#{frmSala.registro.activo}"/>
@@ -159,7 +164,7 @@
 
                     <p:tab title="Asientos" closable="false" disabled="#{frmSala.estado!='MODIFICAR'}">
                         <h2>Asientos de #{frmSala.registro.nombre}</h2>
-                        <h:panelGrid>
+
                             <h:panelGroup id="pnlTablaA">
                                 <h:form id="frmTablaA">
                                     <h:panelGrid>
@@ -178,14 +183,17 @@
                                             <p:column headerText="Nombre">
                                                 <h:outputText value="#{ra.nombre}"/>
                                             </p:column>
+
+
                                         </p:dataTable>
 
                                         <h:panelGrid>
-                                            <crud:botonesTop frm="#{frmSala.frmAsiento}"/>
+                                            <crud:botonesTop frm="#{frmSala.frmAsiento}" actualizar=":tabDetalle:pnlDetalleA :tabDetalle:pnlTablaA"/>
                                         </h:panelGrid>
 
                                     </h:panelGrid>
                                 </h:form>
+
                             </h:panelGroup>
 
                             <h:panelGroup id="pnlDetalleA">
@@ -226,7 +234,7 @@
                                     </p:tab>
                                 </p:tabView>
                             </h:panelGroup>
-                        </h:panelGrid>
+
                     </p:tab>
 
                     <p:tab title="Funciones" closable="false" disabled="#{frmSala.estado!='MODIFICAR'}" id="tabFunciones">

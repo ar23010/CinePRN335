@@ -8,6 +8,9 @@ import org.primefaces.event.TabChangeEvent;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AsientoBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Asiento;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.PeliculaCaracteristica;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Sala;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.SalaCaracteristica;
 
 
 import java.io.Serializable;
@@ -27,6 +30,10 @@ public class FrmAsiento extends AbstractFormulario<Asiento> implements Serializa
 
     @Inject
     FrmAsientoCaracteristica frmAsientoCaracteristica;
+
+    Integer idSala;
+
+
 
 
     public void cambiarTab(TabChangeEvent tce){
@@ -54,7 +61,11 @@ public class FrmAsiento extends AbstractFormulario<Asiento> implements Serializa
 
     @Override
     protected Asiento createNewRegistro() {
-        return new Asiento();
+        Asiento asiento = new Asiento();
+        if(idSala!=null){
+            asiento.setIdSala(new Sala(idSala));
+        }
+        return asiento;
     }
 
     @Override
@@ -75,8 +86,8 @@ public class FrmAsiento extends AbstractFormulario<Asiento> implements Serializa
     @Override
     public List<Asiento> cargarDatos(int firstResult, int maxResults){
         try{
-            if(asientoBean!=null){
-                return asientoBean.findAll(firstResult,maxResults);
+            if(this.idSala != null && asientoBean!=null){
+                return asientoBean.findByIdSala(this.idSala,firstResult,maxResults);
             }
         }catch (Exception e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
@@ -84,6 +95,13 @@ public class FrmAsiento extends AbstractFormulario<Asiento> implements Serializa
         return List.of();
     }
 
+    public Integer getIdSala() {
+        return idSala;
+    }
+
+    public void setIdSala(Integer idSala) {
+        this.idSala = idSala;
+    }
 
     public FrmAsientoCaracteristica getFrmAsientoCaracteristica() {
         return frmAsientoCaracteristica;

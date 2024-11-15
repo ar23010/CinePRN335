@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SucursalBean;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.PeliculaCaracteristica;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Sucursal;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.TipoPelicula;
@@ -30,7 +31,7 @@ public class FrmSucursal extends AbstractFormulario<Sucursal> implements Seriali
 
     List<Sucursal> sucursalList;
 
-    Long idSucursal;
+    Integer idSucursal;
 
     @PostConstruct
     @Override
@@ -43,19 +44,6 @@ public class FrmSucursal extends AbstractFormulario<Sucursal> implements Seriali
             enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
         }
     }
-
-    @Override
-    public List<Sucursal> cargarDatos(int firstResult, int maxResults){
-        try{
-            if(this.idSucursal != null && sBean!=null){
-                return sBean.findAll(firstResult,maxResults);
-            }
-        }catch (Exception e){
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-        }
-        return List.of();
-    }
-
 
 
 
@@ -76,8 +64,7 @@ public class FrmSucursal extends AbstractFormulario<Sucursal> implements Seriali
 
     @Override
     protected Sucursal createNewRegistro() {
-        return new Sucursal();
-    }
+      return new Sucursal(); }
 
     @Override
     public String buscarIdPorRegistro(Sucursal entity) {
@@ -93,6 +80,11 @@ public class FrmSucursal extends AbstractFormulario<Sucursal> implements Seriali
     public String getTituloDePagina() {
         return "Sucursal";
     }
+
+    public List<Sucursal> getSucursalList() {
+        return sucursalList;
+    }
+
 
 
 

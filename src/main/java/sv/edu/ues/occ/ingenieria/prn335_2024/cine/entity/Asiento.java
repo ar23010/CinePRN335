@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "asiento", schema = "public")
 @NamedQueries({
-        @NamedQuery(name = "Asiento.findAll", query = "SELECT a FROM Asiento a ORDER BY a.idAsiento ASC")
+        @NamedQuery(name = "Asiento.findByIdSala", query = "SELECT asiento FROM Asiento asiento WHERE asiento.idSala.idSala=:idSala ORDER BY asiento.idAsiento ASC")
 })
 public class Asiento {
     @Id

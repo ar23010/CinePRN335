@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Asiento;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.SalaCaracteristica;
 
 
 import java.io.Serializable;
@@ -26,9 +27,10 @@ public class AsientoBean extends AbstractDataPersistence<Asiento> implements Ser
 
 
 
-    public List<Asiento> findAll(int first, int max) {
+    public List<Asiento> findByIdSala(final Integer idSala, int first, int max) {
         try{
-            TypedQuery<Asiento> q = em.createNamedQuery("Asiento.findAll", Asiento.class);
+            TypedQuery<Asiento> q = em.createNamedQuery("Asiento.findByIdSala", Asiento.class);
+            q.setParameter("idSala", idSala);
             q.setFirstResult(first);
             q.setMaxResults(max);
             return q.getResultList();

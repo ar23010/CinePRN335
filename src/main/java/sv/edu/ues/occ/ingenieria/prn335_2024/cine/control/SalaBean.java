@@ -5,6 +5,8 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Sala;
 
 import java.io.Serializable;
@@ -31,20 +33,16 @@ public class SalaBean extends AbstractDataPersistence<Sala> implements Serializa
     }
 
 
-   public List<Sala> findByIdTipoSala(Integer idTipoSala, int first, int max){
-        if (idTipoSala != null){
-          try{
-              if(em != null){
-                  Query q = em.createNamedQuery("Sala.findByIdTipoSala");
-                  q.setParameter("idTipoSala", idTipoSala);
-                  return q.getResultList();
-
-              }
-          }catch (Exception e){
-              Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-          }
+    public List<Sala> findAll(int first, int max) {
+        try{
+            TypedQuery<Sala> q = em.createNamedQuery("Sala.findAll", Sala.class);
+            q.setFirstResult(first);
+            q.setMaxResults(max);
+            return q.getResultList();
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage());
         }
-        return Collections.emptyList();
+        return List.of();
     }
 }
 
