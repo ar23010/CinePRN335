@@ -35,7 +35,7 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
     TipoAsientoBean taBean;
 
     List<TipoAsiento> tipoAsientoList;
-
+    List<AsientoCaracteristica> AsientoCaracteristicaList;
     Long idAsiento;
 
 
@@ -50,7 +50,16 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
             enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
         }
     }
-
+    public List<AsientoCaracteristica> cargarDatos(int firstResult, int maxResults){
+        try{
+            if(this.idAsiento != null && acBean!=null){
+                return acBean.findByIdAsiento(this.idAsiento,firstResult,maxResults);
+            }
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+        return List.of();
+    }
 
     @Override
     protected Object getId(AsientoCaracteristica Object) {
@@ -124,6 +133,13 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
         }
     }
 
+    public Long getIdAsientoSeleccionado() {
+        if(this.registro!=null && this.registro.getIdAsiento()!=null){
+            return this.registro.getIdAsiento().getIdAsiento();
+        }
+        return null;
+    }
+
 
     public void validarValor(FacesContext fc, UIComponent componente, Object valor){
         UIInput input = (UIInput) componente;
@@ -140,5 +156,6 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
         input.setValid(false);
     }
 
+    public Object getAsientoCaracteristicaList() {return AsientoCaracteristicaList;}
 }
 

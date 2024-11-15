@@ -16,7 +16,7 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmSala.modelo}"
-                                     rows="#{frmSala.registrosPorPagina}"
+                                     rows="#{frmSala.registrosEnPagina}"
                                      selection="#{frmSala.registro}"
                                      rendered="#{frmSala.estado=='NINGUNO'}"
                                      var="r"
@@ -81,7 +81,7 @@
                                             <p:ajax event="rowSelect"
                                                     update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"
                                                     process="@this"
-                                                    listener="#{frmSala.frmSalaCaracteristica.cambiarSeleccion}"/>
+                                                    listener="#{frmSala.frmSalaCaracteristica.cambioSeleccion}"/>
                                             <p:column headerText="ID">
                                                 <h:outputText value="#{rc.idSalaCaracteristica}"/>
                                             </p:column>
@@ -150,7 +150,7 @@
                                     <p:dataTable
                                             value="#{frmSala.frmAsiento.modelo}"
                                             var="ra"
-                                            rows="#{frmSala.frmAsiento.registrosPorPagina}"
+                                            rows="#{frmSala.frmAsiento.registrosEnPagina}"
                                             lazy="true"
                                             selectionMode="single"
                                             selection="#{frmSala.frmAsiento.registro}"
@@ -160,7 +160,7 @@
                                         <p:ajax event="rowSelect"
                                                 update=":tabDetalle:pnlDetalleA :tabDetalle:pnlTablaA :tabDetalle:pnlListaAC :tabDetalle:pnlDetalleAC :tabDetalle:pnlSpplitter"
                                                 process="@this"
-                                                listener="#{frmSala.frmAsiento.cambiarSeleccion}"
+                                                listener="#{frmSala.frmAsiento.cambioSeleccion}"
                                         />
 
                                         <p:column headerText="ID">
@@ -224,7 +224,7 @@
 
                                                     <h4>Características de Asientos</h4>
                                                     <h:selectOneListbox
-                                                            value="#{frmSala.frmAsiento.frmAsientoCaracteristica.selectedIdAsiento}"
+                                                            value="#{frmSala.frmAsiento.frmAsientoCaracteristica.idAsientoSeleccionado}"
                                                     >
                                                         <f:selectItems
                                                                 value="#{frmSala.frmAsiento.frmAsientoCaracteristica.asientoCaracteristicaList}"
@@ -338,7 +338,7 @@
                                         <p:outputLabel value="Pelicula" for="txtPelicula" styleClass="font-bold"/>
 
                                         <p:autoComplete id="acMinLength" minQueryLength="3"
-                                                        value="#{frmSala.frmProgramacion.calendarSchedule.nomPelicula}"
+                                                        value="#{frmSala.frmProgramacion.calendarSchedule.nombrePelicula}"
                                                         completeMethod="#{frmSala.frmProgramacion.calendarSchedule.completeText}"
                                                         effect="fade" scrollHeight="250">">
 
