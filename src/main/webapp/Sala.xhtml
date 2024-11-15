@@ -158,7 +158,9 @@
                                         >
 
 
-                                            <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleA :tabDetalle:pnlTablaA" process="@this"/>
+                                            <p:ajax event="rowSelect"
+                                                    update=":tabDetalle:pnlDetalleA :tabDetalle:pnlTablaA"
+                                                    process="@this"/>
                                             <p:column headerText="ID">
                                                 <h:outputText value="#{ra.idAsiento}"/>
                                             </p:column>
@@ -205,16 +207,15 @@
 
                                         <h:selectOneListbox id="lstTipoAsiento"
                                                             value="#{frmAsiento.frmAsientoCaracteristica.idTipoAsientoSeleccionado}">
-                                            <f:selectItems value="#{frmAsiento.frmAsientoCaracteristica.tipoAsientoList}"
-                                                           var="tp"
-                                                           itemLabel="#{tp.nombre}"
-                                                           itemValue="#{tp.idTipoAsiento}" />
-                                            <f:ajax execute="@this" render="txtValorAsiento" />
+                                            <f:selectItems
+                                                    value="#{frmAsiento.frmAsientoCaracteristica.tipoAsientoList}"
+                                                    var="tp"
+                                                    itemLabel="#{tp.nombre}"
+                                                    itemValue="#{tp.idTipoAsiento}"/>
+                                            <f:ajax execute="@this" render="txtValorAsiento"/>
                                         </h:selectOneListbox>
 
                                     </p:tab>
-
-
 
 
                                 </p:tabView>
@@ -222,43 +223,60 @@
                         </h:panelGrid>
                     </p:tab>
 
-                    <p:tab title="Funciones" closable="false" disabled="#{frmSala.estado!='MODIFICAR'}" id="tabFunciones">
+                    <p:tab title="Funciones" closable="false" disabled="#{frmSala.estado!='MODIFICAR'}"
+                           id="tabFunciones">
                         <h2>Programacion de #{frmSala.registro.nombre} </h2>
-                                <h:panelGrid id="panelFunciones">
-                                   <h:form id="formFunciones">
-                                       <p:growl id="messages" showDetail="true"/>
+                        <h:panelGrid id="panelFunciones">
+                            <h:form id="formFunciones">
+                                <p:growl id="messages" showDetail="true"/>
 
 
-                                       <p:schedule id="schedule" value="#{frmSala.frmProgramacion.scheduleJava8View.eventModel}" widgetVar="myschedule"
-                                                   timeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}" clientTimeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}">
-                                           <p:ajax event="dateSelect" listener="#{frmSala.frmProgramacion.scheduleJava8View.onDateSelect}" update="eventDetails"
-                                                   oncomplete="PF('eventDialog').show();"/>
-                                           <p:ajax event="eventSelect" listener="#{frmSala.frmProgramacion.scheduleJava8View.onEventSelect}" update="eventDetails"
-                                                   oncomplete="PF('eventDialog').show();"/>
-                                       </p:schedule>
+                                <p:schedule id="schedule"
+                                            value="#{frmSala.frmProgramacion.scheduleJava8View.eventModel}"
+                                            widgetVar="myschedule"
+                                            timeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}"
+                                            clientTimeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}">
+                                    <p:ajax event="dateSelect"
+                                            listener="#{frmSala.frmProgramacion.scheduleJava8View.onDateSelect}"
+                                            update="eventDetails"
+                                            oncomplete="PF('eventDialog').show();"/>
+                                    <p:ajax event="eventSelect"
+                                            listener="#{frmSala.frmProgramacion.scheduleJava8View.onEventSelect}"
+                                            update="eventDetails"
+                                            oncomplete="PF('eventDialog').show();"/>
+                                </p:schedule>
 
-                                       <p:dialog widgetVar="eventDialog" header="Programación" showEffect="fade" hideEffect="fade" >
-                                           <h:panelGrid id="eventDetails" columns="2" cellpadding="7" >
-                                           <p:outputLabel value="ID" for="txtID"  styleClass="font-bold"/>
-                                               <p:inputText id="txtID" value="#{frmSala.frmProgramacion.scheduleJava8View.event.id}" disabled="true"/>
+                                <p:dialog widgetVar="eventDialog" header="Programación" showEffect="fade"
+                                          hideEffect="fade">
+                                    <h:panelGrid id="eventDetails" columns="2" cellpadding="7">
+                                        <p:outputLabel value="ID" for="txtID" styleClass="font-bold"/>
+                                        <p:inputText id="txtID"
+                                                     value="#{frmSala.frmProgramacion.scheduleJava8View.event.id}"
+                                                     disabled="true"/>
 
 
-                                               <p:outputLabel  value="Pelicula" for="txtPelicula" styleClass="font-bold"/>
+                                        <p:outputLabel value="Pelicula" for="txtPelicula" styleClass="font-bold"/>
 
-                                               <p:autoComplete id="acMinLength" minQueryLength="3" value="#{frmSala.frmProgramacion.scheduleJava8View.nomPelicula}"
-                                                               completeMethod="#{frmSala.frmProgramacion.scheduleJava8View.completeText}" effect="fade" scrollHeight="250">">
+                                        <p:autoComplete id="acMinLength" minQueryLength="3"
+                                                        value="#{frmSala.frmProgramacion.scheduleJava8View.nomPelicula}"
+                                                        completeMethod="#{frmSala.frmProgramacion.scheduleJava8View.completeText}"
+                                                        effect="fade" scrollHeight="250">">
 
-                                                   <p:ajax event="itemSelect"
-                                                           listener="#{frmSala.frmProgramacion.scheduleJava8View.obtenerFechaFin}"
-                                                           update="txtFin" global="false" />
-                                               </p:autoComplete>
+                                            <p:ajax event="itemSelect"
+                                                    listener="#{frmSala.frmProgramacion.scheduleJava8View.obtenerFechaFin}"
+                                                    update="txtFin" global="false"/>
+                                        </p:autoComplete>
 
-                                               <p:outputLabel value="Inicio" for="txtInicio" styleClass="font-bold"/>
-                                               <p:datePicker id="txtInicio" value="#{frmSala.frmProgramacion.scheduleJava8View.event.startDate}" pattern="dd/MM/yyyy"
-                                                             showTime="true" appendTo="@(body)"
-                                               >
-                                                   <p:ajax event="dateSelect" listener="#{frmSala.frmProgramacion.scheduleJava8View.obtenerFechaFin}" update="txtFin" global="false" />
-                                               </p:datePicker>
+                                        <p:outputLabel value="Inicio" for="txtInicio" styleClass="font-bold"/>
+                                        <p:datePicker id="txtInicio"
+                                                      value="#{frmSala.frmProgramacion.scheduleJava8View.event.startDate}"
+                                                      pattern="dd/MM/yyyy"
+                                                      showTime="true" appendTo="@(body)"
+                                        >
+                                            <p:ajax event="dateSelect"
+                                                    listener="#{frmSala.frmProgramacion.scheduleJava8View.obtenerFechaFin}"
+                                                    update="txtFin" global="false"/>
+                                        </p:datePicker>
 
                                                <p:outputLabel value="Fin" for="txtFin"  styleClass="font-bold"/>
                                                <p:datePicker id="txtFin" value="#{frmSala.frmProgramacion.scheduleJava8View.event.endDate}" pattern="dd/MM/yyyy"
@@ -280,17 +298,15 @@
                                                </p:commandButton>
 
 
+                                    </h:panelGrid>
 
-                                           </h:panelGrid>
+                                </p:dialog>
 
-                                       </p:dialog>
+                            </h:form>
 
-                                   </h:form>
+                        </h:panelGrid>
 
-                                </h:panelGrid>
-
-                                </p:tab>
-
+                    </p:tab>
 
 
                 </p:tabView>
