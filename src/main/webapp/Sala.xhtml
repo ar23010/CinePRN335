@@ -182,7 +182,7 @@
                                     <p:ajax process="@this" event="tabChange"
                                             listener="#{frmSala.frmAsiento.cambiarTab}"/>
 
-                                    <p:tab title="Generalidades" closable="false">
+                                    <p:tab>
                                         <h:panelGrid>
                                             <h:form id="frmDetalleA">
                                                 <h:panelGrid>
@@ -201,89 +201,20 @@
                                             </h:form>
                                         </h:panelGrid>
 
+                                        <h2>Caracteristicas del asiento</h2>
+
+                                        <h:selectOneListbox id="lstTipoAsiento"
+                                                            value="#{frmAsiento.frmAsientoCaracteristica.idTipoAsientoSeleccionado}">
+                                            <f:selectItems value="#{frmAsiento.frmAsientoCaracteristica.tipoAsientoList}"
+                                                           var="tp"
+                                                           itemLabel="#{tp.nombre}"
+                                                           itemValue="#{tp.idTipoAsiento}" />
+                                            <f:ajax execute="@this" render="txtValorAsiento" />
+                                        </h:selectOneListbox>
 
                                     </p:tab>
 
-                                    <p:tab title="Caracteristicas" closable="false">  <!-- disabled="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado!='MODIFICAR'}"-->
-                                        <h:panelGrid>
-                                            <h:panelGroup id="pnlTablaAC">
-                                                <h:form id="frmTablaAC">
-                                                    <h:panelGrid>
-                                                        <p:dataTable
-                                                                value="#{frmSala.frmAsiento.frmAsientoCaracteristica.modelo}"
-                                                                rows="10"
-                                                                selection="#{frmSala.frmAsiento.frmAsientoCaracteristica.registro}"
-                                                                rendered="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado=='NINGUNO'}"
-                                                                var="ac"
-                                                                lazy="true" paginator="true" selectionMode="single"
 
-                                                        >
-                                                            <p:ajax event="rowSelect"
-                                                                    update=":tabDetalle:pnlDetalleAC :tabDetalle:pnlTablaAC"
-                                                                    process="@this"/>
-                                                            <p:column headerText="ID">
-                                                                <h:outputText value="#{ac.idAsientoCaracteristica}"/>
-                                                            </p:column>
-                                                            <p:column headerText="Tipo de Asiento">
-                                                                <h:outputText value="#{ra.idTipoAsiento.nombre}"/>
-                                                            </p:column>
-                                                            <p:column headerText="Valor">
-                                                                <h:outputText value="#{ra.valor}"/>
-                                                            </p:column>
-                                                        </p:dataTable>
-
-                                                        <h:panelGrid>
-                                                            <crud:botonesTop
-                                                                    frm="#{frmSala.frmAsiento.frmAsientoCaracteristica}"
-                                                                    actualizar=":tabDetalle:pnlDetalleAC :tabDetalle:pnlTablaAC"/>
-                                                        </h:panelGrid>
-                                                    </h:panelGrid>
-                                                </h:form>
-                                            </h:panelGroup>
-                                            <h:panelGroup id="pnlDetalleAC">
-                                                <h:panelGrid
-                                                        rendered="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado!='NINGUNO'}">
-                                                    <h:form id="frmDetalleAC">
-                                                        <h:panelGrid>
-                                                            <h:panelGrid columns="2">
-                                                                <p:outputLabel value="ID" for="txtId"/>
-                                                                <p:inputText id="txtIdAsientoCaracteristica"
-                                                                             disabled="true"
-                                                                             readonly="true"
-                                                                             value="#{frmSala.frmAsiento.frmAsientoCaracteristica.registro.idAsientoCaracteristica}"/>
-                                                                <p:outputLabel value="Tipo de Asiento"
-                                                                               for="lstTipoAsiento"/>
-                                                                <h:selectOneMenu id="lstTipoAsiento"
-                                                                                 value="#{frmSala.frmAsiento.frmAsientoCaracteristica.idTipoAsientoSeleccionado}">
-                                                                    <f:selectItems
-                                                                            value="#{frmSala.frmAsiento.frmAsientoCaracteristica.tipoAsientoList}"
-                                                                            var="ta"
-                                                                            itemLabel="#{ta.nombre}"
-                                                                            itemValue="#{ta.idTipoAsiento}"/>
-                                                                    <f:ajax execute="@this" render="txtValorAsiento"/>
-                                                                </h:selectOneMenu>
-
-                                                                <p:outputLabel value="valor" for="txtValorAsiento"/>
-                                                                <h:inputTextarea id="txtValorAsiento"
-                                                                                 validator="#{frmSala.frmAsiento.frmAsientoCaracteristica.validarValor}"
-                                                                                 value="#{frmSala.frmAsiento.frmAsientoCaracteristica.registro.valor}"
-                                                                                 cols="70" rows="3"/>
-                                                            </h:panelGrid>
-                                                            <crud:botonesBottom
-                                                                    frm="#{frmSala.frmAsiento.frmAsientoCaracteristica}"
-                                                                    actualizar=":pnlDetalleAC :pnlTablaAC"/>
-                                                        </h:panelGrid>
-                                                    </h:form>
-                                                </h:panelGrid>
-
-
-                                            </h:panelGroup>
-
-
-                                        </h:panelGrid>
-
-
-                                    </p:tab>
 
 
                                 </p:tabView>
