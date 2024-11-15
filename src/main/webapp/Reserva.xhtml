@@ -49,16 +49,7 @@
             <p:growl id="growl" sticky="true" showDetail="true"/>
 
             <p:wizard flowListener="#{frmReserva.onFlowProcess}" showStepStatus="true" widgetVar="wizard">
-                <p:tab id="funcion" title="Función">
-                    <p:panel header="Selecciona una pelicula">
-                        <p:messages/>
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <h:outputText value="Seleccione una Pelicula: "/>
 
-                        </h:panelGrid>
-                    </p:panel>
-                </p:tab>
-                <!-- Fecha-->
                 <p:tab id="fecha" title="Fecha">
                     <p:panel header="Seleccionar fecha">
                         <p:messages for="Fecha"/>
@@ -74,10 +65,16 @@
                 </p:tab>
 
 
-                <!-- Función-->
+                <p:tab id="funcion" title="Función">
+                    <p:panel header="Selecciona una pelicula">
+                        <p:messages/>
+                        <h:panelGrid columns="2" columnClasses="label, value">
+                            <h:outputText value="Seleccione una Pelicula: "/>
 
+                        </h:panelGrid>
+                    </p:panel>
+                </p:tab>
 
-                <!-- Asientos-->
                 <p:tab id="asientos" title="Asientos">
                     <p:panel header="Asientos"> </p:panel>
                     <h:form>
@@ -89,7 +86,7 @@
                     </h:form>
                 </p:tab>
 
-                <!-- Confirmacion-->
+
                 <p:tab id="confirm" title="Confirmacion">
                     <p:panel header="Confirmation">
                         <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">

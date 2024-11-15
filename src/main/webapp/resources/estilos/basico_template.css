@@ -1,12 +1,14 @@
 body{
-    background-image: url("https://articles-img.sftcdn.net/auto-mapping-folder/sites/2/2023/03/fondo-paisaje-blanco-y-negro.jpg");
+    background-image: url("https://images.alphacoders.com/966/thumb-1920-966313.jpg");
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
     margin: 0 auto;
+
 }
 
 h1{
     text-align: center;
-    color: #000000;
+    color: #a1d1f8;
+
 }
