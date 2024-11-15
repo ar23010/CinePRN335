@@ -16,14 +16,12 @@ import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistenc
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.PeliculaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.ProgramacionBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SalaBean;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.PeliculaCaracteristica;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Programacion;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.SalaCaracteristica;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -121,7 +119,6 @@ public class FrmProgramacion extends AbstractForm<Programacion> implements Seria
     public ScheduleJava8View getScheduleJava8View() {
         return scheduleJava8View;
     }
-
 
 
 
