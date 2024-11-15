@@ -149,7 +149,7 @@
                                 <h:form id="frmTablaA">
                                     <h:panelGrid>
                                         <p:dataTable value="#{frmSala.frmAsiento.modelo}"
-                                                     rows="10"
+                                                     rows="#{frmSala.frmAsiento.registrosPorPagina}"
                                                      selection="#{frmSala.frmAsiento.registro}"
                                                      rendered="#{frmSala.frmAsiento.estado=='NINGUNO'}"
                                                      var="ra"
