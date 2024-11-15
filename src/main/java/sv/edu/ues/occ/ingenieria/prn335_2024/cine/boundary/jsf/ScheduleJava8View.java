@@ -15,25 +15,29 @@ import org.primefaces.event.schedule.ScheduleEntryMoveEvent;
 import org.primefaces.event.schedule.ScheduleEntryResizeEvent;
 import org.primefaces.event.schedule.ScheduleRangeEvent;
 import org.primefaces.model.*;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.ProgramacionBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.PeliculaCaracteristica;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Programacion;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Named
 @ViewScoped
 public class ScheduleJava8View implements Serializable {
 
+
+    private  Programacion programacion;
+    private  Pelicula pelicula;
+    private String estado="NINGUNO";
 
 
     private ScheduleModel eventModel;
@@ -77,7 +81,7 @@ public class ScheduleJava8View implements Serializable {
     private String view = "timeGridWeek";
     private String height = "auto";
     private String nomPelicula;
-    private Pelicula pelicula;
+
 
     private String extenderCode = "// Write your code here or select an example from above";
     private String selectedExtenderExample = "";
@@ -95,10 +99,21 @@ public class ScheduleJava8View implements Serializable {
     FrmPelicula frmPelicula;
 
 
+    public String getEstado() {
+        return estado;
+    }
 
-    List<Programacion> programaciones=new ArrayList<>();
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
+    public Programacion getProgramacion() {
+        return programacion;
+    }
 
+    public void setProgramacion(Programacion programacion) {
+        this.programacion = programacion;
+    }
 
     @PostConstruct
     public void init() {
@@ -125,11 +140,10 @@ public class ScheduleJava8View implements Serializable {
 
     public void obtenerFechaFin(){
 
-
-        System.out.println("Esta funcionando");
         List<Pelicula> peliculas = frmProgramacion.frmPelicula.cargarDatos(0, 100000);
         for(Pelicula p: peliculas){
             if(p.getNombre().equals(nomPelicula)){
+                pelicula=p;
                 for(PeliculaCaracteristica pc: p.getPeliculaCaracteristicaList()) {
                     if (pc.getIdTipoPelicula().getNombre().toUpperCase().equals("DURACION")) {
                         event.setEndDate( event.getStartDate().plusMinutes(Long.parseLong(pc.getValor())));
@@ -138,11 +152,65 @@ public class ScheduleJava8View implements Serializable {
                     }
                 }
 
+
+
             }
 
         }
 
     }
+
+    public void crearProgramacion(){
+        try {
+            if(pelicula!=null && pelicula.getIdPelicula()!=null
+        && event!=null){
+            programacion=frmProgramacion.createNewRegistro();
+            programacion.setIdSala(frmSala.getRegistro());
+            programacion.setIdPelicula(pelicula);
+            programacion.setDesde(event.getStartDate().atOffset(ZoneOffset.ofHours(-6)));
+            programacion.setHasta(event.getEndDate().atOffset(ZoneOffset.ofHours(-6)));
+            frmProgramacion.prBean.create(programacion);
+            agregarProgramacion(frmProgramacion.cargarDatos(0,100), frmSala.getRegistro().getIdSala());
+
+        }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+
+
+    }
+
+    public void modificarProgramacion() {
+        try {
+
+            if (event != null && event.getId() != null) {
+                programacion = frmProgramacion.prBean.findById(Long.parseLong(event.getId()));
+                programacion.setDesde(event.getStartDate().atOffset(ZoneOffset.ofHours(-6)));
+                programacion.setHasta(event.getEndDate().atOffset(ZoneOffset.ofHours(-6)));
+                frmProgramacion.prBean.update(programacion);
+                agregarProgramacion(frmProgramacion.cargarDatos(0, 100), frmSala.getRegistro().getIdSala());
+
+            }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+        public void eliminarProgramacion(){
+            try {
+
+                if(event!=null && event.getId()!=null ){
+                    programacion=frmProgramacion.prBean.findById(Long.parseLong(event.getId()));
+                    frmProgramacion.prBean.delete(programacion);
+                    agregarProgramacion(frmProgramacion.cargarDatos(0,100), frmSala.getRegistro().getIdSala());
+
+                }
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            }
+
+    }
+
+
 
 
     public FrmPelicula getFrmPelicula() {
@@ -154,7 +222,7 @@ public class ScheduleJava8View implements Serializable {
     }
 
     public String getNomPelicula() {
-        return nomPelicula;
+        return nomPelicula = event.getTitle();
     }
 
     public void setNomPelicula(String nomPelicula) {
@@ -266,25 +334,17 @@ public class ScheduleJava8View implements Serializable {
     }
 
     public void addEvent() {
-        if (event.isAllDay()) {
-            // see https://github.com/primefaces/primefaces/issues/1164
-            if (event.getStartDate().toLocalDate().equals(event.getEndDate().toLocalDate())) {
-                event.setEndDate(event.getEndDate().plusDays(1));
+      crearProgramacion();
+      frmProgramacion.prBean.create(frmProgramacion.getRegistro());
+      eventModel.addEvent(event);
             }
-        }
-
-        if (event.getId() == null) {
-            eventModel.addEvent(event);
-        }
-        else {
-            eventModel.updateEvent(event);
-        }
-
-        event = new DefaultScheduleEvent<>();
-    }
 
     public void onEventSelect(SelectEvent<ScheduleEvent<?>> selectEvent) {
+       setEstado("MODIFICAR");
         event = selectEvent.getObject();
+
+
+
     }
 
     public void onViewChange(SelectEvent<String> selectEvent) {
@@ -294,6 +354,7 @@ public class ScheduleJava8View implements Serializable {
     }
 
     public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
+      setEstado("CREAR");
         event = DefaultScheduleEvent.builder()
                 .startDate(selectEvent.getObject())
                 .endDate(selectEvent.getObject().plusHours(1))
