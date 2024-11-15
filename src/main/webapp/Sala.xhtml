@@ -278,24 +278,32 @@
                                                     update="txtFin" global="false"/>
                                         </p:datePicker>
 
-                                               <p:outputLabel value="Fin" for="txtFin"  styleClass="font-bold"/>
-                                               <p:datePicker id="txtFin" value="#{frmSala.frmProgramacion.scheduleJava8View.event.endDate}" pattern="dd/MM/yyyy"
-                                                             showTime="true" appendTo="@(body)"/>
-                                               <p:commandButton value="Crear Programacion" rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='CREAR'}"
-                                                                actionListener="#{frmSala.frmProgramacion.scheduleJava8View.crearProgramacion}" onclick="PF('eventDialog').hide();"
-                                               >
-                                                   <p:ajax update="schedule"/>
-                                               </p:commandButton>
-                                               <p:commandButton value="Actualizar Programacion" rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='MODIFICAR'}"
-                                                                actionListener="#{frmSala.frmProgramacion.scheduleJava8View.modificarProgramacion}" onclick="PF('eventDialog').hide();"
-                                                   >
-                                                   <p:ajax update="schedule"/>
-                                               </p:commandButton>
-                                               <p:commandButton value="Eliminar Programacion" rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='MODIFICAR'}"
-                                                                actionListener="#{frmSala.frmProgramacion.scheduleJava8View.eliminarProgramacion}" onclick="PF('eventDialog').hide();"
-                                                   >
-                                                   <p:ajax update="schedule"/>
-                                               </p:commandButton>
+                                        <p:outputLabel value="Fin" for="txtFin" styleClass="font-bold"/>
+                                        <p:datePicker id="txtFin"
+                                                      value="#{frmSala.frmProgramacion.scheduleJava8View.event.endDate}"
+                                                      pattern="dd/MM/yyyy"
+                                                      showTime="true" appendTo="@(body)"/>
+                                        <p:commandButton value="Crear Programacion"
+                                                         rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='CREAR'}"
+                                                         actionListener="#{frmSala.frmProgramacion.scheduleJava8View.crearProgramacion}"
+                                                         onclick="PF('eventDialog').hide();"
+                                        >
+                                            <p:ajax update="schedule"/>
+                                        </p:commandButton>
+                                        <p:commandButton value="Actualizar Programacion"
+                                                         rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='MODIFICAR'}"
+                                                         actionListener="#{frmSala.frmProgramacion.scheduleJava8View.modificarProgramacion}"
+                                                         onclick="PF('eventDialog').hide();"
+                                        >
+                                            <p:ajax update="schedule"/>
+                                        </p:commandButton>
+                                        <p:commandButton value="Eliminar Programacion"
+                                                         rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='MODIFICAR'}"
+                                                         actionListener="#{frmSala.frmProgramacion.scheduleJava8View.eliminarProgramacion}"
+                                                         onclick="PF('eventDialog').hide();"
+                                        >
+                                            <p:ajax update="schedule"/>
+                                        </p:commandButton>
 
 
                                     </h:panelGrid>
