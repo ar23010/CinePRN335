@@ -9,11 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "programacion", schema = "public")
 @NamedQueries({
-        @NamedQuery(name = "Programacion.findByIdProgramacion", query = "SELECT pr FROM Programacion pr WHERE pr.idProgramacion=:idProgramacion ORDER BY pr.idProgramacion ASC"),
-        @NamedQuery(name = "Programacion.countByIdProgramacion", query = "SELECT COUNT(pr.idProgramacion) FROM Programacion pr WHERE pr.idProgramacion=:idProgramacion"),
         @NamedQuery(name = "Programacion.findAll", query = "SELECT pr FROM Programacion pr ORDER BY pr.idProgramacion ASC")
-
-
 })
 public class Programacion {
     @Id

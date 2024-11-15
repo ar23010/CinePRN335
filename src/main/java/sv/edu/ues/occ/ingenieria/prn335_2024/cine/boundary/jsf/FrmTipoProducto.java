@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @Named
 @ViewScoped
-public class FrmTipoProducto extends AbstractForm<TipoProducto> implements Serializable {
+public class FrmTipoProducto extends AbstractFormulario<TipoProducto> implements Serializable {
 
     @Inject
     TipoProductoBean tprBean;

@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 @Named
 @Dependent
-public class FrmPeliculaCaracteristica extends AbstractForm<PeliculaCaracteristica> implements Serializable {
+public class FrmPeliculaCaracteristica extends AbstractFormulario<PeliculaCaracteristica> implements Serializable {
 
     @Inject
     PeliculaCaracteristicaBean pcBean;
@@ -67,7 +67,7 @@ public class FrmPeliculaCaracteristica extends AbstractForm<PeliculaCaracteristi
 
 
     @Override
-    public int contar(){
+    public int contarRegistros(){
         try{
             if(idPelicula != null && pcBean!=null){
                 return pcBean.countPelicula(this.idPelicula);
@@ -173,7 +173,7 @@ public class FrmPeliculaCaracteristica extends AbstractForm<PeliculaCaracteristi
         }
                 input.setValid(false);
                 FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Advertencia", "Valor ingresado inválidoS."));
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Valor incorrecto", "Valor ingresado inválidoS."));
 
     }
 }

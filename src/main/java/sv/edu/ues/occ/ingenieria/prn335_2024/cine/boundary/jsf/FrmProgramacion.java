@@ -1,35 +1,28 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.ejb.Schedule;
 import jakarta.enterprise.context.Dependent;
 import jakarta.faces.application.FacesMessage;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.UIInput;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.LazyScheduleModel;
-import org.primefaces.model.ScheduleModel;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.PeliculaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.ProgramacionBean;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SalaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Named
 @Dependent
-public class FrmProgramacion extends AbstractForm<Programacion> implements Serializable {
+public class FrmProgramacion extends AbstractFormulario<Programacion> implements Serializable {
 
     @Inject
     ProgramacionBean prBean;
@@ -41,17 +34,12 @@ public class FrmProgramacion extends AbstractForm<Programacion> implements Seria
      PeliculaBean pBean;
 
     @Inject
-    ScheduleJava8View scheduleJava8View;
+    CalendarioFunciones calendarSchedule;
 
     @Inject
     FrmPelicula frmPelicula;
 
-
-    private ScheduleModel eventModel;
-
-    List<Pelicula> peliculaList;
-
-
+    
 
 
     @Override
@@ -111,13 +99,28 @@ public class FrmProgramacion extends AbstractForm<Programacion> implements Seria
         return List.of();
     }
 
+    public void validarValor(FacesContext fc, UIComponent componente, Object valor){
+        UIInput input = (UIInput) componente;
 
-    public FrmPelicula getFrmPelicula() {
-        return frmPelicula;
+        if(registro!= null && this.registro.getIdProgramacion()!=null && registro.getDesde().isBefore(registro.getHasta())){
+            String nuevo= valor.toString();
+            Pattern patron=Pattern.compile(this.registro.getIdProgramacion().toString());
+            Matcher validador= patron.matcher(nuevo);
+            if(validador.find()){
+                input.setValid(true);
+                return;
+            }
+        }
+        input.setValid(false);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Valor incorrecto", "Valor ingresado inválidoS."));
+
     }
 
-    public ScheduleJava8View getScheduleJava8View() {
-        return scheduleJava8View;
+
+
+    public CalendarioFunciones getCalendarSchedule() {
+        return calendarSchedule;
     }
 
 

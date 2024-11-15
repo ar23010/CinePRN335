@@ -3,8 +3,8 @@
                 xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
                 xmlns:p="primefaces" xmlns:f="jakarta.faces.core"
                 xmlns:crud="jakarta.faces.composite/crud"
-                template="WEB-INF/templates/principal.xhtml"
->
+                template="WEB-INF/templates/principal.xhtml">
+
     <ui:define name="titulo">
         #{frmSala.tituloDePagina}
     </ui:define>
@@ -16,26 +16,34 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmSala.modelo}"
-                                     rows="#{frmSala.registrosPorPagina}"
+                                     rows="#{frmSala.registrosEnPagina}"
                                      selection="#{frmSala.registro}"
                                      rendered="#{frmSala.estado=='NINGUNO'}"
                                      var="r"
-                                     lazy="true" paginator="true" selectionMode="single"
+                                     lazy="true" paginator="true" selectionMode="single">
 
-                        >
                             <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla  :tabDetalle" process="@this"/>
                             <p:column headerText="ID">
                                 <h:outputText value="#{r.idSala}"/>
                             </p:column>
+                            <p:column headerText="Sucursal">
+                                <h:outputText value="#{r.idSucursal.nombre}"/>
+                            </p:column>
                             <p:column headerText="Nombre">
                                 <h:outputText value="#{r.nombre}"/>
                             </p:column>
-
+                            <p:column headerText="Estado">
+                                <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
+                            </p:column>
+                            <p:column headerText="Observaciones">
+                                <h:outputText value="#{r.observaciones}"/>
+                            </p:column>
                         </p:dataTable>
 
                         <h:panelGrid>
                             <crud:botonesTop frm="#{frmSala}"/>
                         </h:panelGrid>
+
                     </h:panelGrid>
                 </h:form>
             </h:panelGroup>
@@ -44,6 +52,7 @@
 
                 <p:tabView id="tabDetalle" cache="false" dynamic="true" rendered="#{frmSala.estado!='NINGUNO'}">
                     <p:ajax process="@this" event="tabChange" listener="#{frmSala.cambiarTab}"/>
+
                     <p:tab title="Generalidades" closable="false">
                         <h:panelGrid>
                             <h:form id="frmDetalle">
@@ -52,19 +61,27 @@
                                         <p:outputLabel value="ID" for="txtId"/>
                                         <p:inputText id="txtId" disabled="true" readonly="true"
                                                      value="#{frmSala.registro.idSala}"/>
+
                                         <p:outputLabel value="Nombre" for="txtNombre"/>
                                         <p:inputText id="txtNombre" value="#{frmSala.registro.nombre}" size="70"/>
+
+                                        <p:outputLabel value="Sucursal" for="listaSucursal"/><!--Areglar esto-->
+
+                                        <p:outputLabel value="Activo" for="chkActivo"/>
+                                        <h:selectBooleanCheckbox id="chkActivo" value="#{frmSala.registro.activo}"/>
+
                                         <p:outputLabel value="Observaciones" for="txtObservaciones"/>
                                         <h:inputTextarea id="txtObservaciones" value="#{frmSala.registro.observaciones}"
                                                          cols="70" rows="3"/>
+
                                     </h:panelGrid>
-                                    <crud:botonesBottom frm="#{frmSala}"/>
-                                </h:panelGrid>
+                                        <crud:botonesBottom frm="#{frmSala}"/>
+                                    </h:panelGrid>
+
                             </h:form>
                         </h:panelGrid>
-
-
                     </p:tab>
+
                     <p:tab title="Caracteristicas" disabled="#{frmSala.estado!='MODIFICAR'}">
                         <h:panelGrid>
                             <h:panelGroup id="pnlTablaC">
@@ -75,13 +92,11 @@
                                                      selection="#{frmSala.frmSalaCaracteristica.registro}"
                                                      rendered="#{frmSala.frmSalaCaracteristica.estado=='NINGUNO'}"
                                                      var="rc"
-                                                     lazy="true" paginator="true" selectionMode="single"
-
-                                        >
+                                                     lazy="true" paginator="true" selectionMode="single">
                                             <p:ajax event="rowSelect"
                                                     update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"
                                                     process="@this"
-                                                    listener="#{frmSala.frmSalaCaracteristica.cambiarSeleccion}"/>
+                                                    listener="#{frmSala.frmSalaCaracteristica.cambioSeleccion}"/>
                                             <p:column headerText="ID">
                                                 <h:outputText value="#{rc.idSalaCaracteristica}"/>
                                             </p:column>
@@ -97,9 +112,11 @@
                                             <crud:botonesTop frm="#{frmSala.frmSalaCaracteristica}"
                                                              actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
                                         </h:panelGrid>
+
                                     </h:panelGrid>
                                 </h:form>
                             </h:panelGroup>
+
                             <h:panelGroup id="pnlDetalleC">
                                 <h:panelGrid rendered="#{frmSala.frmSalaCaracteristica.estado!='NINGUNO'}">
                                     <h:form id="frmDetalleC">
@@ -120,24 +137,22 @@
                                                 </h:selectOneMenu>
 
                                                 <p:outputLabel value="valor" for="txtValor"/>
-                                                <h:inputTextarea id="txtValor"
+                                                <h:inputTextarea id="txtValor" required="true"
                                                                  validator="#{frmSala.frmSalaCaracteristica.validarValor}"
                                                                  value="#{frmSala.frmSalaCaracteristica.registro.valor}"
                                                                  cols="70" rows="3"/>
                                                 <p:tooltip for="txtValor"
                                                            value="#{frmSala.frmSalaCaracteristica.registro.idTipoSala.expresionRegular}"
                                                            position="right"/>
+
                                             </h:panelGrid>
-                                            <crud:botonesBottom frm="#{frmSala.frmSalaCaracteristica}"
-                                                                actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
-                                        </h:panelGrid>
+                                                 <crud:botonesBottom frm="#{frmSala.frmSalaCaracteristica}"
+                                                                        actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
+                                            </h:panelGrid>
+
                                     </h:form>
                                 </h:panelGrid>
-
-
                             </h:panelGroup>
-
-
                         </h:panelGrid>
                     </p:tab>
 
@@ -149,13 +164,11 @@
                                 <h:form id="frmTablaA">
                                     <h:panelGrid>
                                         <p:dataTable value="#{frmSala.frmAsiento.modelo}"
-                                                     rows="#{frmSala.frmAsiento.registrosPorPagina}"
+                                                     rows="#{frmSala.frmAsiento.registrosEnPagina}"
                                                      selection="#{frmSala.frmAsiento.registro}"
                                                      rendered="#{frmSala.frmAsiento.estado=='NINGUNO'}"
                                                      var="ra"
-                                                     lazy="true" paginator="true" selectionMode="single"
-
-                                        >
+                                                     lazy="true" paginator="true" selectionMode="single">
 
 
                                             <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleA :tabDetalle:pnlTablaA" process="@this"/>
@@ -165,23 +178,21 @@
                                             <p:column headerText="Nombre">
                                                 <h:outputText value="#{ra.nombre}"/>
                                             </p:column>
-
                                         </p:dataTable>
 
                                         <h:panelGrid>
                                             <crud:botonesTop frm="#{frmSala.frmAsiento}"/>
                                         </h:panelGrid>
+
                                     </h:panelGrid>
                                 </h:form>
                             </h:panelGroup>
 
                             <h:panelGroup id="pnlDetalleA">
-
                                 <p:tabView id="tabDetalleA" cache="false" dynamic="true"
                                            rendered="#{frmSala.frmAsiento.estado!='NINGUNO'}">
                                     <p:ajax process="@this" event="tabChange"
                                             listener="#{frmSala.frmAsiento.cambiarTab}"/>
-
                                     <p:tab>
                                         <h:panelGrid>
                                             <h:form id="frmDetalleA">
@@ -196,8 +207,9 @@
                                                                      size="70"/>
 
                                                     </h:panelGrid>
-                                                    <crud:botonesBottom frm="#{frmSala.frmAsiento}"/>
-                                                </h:panelGrid>
+                                                        <crud:botonesBottom frm="#{frmSala.frmAsiento}"/>
+                                                    </h:panelGrid>
+
                                             </h:form>
                                         </h:panelGrid>
 
@@ -211,12 +223,7 @@
                                                            itemValue="#{tp.idTipoAsiento}" />
                                             <f:ajax execute="@this" render="txtValorAsiento" />
                                         </h:selectOneListbox>
-
                                     </p:tab>
-
-
-
-
                                 </p:tabView>
                             </h:panelGroup>
                         </h:panelGrid>
@@ -229,76 +236,72 @@
                                        <p:growl id="messages" showDetail="true"/>
 
 
-                                       <p:schedule id="schedule" value="#{frmSala.frmProgramacion.scheduleJava8View.eventModel}" widgetVar="myschedule"
-                                                   timeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}" clientTimeZone="#{frmSala.frmProgramacion.scheduleJava8View.serverTimeZone}">
-                                           <p:ajax event="dateSelect" listener="#{frmSala.frmProgramacion.scheduleJava8View.onDateSelect}" update="eventDetails"
+                                       <p:schedule id="schedule" value="#{frmSala.frmProgramacion.calendarSchedule.eventModel}" widgetVar="myschedule"
+                                                   timeZone="#{frmSala.frmProgramacion.calendarSchedule.serverTimeZone}" clientTimeZone="#{frmSala.frmProgramacion.calendarSchedule.serverTimeZone}">
+                                           <p:ajax event="dateSelect" listener="#{frmSala.frmProgramacion.calendarSchedule.onDateSelect}" update="eventDetails"
                                                    oncomplete="PF('eventDialog').show();"/>
-                                           <p:ajax event="eventSelect" listener="#{frmSala.frmProgramacion.scheduleJava8View.onEventSelect}" update="eventDetails"
+                                           <p:ajax event="eventSelect" listener="#{frmSala.frmProgramacion.calendarSchedule.onEventSelect}" update="eventDetails"
                                                    oncomplete="PF('eventDialog').show();"/>
                                        </p:schedule>
 
                                        <p:dialog widgetVar="eventDialog" header="Programación" showEffect="fade" hideEffect="fade" >
                                            <h:panelGrid id="eventDetails" columns="2" cellpadding="7" >
-                                           <p:outputLabel value="ID" for="txtID"  styleClass="font-bold"/>
-                                               <p:inputText id="txtID" value="#{frmSala.frmProgramacion.scheduleJava8View.event.id}" disabled="true"/>
 
+                                               <p:outputLabel value="ID" for="txtID"  styleClass="font-bold"/>
+                                               <p:inputText id="txtID" value="#{frmSala.frmProgramacion.calendarSchedule.event.id}" disabled="true"/>
 
-                                               <p:outputLabel  value="Pelicula" for="txtPelicula" styleClass="font-bold"/>
-
-                                               <p:autoComplete id="acMinLength" minQueryLength="3" value="#{frmSala.frmProgramacion.scheduleJava8View.nomPelicula}"
-                                                               completeMethod="#{frmSala.frmProgramacion.scheduleJava8View.completeText}" effect="fade" scrollHeight="250">">
-
+                                               <p:outputLabel  value="Pelicula" for="txtPelicula" styleClass="font-bold" />
+                                               <p:autoComplete rendered="#{frmSala.frmProgramacion.calendarSchedule.estado=='CREAR'}" id="acMinLength" minQueryLength="3"
+                                                               value="#{frmSala.frmProgramacion.calendarSchedule.nombrePelicula}"
+                                                               completeMethod="#{frmSala.frmProgramacion.calendarSchedule.completeText}" effect="fade" scrollHeight="250">" >
                                                    <p:ajax event="itemSelect"
-                                                           listener="#{frmSala.frmProgramacion.scheduleJava8View.obtenerFechaFin}"
+                                                           listener="#{frmSala.frmProgramacion.calendarSchedule.obtenerFechaFin}"
+                                                           update="txtFin" global="false" />
+                                               </p:autoComplete>
+
+                                               <p:autoComplete rendered="#{frmSala.frmProgramacion.calendarSchedule.estado=='MODIFICAR'}" id="aja" minQueryLength="3"
+                                                               value="#{frmSala.frmProgramacion.calendarSchedule.nombrePelicula}"
+                                                               completeMethod="#{frmSala.frmProgramacion.calendarSchedule.completeText}" effect="fade"
+                                                               disabled="true" scrollHeight="250">"
+                                                   <p:ajax event="itemSelect"
+                                                           listener="#{frmSala.frmProgramacion.calendarSchedule.obtenerFechaFin}"
                                                            update="txtFin" global="false" />
                                                </p:autoComplete>
 
                                                <p:outputLabel value="Inicio" for="txtInicio" styleClass="font-bold"/>
-                                               <p:datePicker id="txtInicio" value="#{frmSala.frmProgramacion.scheduleJava8View.event.startDate}" pattern="dd/MM/yyyy"
-                                                             showTime="true" appendTo="@(body)"
-                                               >
-                                                   <p:ajax event="dateSelect" listener="#{frmSala.frmProgramacion.scheduleJava8View.obtenerFechaFin}" update="txtFin" global="false" />
+                                               <p:datePicker id="txtInicio" value="#{frmSala.frmProgramacion.calendarSchedule.event.startDate}" pattern="dd/MM/yyyy"
+                                                             showTime="true" appendTo="@(body)">
+                                                   <p:ajax event="dateSelect" listener="#{frmSala.frmProgramacion.calendarSchedule.obtenerFechaFin}" update="txtFin" global="false" />
                                                </p:datePicker>
 
                                                <p:outputLabel value="Fin" for="txtFin"  styleClass="font-bold"/>
-                                               <p:datePicker id="txtFin" value="#{frmSala.frmProgramacion.scheduleJava8View.event.endDate}" pattern="dd/MM/yyyy"
+                                               <p:datePicker id="txtFin" value="#{frmSala.frmProgramacion.calendarSchedule.event.endDate}" pattern="dd/MM/yyyy"
+
                                                              showTime="true" appendTo="@(body)"/>
-                                               <p:commandButton value="Crear Programacion" rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='CREAR'}"
-                                                                actionListener="#{frmSala.frmProgramacion.scheduleJava8View.crearProgramacion}" onclick="PF('eventDialog').hide();"
-                                               >
-                                                   <p:ajax update="schedule"/>
-                                               </p:commandButton>
-                                               <p:commandButton value="Actualizar Programacion" rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='MODIFICAR'}"
-                                                                actionListener="#{frmSala.frmProgramacion.scheduleJava8View.modificarProgramacion}" onclick="PF('eventDialog').hide();"
-                                                   >
-                                                   <p:ajax update="schedule"/>
-                                               </p:commandButton>
-                                               <p:commandButton value="Eliminar Programacion" rendered="#{frmSala.frmProgramacion.scheduleJava8View.estado=='MODIFICAR'}"
-                                                                actionListener="#{frmSala.frmProgramacion.scheduleJava8View.eliminarProgramacion}" onclick="PF('eventDialog').hide();"
-                                                   >
+
+                                               <p:commandButton value="Crear Programacion" rendered="#{frmSala.frmProgramacion.calendarSchedule.estado=='CREAR'}"
+                                                                actionListener="#{frmSala.frmProgramacion.calendarSchedule.crearProgramacion}" onclick="PF('eventDialog').hide();">
                                                    <p:ajax update="schedule"/>
                                                </p:commandButton>
 
+                                               <p:commandButton value="Actualizar Programacion" rendered="#{frmSala.frmProgramacion.calendarSchedule.estado=='MODIFICAR'}"
+                                                                actionListener="#{frmSala.frmProgramacion.calendarSchedule.modificarProgramacion}" onclick="PF('eventDialog').hide();">
+                                                   <p:ajax update="schedule"/>
+                                               </p:commandButton>
 
+                                               <p:commandButton value="Eliminar Programacion" rendered="#{frmSala.frmProgramacion.calendarSchedule.estado=='MODIFICAR'}"
+                                                                actionListener="#{frmSala.frmProgramacion.calendarSchedule.eliminarProgramacion}" onclick="PF('eventDialog').hide();">
+                                                   <p:ajax update="schedule"/>
+                                               </p:commandButton>
 
                                            </h:panelGrid>
-
                                        </p:dialog>
-
                                    </h:form>
-
                                 </h:panelGrid>
-
                                 </p:tab>
 
-
-
                 </p:tabView>
-
-
             </h:panelGroup>
         </h:panelGrid>
-
-
     </ui:define>
 </ui:composition>

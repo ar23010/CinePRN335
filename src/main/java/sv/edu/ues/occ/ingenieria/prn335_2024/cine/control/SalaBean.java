@@ -2,7 +2,6 @@ package sv.edu.ues.occ.ingenieria.prn335_2024.cine.control;
 
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;

@@ -2,7 +2,6 @@ package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.inject.Default;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -35,37 +34,37 @@ public class FrmMenu implements Serializable {
                 .label("Cine")
                 .expanded(true)
                 .build();
-        DefaultMenuItem item = DefaultMenuItem.builder()
+        DefaultMenuItem itemTipo1 = DefaultMenuItem.builder()
                 .value("Asiento")
                 .ajax(true)
                 .command("#{frmMenu.navegar('TipoAsiento.jsf')}")
                 .build();
-        DefaultMenuItem item2 = DefaultMenuItem.builder()
+        DefaultMenuItem itemTipo2 = DefaultMenuItem.builder()
                 .value("Pago")
                 .ajax(true)
                 .command("#{frmMenu.navegar('TipoPago.jsf')}")
                 .build();
-        DefaultMenuItem item3 = DefaultMenuItem.builder()
+        DefaultMenuItem itemTipo3 = DefaultMenuItem.builder()
                 .value("Pelicula")
                 .ajax(true)
                 .command("#{frmMenu.navegar('TipoPelicula.jsf')}")
                 .build();
-        DefaultMenuItem item4 = DefaultMenuItem.builder()
+        DefaultMenuItem itemTipo4 = DefaultMenuItem.builder()
                 .value("Producto")
                 .ajax(true)
                 .command("#{frmMenu.navegar('TipoProducto.jsf')}")
                 .build();
-        DefaultMenuItem item5 = DefaultMenuItem.builder()
+        DefaultMenuItem itemTipo5 = DefaultMenuItem.builder()
                 .value("Reserva")
                 .ajax(true)
                 .command("#{frmMenu.navegar('TipoReserva.jsf')}")
                 .build();
-        DefaultMenuItem item6 = DefaultMenuItem.builder()
+        DefaultMenuItem itemTipo6 = DefaultMenuItem.builder()
                 .value("Sala")
                 .ajax(true)
                 .command("#{frmMenu.navegar('TipoSala.jsf')}")
                 .build();
-        DefaultMenuItem itemCine = DefaultMenuItem.builder()
+        DefaultMenuItem itemCine1 = DefaultMenuItem.builder()
                 .value("Pelicula")
                 .ajax(true)
                 .command("#{frmMenu.navegar('Pelicula.jsf')}")
@@ -85,13 +84,13 @@ public class FrmMenu implements Serializable {
                 .ajax(true)
                 .command("#{frmMenu.navegar('Reserva.jsf')}")
                 .build();
-        tipos.getElements().add(item);
-        tipos.getElements().add(item2);
-        tipos.getElements().add(item3);
-        tipos.getElements().add(item4);
-        tipos.getElements().add(item5);
-        tipos.getElements().add(item6);
-        cine.getElements().add(itemCine);
+        tipos.getElements().add(itemTipo1);
+        tipos.getElements().add(itemTipo2);
+        tipos.getElements().add(itemTipo3);
+        tipos.getElements().add(itemTipo4);
+        tipos.getElements().add(itemTipo5);
+        tipos.getElements().add(itemTipo6);
+        cine.getElements().add(itemCine1);
         cine.getElements().add(itemCine2);
         cine.getElements().add(itemCine3);
         cine.getElements().add(itemCine4);

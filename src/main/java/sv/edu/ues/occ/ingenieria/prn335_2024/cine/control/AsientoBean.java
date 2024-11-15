@@ -6,7 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Asiento;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
+
 
 import java.io.Serializable;
 import java.util.List;

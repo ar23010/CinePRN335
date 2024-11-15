@@ -1,6 +1,6 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
-import jakarta.annotation.PostConstruct;
+
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @Named
 @ViewScoped
-public class FrmTipoSala extends AbstractForm<TipoSala> implements Serializable {
+public class FrmTipoSala extends AbstractFormulario<TipoSala> implements Serializable {
 
    @Inject
    TipoSalaBean tsBean;

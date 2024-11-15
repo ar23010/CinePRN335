@@ -1,26 +1,63 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SucursalBean;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.PeliculaCaracteristica;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Sucursal;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.TipoPelicula;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @Named
 @ViewScoped
-public class FrmSucursal extends AbstractForm<Sucursal> implements Serializable {
+public class FrmSucursal extends AbstractFormulario<Sucursal> implements Serializable {
 
     @Inject
     SucursalBean sBean;
 
-
     @Inject
     FacesContext facesContext;
+
+    List<Sucursal> sucursalList;
+
+    Long idSucursal;
+
+    @PostConstruct
+    @Override
+    public void inicializar(){
+        super.inicializar();
+        try{
+            this.sucursalList = sBean.findRange(0, Integer.MAX_VALUE);
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
+        }
+    }
+
+    @Override
+    public List<Sucursal> cargarDatos(int firstResult, int maxResults){
+        try{
+            if(this.idSucursal != null && sBean!=null){
+                return sBean.findAll(firstResult,maxResults);
+            }
+        }catch (Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+        }
+        return List.of();
+    }
+
+
+
 
     @Override
     protected Object getId(Sucursal Object) {
@@ -56,4 +93,7 @@ public class FrmSucursal extends AbstractForm<Sucursal> implements Serializable 
     public String getTituloDePagina() {
         return "Sucursal";
     }
+
+
+
 }

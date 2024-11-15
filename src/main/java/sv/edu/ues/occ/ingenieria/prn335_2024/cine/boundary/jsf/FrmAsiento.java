@@ -8,7 +8,7 @@ import org.primefaces.event.TabChangeEvent;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AsientoBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Asiento;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
+
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 @Named
 @ViewScoped
-public class FrmAsiento extends AbstractForm<Asiento> implements Serializable {
+public class FrmAsiento extends AbstractFormulario<Asiento> implements Serializable {
 
     @Inject
     AsientoBean asientoBean;
