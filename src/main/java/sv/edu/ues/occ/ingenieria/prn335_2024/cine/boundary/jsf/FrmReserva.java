@@ -7,15 +7,12 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.event.FlowEvent;
-import org.primefaces.event.TabChangeEvent;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf.AbstractForm;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.PeliculaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.ReservaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.TipoReservaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Reserva;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Asiento;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.TipoReserva;
 
 import java.io.Serializable;
@@ -24,7 +21,7 @@ import java.util.List;
 @Named
 @ViewScoped
 @ManagedBean
-public class FrmReserva extends AbstractForm<Reserva> implements Serializable {
+public class FrmReserva extends AbstractFormulario<Reserva> implements Serializable {
 
 
     @Inject

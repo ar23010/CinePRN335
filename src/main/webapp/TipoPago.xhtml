@@ -7,8 +7,8 @@
       xmlns:h="jakarta.faces.html"
       xmlns:p="primefaces"
                 xmlns:crud="jakarta.faces.composite/crud"
-                template="WEB-INF/templates/principal.xhtml"
->
+                template="WEB-INF/templates/principal.xhtml">
+
 <f:define name="titulo">
     #{frmTipoPago.tituloDePagina}
 </f:define>
@@ -20,13 +20,12 @@
             <h:form id="frmTabla">
                 <h:panelGrid>
                     <p:dataTable value="#{frmTipoPago.modelo}"
-                                rows="#{frmTipoPago.registrosPorPagina}"
+                                rows="#{frmTipoPago.registrosEnPagina}"
                                  selection="#{frmTipoPago.registro}"
                                  rendered="#{frmTipoPago.estado=='NINGUNO'}"
                                  var="r"
-                                 lazy="true" paginator="true" selectionMode="single"
+                                 lazy="true" paginator="true" selectionMode="single">
 
-                                 >
                         <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"/>
                         <p:column headerText="ID">
                             <h:outputText value="#{r.idTipoPago}"/>
@@ -37,12 +36,12 @@
                         <p:column headerText="Estado">
                             <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
                         </p:column>
-
                     </p:dataTable>
 
                     <h:panelGrid>
                         <crud:botonesTop frm="#{frmTipoPago}"/>
                     </h:panelGrid>
+
                 </h:panelGrid>
             </h:form>
         </h:panelGroup>
@@ -59,9 +58,11 @@
                             <p:inputText id="txtNombre" value="#{frmTipoPago.registro.nombre}" size="70"/>
                             <p:outputLabel value="Activo" for="chkActivo"/>
                             <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoPago.registro.activo}"/>
+
                         </h:panelGrid>
-                       <crud:botonesBottom frm="#{frmTipoPago}"/>
-                    </h:panelGrid>
+                            <crud:botonesBottom frm="#{frmTipoPago}"/>
+                        </h:panelGrid>
+
                 </h:form>
             </h:panelGrid>
         </h:panelGroup>

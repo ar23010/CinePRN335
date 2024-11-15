@@ -9,7 +9,7 @@ import org.primefaces.event.TabChangeEvent;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.PeliculaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Programacion;
+
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 @Named
 @ViewScoped
-public class FrmPelicula extends AbstractForm<Pelicula> implements Serializable {
+public class FrmPelicula extends AbstractFormulario<Pelicula> implements Serializable {
 
     @Inject
     PeliculaBean peliBean;

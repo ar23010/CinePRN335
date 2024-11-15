@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 @Named
 @Dependent
-public class FrmSalaCaracteristica extends AbstractForm<SalaCaracteristica> implements Serializable {
+public class FrmSalaCaracteristica extends AbstractFormulario<SalaCaracteristica> implements Serializable {
 
     @Inject
     SalaCaracteristicaBean scBean;
@@ -62,7 +62,7 @@ public class FrmSalaCaracteristica extends AbstractForm<SalaCaracteristica> impl
     }
 
     @Override
-    public int contar() {
+    public int contarRegistros() {
         try {
             if (idSala != null && scBean != null) {
                 return scBean.countSala(this.idSala);
@@ -170,5 +170,6 @@ public class FrmSalaCaracteristica extends AbstractForm<SalaCaracteristica> impl
             }
         }
         input.setValid(false);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Valor incorrecto", "Valor ingresado inválidoS."));
     }
 }

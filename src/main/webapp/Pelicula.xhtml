@@ -8,8 +8,8 @@
                xmlns:p="primefaces"
                xmlns:f="jakarta.faces.core"
                xmlns:crud="jakarta.faces.composite/crud"
-               template="WEB-INF/templates/principal.xhtml"
->
+               template="WEB-INF/templates/principal.xhtml">
+
     <ui:define name="titulo">
         #{frmPelicula.tituloDePagina}
     </ui:define>
@@ -21,13 +21,12 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmPelicula.modelo}"
-                                     rows="#{frmPelicula.registrosPorPagina}"
+                                     rows="#{frmPelicula.registrosEnPagina}"
                                      selection="#{frmPelicula.registro}"
                                      rendered="#{frmPelicula.estado=='NINGUNO'}"
                                      var="r"
-                                     lazy="true" paginator="true" selectionMode="single"
+                                     lazy="true" paginator="true" selectionMode="single">
 
-                        >
                             <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"/>
                             <p:column headerText="ID">
                                 <h:outputText value="#{r.idPelicula}"/>
@@ -38,12 +37,12 @@
                             <p:column headerText="Sinopsis">
                                 <h:outputText value="#{r.sinopsis}"/>
                             </p:column>
-
                         </p:dataTable>
 
                         <h:panelGrid>
                             <crud:botonesTop frm="#{frmPelicula}"/>
                         </h:panelGrid>
+
                     </h:panelGrid>
                 </h:form>
             </h:panelGroup>
@@ -52,6 +51,7 @@
 
                 <p:tabView id="tabDetalle" cache="false" dynamic="true" rendered="#{frmPelicula.estado!='NINGUNO'}">
                     <p:ajax process="@this" event="tabChange" listener="#{frmPelicula.cambiarTab}"/>
+
                     <p:tab title="Generalidades" closable="false">
                         <h:panelGrid>
                             <h:form id="frmDetalle" >
@@ -64,14 +64,15 @@
                                         <p:inputText id="txtNombre" value="#{frmPelicula.registro.nombre}" size="70"/>
                                         <p:outputLabel value="Sinopsis" for="txtSinopsis"/>
                                         <h:inputTextarea id="txtSinopsis" value="#{frmPelicula.registro.sinopsis}" cols="70" rows="3"/>
+
                                     </h:panelGrid>
-                                  <crud:botonesBottom frm="#{frmPelicula}"/>
-                                </h:panelGrid>
+                                        <crud:botonesBottom frm="#{frmPelicula}"/>
+                                    </h:panelGrid>
+
                             </h:form>
                         </h:panelGrid>
-
-
                     </p:tab>
+
                     <p:tab title="Tipos" disabled="#{frmPelicula.estado!='MODIFICAR'}">
                         <h:panelGrid>
                         <h:panelGroup id="pnlTablaC">
@@ -82,11 +83,10 @@
                                      selection="#{frmPelicula.frmPeliculaCaracteristica.registro}"
                                      rendered="#{frmPelicula.frmPeliculaCaracteristica.estado=='NINGUNO'}"
                                      var="rc"
-                                     lazy="true" paginator="true" selectionMode="single"
+                                     lazy="true" paginator="true" selectionMode="single">
 
-                        >
                         <p:ajax event="rowSelect" update=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC" process="@this"
-                                listener="#{frmPelicula.frmPeliculaCaracteristica.cambiarSeleccion}"/>
+                                listener="#{frmPelicula.frmPeliculaCaracteristica.cambioSeleccion}"/>
                         <p:column headerText="ID">
                             <h:outputText value="#{rc.idPeliculaCaracteristica}"/>
                         </p:column>
@@ -101,6 +101,7 @@
                             <h:panelGrid>
                                 <crud:botonesTop frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
                             </h:panelGrid>
+
                         </h:panelGrid>
                         </h:form>
                         </h:panelGroup>
@@ -112,6 +113,7 @@
                                                 <p:outputLabel value="ID" for="txtId"/>
                                                 <p:inputText id="txtIdPeliculaCaracteristica" disabled="true" readonly="true"
                                                              value="#{frmPelicula.frmPeliculaCaracteristica.registro.idPeliculaCaracteristica}"/>
+
                                                 <p:outputLabel value="Tipo de Pelicula" for="lstTipoPelicula"/>
                                                 <h:selectOneMenu id="lstTipoPelicula" value="#{frmPelicula.frmPeliculaCaracteristica.idTipoPeliculaSeleccionado}">
                                                     <f:selectItems value="#{frmPelicula.frmPeliculaCaracteristica.tipoPeliculaList}" var="tp"
@@ -122,26 +124,21 @@
                                                 <p:outputLabel value="valor" for="txtValor"/>
                                                 <h:inputTextarea id="txtValor" required="true"
                                                                  validator="#{frmPelicula.frmPeliculaCaracteristica.validarValor}"
-                                                                 value="#{frmPelicula.frmPeliculaCaracteristica.registro.valor}" cols="70" rows="3"
-                                                />
-                                                <p:tooltip for="txtValor" value="#{frmPelicula.frmPeliculaCaracteristica.registro.idTipoPelicula.expresionRegular}" position="right"/>
+                                                                 value="#{frmPelicula.frmPeliculaCaracteristica.registro.valor}" cols="70" rows="3"/>
+                                                <p:tooltip for="txtValor" value="#{frmPelicula.frmPeliculaCaracteristica.registro.idTipoPelicula.expresionRegular}"
+                                                           position="right"/>
 
                                             </h:panelGrid>
-                                                <crud:botonesBottom frm="#{frmPelicula.frmPeliculaCaracteristica}" actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
-                                        </h:panelGrid>
+                                                <crud:botonesBottom frm="#{frmPelicula.frmPeliculaCaracteristica}"
+                                                                    actualizar=":tabDetalle:pnlDetalleC :tabDetalle:pnlTablaC"/>
+                                            </h:panelGrid>
+
                                     </h:form>
                                 </h:panelGrid>
-
-
                             </h:panelGroup>
-
-
                         </h:panelGrid>
                     </p:tab>
                 </p:tabView>
-
-
-
             </h:panelGroup>
         </h:panelGrid>
     </ui:define>

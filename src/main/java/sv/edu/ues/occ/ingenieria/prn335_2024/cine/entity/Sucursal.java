@@ -6,7 +6,10 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "sucursal")
+@Table(name = "sucursal", schema = "public")
+@NamedQueries({
+        @NamedQuery(name = "Sucursal.findAll", query = "SELECT sucu FROM Sucursal sucu ORDER BY sucu.idSucursal ASC")
+})
 public class Sucursal {
     @Id
     @Column(name = "id_sucursal", nullable = false)

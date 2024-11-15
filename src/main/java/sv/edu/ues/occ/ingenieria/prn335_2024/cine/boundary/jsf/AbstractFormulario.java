@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractForm<T> implements Serializable {
+public abstract class AbstractFormulario<T> implements Serializable {
     protected T registro;
     protected ESTADO_CRUD estado;
 
@@ -31,7 +31,8 @@ public abstract class AbstractForm<T> implements Serializable {
 
     public abstract String getTituloDePagina();
 
-    protected int registrosPorPagina = 10;
+    protected int registrosEnPagina = 10;
+
 
     @PostConstruct
     public void inicializar() {
@@ -63,10 +64,10 @@ public abstract class AbstractForm<T> implements Serializable {
             @Override
             public int count(Map<String, FilterMeta> map) {
                 try {
-                    int contando = contar();
+                    int contando = contarRegistros();
                     return contando;
                 } catch (Exception e) {
-                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo contar los registros.");
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudieron contar los registros");
                     facesContext().addMessage(null, message);
                     e.printStackTrace();
                 }
@@ -79,15 +80,16 @@ public abstract class AbstractForm<T> implements Serializable {
                     List<T> datos = cargarDatos(desde, max);
                     return datos;
                 } catch (Exception e) {
-                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudieron cargar los datos.");
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudieron cargar los datos");
                     facesContext().addMessage(null, message);
                     e.printStackTrace();
                 }
                 return List.of();
             }
         };
-        modelo.setPageSize(registrosPorPagina);
+        modelo.setPageSize(registrosEnPagina);
     }
+    
     public List<T> cargarDatos(int firstResult, int maxResult) {
         try {
             return getDataBean().findRange(firstResult, maxResult);
@@ -100,7 +102,7 @@ public abstract class AbstractForm<T> implements Serializable {
     }
 
 
-    public int contar() {
+    public int contarRegistros() {
         try {
             return getDataBean().count().intValue();
         } catch (Exception e) {
@@ -111,6 +113,7 @@ public abstract class AbstractForm<T> implements Serializable {
         return 0;
     }
 
+    
     public void btnCrearHandler(ActionEvent actionEvent) {
         try {
             getDataBean().create(registro);
@@ -171,7 +174,7 @@ public abstract class AbstractForm<T> implements Serializable {
         this.estado = ESTADO_CRUD.CREAR;
     }
 
-    public void cambiarSeleccion(SelectEvent<T> event) {
+    public void cambioSeleccion(SelectEvent<T> event) {
         if (event != null && event.getObject() != null) {
             this.registro = event.getObject();
             this.estado = ESTADO_CRUD.MODIFICAR;
@@ -192,8 +195,8 @@ public abstract class AbstractForm<T> implements Serializable {
 
 
 
-    public int getRegistrosPorPagina() {
-        return registrosPorPagina;
+    public int getRegistrosEnPagina() {
+        return registrosEnPagina;
     }
 
 

@@ -7,8 +7,8 @@
                xmlns:h="jakarta.faces.html"
                xmlns:p="primefaces"
                xmlns:crud="jakarta.faces.composite/crud"
-               template="WEB-INF/templates/principal.xhtml"
->
+               template="WEB-INF/templates/principal.xhtml">
+
     <f:define name="titulo">
         #{frmTipoProducto.tituloDePagina}
     </f:define>
@@ -20,13 +20,12 @@
                 <h:form id="frmTabla">
                     <h:panelGrid>
                         <p:dataTable value="#{frmTipoProducto.modelo}"
-                                     rows="#{frmTipoProducto.registrosPorPagina}"
+                                     rows="#{frmTipoProducto.registrosEnPagina}"
                                      selection="#{frmTipoProducto.registro}"
                                      rendered="#{frmTipoProducto.estado=='NINGUNO'}"
                                      var="r"
-                                     lazy="true" paginator="true" selectionMode="single"
+                                     lazy="true" paginator="true" selectionMode="single">
 
-                        >
                             <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"/>
                             <p:column headerText="ID">
                                 <h:outputText value="#{r.idTipoProducto}"/>
@@ -37,12 +36,15 @@
                             <p:column headerText="Estado">
                                 <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
                             </p:column>
-
+                            <p:column headerText="Comentarios">
+                                <h:outputText value="#{r.comentarios}"/>
+                            </p:column>
                         </p:dataTable>
 
                         <h:panelGrid>
                             <crud:botonesTop frm="#{frmTipoProducto}"/>
                         </h:panelGrid>
+
                     </h:panelGrid>
                 </h:form>
             </h:panelGroup>
@@ -61,9 +63,11 @@
                                 <h:selectBooleanCheckbox id="chkActivo" value="#{frmTipoProducto.registro.activo}"/>
                                 <p:outputLabel value="Comentarios" for="txtComentarios"/>
                                 <h:inputTextarea id="txtComentarios" value="#{frmTipoProducto.registro.comentarios}" cols="70" rows="3"/>
+
                             </h:panelGrid>
-                           <crud:botonesBottom frm="#{frmTipoProducto}"/>
-                        </h:panelGrid>
+                                <crud:botonesBottom frm="#{frmTipoProducto}"/>
+                            </h:panelGrid>
+
                     </h:form>
                 </h:panelGrid>
             </h:panelGroup>

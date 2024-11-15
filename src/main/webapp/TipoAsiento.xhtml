@@ -7,8 +7,8 @@
                xmlns:h="jakarta.faces.html"
                xmlns:p="primefaces"
                xmlns:crud="jakarta.faces.composite/crud"
-               template="WEB-INF/templates/principal.xhtml"
->
+               template="WEB-INF/templates/principal.xhtml">
+
    <f:define name="titulo">
       #{frmTipoAsiento.tituloDePagina}
    </f:define>
@@ -20,13 +20,12 @@
             <h:form id="frmTabla">
                <h:panelGrid>
                   <p:dataTable value="#{frmTipoAsiento.modelo}"
-                               rows="#{frmTipoAsiento.registrosPorPagina}"
+                               rows="#{frmTipoAsiento.registrosEnPagina}"
                                selection="#{frmTipoAsiento.registro}"
                                rendered="#{frmTipoAsiento.estado=='NINGUNO'}"
                                var="r"
-                               lazy="true" paginator="true" selectionMode="single"
+                               lazy="true" paginator="true" selectionMode="single">
 
-                  >
                      <p:ajax event="rowSelect" update=":pnlDetalle :pnlTabla" process="@this"/>
                      <p:column headerText="ID">
                         <h:outputText value="#{r.idTipoAsiento}"/>
@@ -37,12 +36,19 @@
                      <p:column headerText="Estado">
                         <h:outputText value="#{r.activo?'ACTIVO':'INACTIVO'}"/>
                      </p:column>
+                     <p:column headerText="Expresión Regular">
+                        <h:outputText value="#{r.expresionRegular}"/>
+                     </p:column>
+                     <p:column headerText="Comentarios">
+                        <h:outputText value="#{r.comentarios}"/>
+                     </p:column>
 
                   </p:dataTable>
 
                   <h:panelGrid>
                      <crud:botonesTop frm="#{frmTipoAsiento}"/>
                   </h:panelGrid>
+
                </h:panelGrid>
             </h:form>
          </h:panelGroup>
@@ -63,9 +69,11 @@
                         <h:inputTextarea id="txtComentarios" value="#{frmTipoAsiento.registro.comentarios}" cols="70" rows="3"/>
                         <p:outputLabel value="ExpresionRegular" for="txtExpresionRegular"/>
                         <h:inputTextarea  id="txtExpresionRegular" value="#{frmTipoAsiento.registro.expresionRegular}"/>
+
                      </h:panelGrid>
-                     <crud:botonesBottom frm="#{frmTipoAsiento}"/>
-                  </h:panelGrid>
+                        <crud:botonesBottom frm="#{frmTipoAsiento}"/>
+                     </h:panelGrid>
+
                </h:form>
             </h:panelGrid>
          </h:panelGroup>

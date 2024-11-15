@@ -1,36 +1,23 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.ScheduleEvent;
-import org.primefaces.model.ScheduleModel;
+
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.SalaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Named
 @ViewScoped
-public class FrmSala extends AbstractForm<Sala> implements Serializable {
-    private ScheduleModel eventModel;
-    private ScheduleEvent<?> event = new DefaultScheduleEvent();
-    private String serverTimeZone = ZoneId.systemDefault().toString();
-    private String nomPelicula;
+public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
+
 
     @Inject
     SalaBean salaBean;
@@ -47,8 +34,8 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
     @Inject
     FrmProgramacion frmProgramacion;
 
-
-
+    @Inject
+    FrmSucursal frmSucursal;
 
 
     public void cambiarTab(TabChangeEvent tce){
@@ -116,9 +103,7 @@ public class FrmSala extends AbstractForm<Sala> implements Serializable {
     }
 
 
-
-
-
-
-
+    public FrmSucursal getFrmSucursal() {
+        return frmSucursal;
+    }
 }

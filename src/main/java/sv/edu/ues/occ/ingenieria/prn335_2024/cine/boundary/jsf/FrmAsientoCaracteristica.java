@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 @Named
 @Dependent
-public class FrmAsientoCaracteristica extends AbstractForm<AsientoCaracteristica>{
+public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracteristica> {
 
 
     @Inject
