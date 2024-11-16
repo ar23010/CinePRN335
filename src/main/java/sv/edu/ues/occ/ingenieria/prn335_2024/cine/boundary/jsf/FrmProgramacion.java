@@ -1,5 +1,6 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.Dependent;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
@@ -24,7 +25,7 @@ import java.util.regex.Pattern;
 @Dependent
 public class FrmProgramacion extends AbstractFormulario<Programacion> implements Serializable {
 
-    @Inject
+    @EJB
     ProgramacionBean prBean;
 
     @Inject

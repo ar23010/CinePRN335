@@ -198,32 +198,35 @@ public abstract class AbstractFormulario<T> implements Serializable {
     }
 
 
-
     public int getRegistrosEnPagina() {
         return registrosEnPagina;
     }
-
 
 
     public T getRegistro() {
         return registro;
     }
 
+
     public void setRegistro(T registro) {
         this.registro = registro;
     }
+
 
     public ESTADO_CRUD getEstado() {
         return estado;
     }
 
+
     public void setEstado(ESTADO_CRUD estado) {
         this.estado = estado;
     }
 
+
     public LazyDataModel<T> getModelo() {
         return modelo;
     }
+
 
     public void setModelo(LazyDataModel<T> modelo) {
         this.modelo = modelo;
