@@ -48,6 +48,11 @@ public class FrmTipoReserva extends AbstractFormulario<TipoReserva> implements S
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public TipoReserva buscarRegistroPorId(String id) {
         return null;
     }

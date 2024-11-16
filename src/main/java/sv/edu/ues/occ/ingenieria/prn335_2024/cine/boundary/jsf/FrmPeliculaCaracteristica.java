@@ -115,6 +115,11 @@ public class FrmPeliculaCaracteristica extends AbstractFormulario<PeliculaCaract
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public PeliculaCaracteristica buscarRegistroPorId(String id) {
         if (id != null && this.modelo != null) {
             return this.modelo.getWrappedData().stream()

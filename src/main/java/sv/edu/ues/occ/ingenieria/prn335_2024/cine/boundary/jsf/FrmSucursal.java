@@ -72,6 +72,11 @@ public class FrmSucursal extends AbstractFormulario<Sucursal> implements Seriali
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public Sucursal buscarRegistroPorId(String id) {
         return null;
     }

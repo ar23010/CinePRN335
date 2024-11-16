@@ -1,87 +1,262 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
-import jakarta.annotation.ManagedBean;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.*;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Programacion;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Reserva;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.TipoReserva;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.*;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Named
 @ViewScoped
-@ManagedBean
 public class FrmReserva extends AbstractFormulario<Reserva> implements Serializable {
 
     @Inject
-    ProgramacionBean programacionBean;
-    @Inject
-    ReservaBean reservaBean;
-
-    @Inject
-    TipoReservaBean trBean;
+    ReservaBean rBean;
 
     @Inject
     FacesContext facesContext;
 
     @Inject
-    FrmSalaCaracteristica frmSalaCaracteristica;
+    FrmProgramacion frmProgramacion;
+
+    @Inject
+    ProgramacionBean prBean;
+
+    @Inject
+    TipoReservaBean trBean;
+
+    @Inject
+    AsientoBean aBean;
+
+    @Inject
+    ReservaDetalleBean rdBean;
 
 
+    Asiento seleccionadoReserva;
+    Asiento seleccionadoOcupado;
 
 
-    @Override
-    protected Object getId(Reserva Object) {
-        return Object.getIdReserva();
+    Integer IdTipoReservaSeleccionado;
+
+
+    private List<TipoReserva> tipoReservaList;
+
+
+    List<Asiento> asientosDisponiblesList = new ArrayList<>();
+    List<Asiento> asientoOcupadosList = new ArrayList<>();
+
+
+    private Date fechaSeleccionada;
+
+
+    Programacion programacionSeleccionada;
+
+    @PostConstruct
+    public void inicializar() {
+        super.inicializar();
+
+        this.tipoReservaList = trBean.findRange(0, Integer.MAX_VALUE);
     }
 
-    @Override
-    protected AbstractDataPersistence<Reserva> getDataBean() {
-        return reservaBean;
-    }
 
-    @Override
-    protected FacesContext facesContext() {
-        return facesContext;
-    }
+    public String formatearLabel(Programacion programacion) {
+        if (programacion != null) {
 
-    @Override
-    protected Reserva createNewRegistro() {
-        return new Reserva();
-    }
+            String formatearDesde = formatearHora(programacion.getDesde());
+            String formatearHasta = formatearHora(programacion.getHasta());
 
 
-    @Override
-    public String buscarIdPorRegistro(Reserva entity) {
-        if (entity != null && entity.getIdReserva() != null) {
-            return entity.getIdReserva().toString();
+            return String.format("%s, %s - %s (%s-%s)",
+                    programacion.getIdPelicula().getNombre(),
+                    programacion.getIdSala().getNombre(),
+                    programacion.getIdSala().getIdSucursal().getNombre(),
+                    formatearDesde,
+                    formatearHasta
+            );
         }
-        return null;
+        return "";
     }
 
-    @Override
-    public Reserva buscarRegistroPorId(String id) {
-        if (id != null && this.modelo != null) {
-            return this.modelo.getWrappedData().stream()
-                    .filter(r -> r.getIdReserva().toString().equals(id))
-                    .findFirst()
-                    .orElse(null);
+
+    public List<Programacion> completarTexto(String query) {
+
+        String queryLowerCase = query.toLowerCase();
+        try {
+
+            LocalDate fechaSeleccionadaLocalDate = fechaSeleccionada.toInstant()
+                    .atZone(ZoneId.of("UTC-6"))
+                    .toLocalDate();
+
+
+            LocalDateTime DiaInicio = fechaSeleccionadaLocalDate.atStartOfDay();
+
+
+            OffsetDateTime desde = DiaInicio.atOffset(ZoneOffset.ofHours(-6));
+
+            LocalDateTime DiaFin = fechaSeleccionadaLocalDate.atTime(23, 59, 59);
+            OffsetDateTime hasta = DiaFin.atOffset(ZoneOffset.ofHours(-6));
+
+
+            List<Programacion> programaciones = prBean.findByDate(desde, hasta);
+
+            return programaciones.stream()
+                    .filter(p -> p.getIdPelicula().getNombre().toLowerCase().startsWith(queryLowerCase)
+                            || p.getIdSala().getNombre().toLowerCase().contains(queryLowerCase)
+                            || p.getDesde().toString().toLowerCase().contains(queryLowerCase)
+                            || p.getHasta().toString().toLowerCase().contains(queryLowerCase)
+                    )
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error en cargar las programaciones", e);
         }
-        return null;
+        return List.of();
+    }
+
+
+    public String formatearHora(OffsetDateTime dateTime) {
+        if (dateTime != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            return dateTime.format(formatter);
+        }
+        return "";
+    }
+
+
+    public String onFlowProcess(FlowEvent event) {
+        String currentStep = event.getOldStep();
+        String nextStep = event.getNewStep();
+
+        // Validación para el paso "asientos"
+        if (nextStep.equals("asientos")) {
+            if (this.programacionSeleccionada != null) {
+                OffsetDateTime fechaHoraActual = OffsetDateTime.now(ZoneOffset.of("-06:00"));
+                if (programacionSeleccionada.getDesde().isBefore(fechaHoraActual)) {
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                    "Advertencia", "No puede seleccionar una programación pasada."));
+                    return currentStep; // Regresar al paso actual
+                } else if (asientosDisponiblesList.isEmpty() && asientoOcupadosList.isEmpty()) {
+                    cargarAsientos(this.programacionSeleccionada.getIdProgramacion());
+                }
+            }
+        }
+
+        // Validación para el paso "fecha"
+        if (nextStep.equals("fecha")) {
+            this.programacionSeleccionada = null;
+            this.seleccionadoReserva = null;
+            this.seleccionadoOcupado = null;
+        }
+
+        // Validación para el paso "Confirmar"
+        if (nextStep.equals("Confirmar")) {
+            if (asientoOcupadosList.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "Advertencia", "Esos asientos ya no están disponibles."));
+                return currentStep; // Regresar al paso actual
+            }
+        }
+
+        // Validación para el paso "Funcion"
+        if (nextStep.equals("Funcion")) {
+            asientosDisponiblesList.clear();
+            asientoOcupadosList.clear();
+            OffsetDateTime fechaHoraActual = OffsetDateTime.now(ZoneOffset.of("-06:00"));
+            Date fechaActual = Date.from(fechaHoraActual.toLocalDate().atStartOfDay(ZoneOffset.of("-06:00")).toInstant());
+
+            // Asegúrate de que this.fechaSeleccionada sea del tipo correcto
+            if (this.fechaSeleccionada != null && this.fechaSeleccionada.before(fechaActual)) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "Advertencia", "No puede seleccionar una fecha anterior al día actual."));
+                return currentStep; // Regresar al paso actual
+            }
+        }
+
+        return nextStep; // Avanzar al siguiente paso si no hay advertencias
+    }
+
+
+    public void cargarAsientos(Long idProgramacion) {
+        if (idProgramacion != null) {
+            this.asientosDisponiblesList = aBean.findDisponiblesByIdProgramacion(idProgramacion);
+            if (this.asientosDisponiblesList.isEmpty()) {
+                enviarMensaje("En esta programacion ya no existen asientos disponibles", "Error", FacesMessage.SEVERITY_ERROR);
+            }
+        } else {
+            enviarMensaje("Debe seleccionar una programación", "Error de programación", FacesMessage.SEVERITY_ERROR);
+        }
+    }
+
+
+    public void btnReservarHandler(ActionEvent event) {
+        if (asientosDisponiblesList != null && !asientosDisponiblesList.isEmpty()) {
+            asientoOcupadosList.add(seleccionadoReserva);
+            asientosDisponiblesList.remove(seleccionadoReserva);
+            seleccionadoReserva = null;
+        }
+    }
+
+
+    public void btnEliminarAsientoReserva(ActionEvent event) {
+        if (getAsientoOcupadosList() != null && !asientoOcupadosList.isEmpty()) {
+            asientosDisponiblesList.add(seleccionadoOcupado);
+            asientoOcupadosList.remove(seleccionadoOcupado);
+            seleccionadoOcupado = null;
+        }
+    }
+
+    public void btnConfirmarReserva() {
+        try {
+            Reserva reserva = new Reserva();
+            reserva.setIdTipoReserva(
+                    this.tipoReservaList.stream()
+                            .filter(r -> r.getIdTipoReserva().equals(IdTipoReservaSeleccionado))
+                            .findFirst()
+                            .orElse(null)
+            );
+            reserva.setIdProgramacion(programacionSeleccionada);
+            OffsetDateTime fechaReservaOffsetDateTime = fechaSeleccionada.toInstant()
+                    .atOffset(ZoneOffset.UTC);
+            reserva.setFechaReserva(fechaReservaOffsetDateTime);
+            reserva.setEstado("CREADO");
+            rBean.create(reserva);
+            ReservaDetalle reservaDetalle = new ReservaDetalle();
+            reservaDetalle.setIdReserva(reserva);
+            reservaDetalle.setEstado("CREADO");
+            for (Asiento asiento : asientoOcupadosList) {
+                try {
+                    reservaDetalle.setIdAsiento(asiento);
+                    rdBean.create(reservaDetalle);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            reserva = null;
+            reservaDetalle = null;
+            enviarMensaje("Éxito", "Reserva creada con éxito", FacesMessage.SEVERITY_INFO);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("Reserva.jsf");
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error al crear la Reserva", e);
+        }
     }
 
     @Override
@@ -89,124 +264,119 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
         return "Reserva";
     }
 
-
-    @Inject
-    TipoReservaBean trbean;
-    private List<TipoReserva> tipoReservas;
-
-    @Inject
-    private PeliculaBean peliculaBean;
-    private List<Pelicula> peliculas;
-    private List<Programacion> programacionList;
-    private Programacion programacionSeleccionada;
-    private List<TipoReserva> tipoReservaList;
-    private Long idReserva;
-
-
-    @PostConstruct
-    public void init() {
-        tipoReservas = trbean.findRange(0,1000);
-        peliculas = peliculaBean.findRange(0,1000);
-        super.inicializar();
-        try {
-            this.programacionList = programacionBean.findAll(0,Integer.MAX_VALUE);
-            this.tipoReservaList = trBean.findRange(0, Integer.MAX_VALUE);
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
-            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al cargar", "Error al cargar los tipos"));
-        }
+    @Override
+    protected Object getId(Reserva reserva) {
+        return reserva.getIdReserva();
     }
 
-
-
-
-    public List<Pelicula> getPeliculas() {
-        return peliculas;
+    @Override
+    protected Reserva createNewRegistro() {
+        return new Reserva();
     }
 
-    public List<TipoReserva> getTipoReservas() {
-        return tipoReservas;
+    @Override
+    protected AbstractDataPersistence<Reserva> getDataBean() {
+        return rBean;
     }
 
-
-    public String onFlowProcess (FlowEvent event) {
-        String pasoAnterior = event.getOldStep();
-        String pasoNuevo = event.getNewStep();
-
-        FacesContext context =  FacesContext.getCurrentInstance();
-        if ("fecha".equals(pasoAnterior) && "funcion".equals(pasoNuevo)) {
-            if (this.getRegistro().getFechaReserva() == null) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar una fecha."));
-                return pasoAnterior;
-            }
-        }
-
-        if ("funcion".equals(pasoAnterior) && "asientos".equals(pasoNuevo)) {
-            if (this.getRegistro().getIdProgramacion().getIdPelicula().getNombre() == null) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar una película."));
-                return pasoAnterior; // No permitir avanzar al siguiente paso
-            }
-        }
-        if ("asientos".equals(pasoAnterior) && "confirm".equals(pasoNuevo)) {
-            // Validación: Asegurarse de que haya asientos seleccionados
-            if (frmAsiento.getRegistro() == null || frmAsiento.getRegistro().equals("")) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar al menos un asiento."));
-                return pasoAnterior; // No permitir avanzar al siguiente paso
-            }
-        }
-
-        return pasoNuevo;
+    @Override
+    protected FacesContext facesContext() {
+        return null;
     }
 
-
-
-
-
-    @Inject
-    FrmAsiento frmAsiento;
-
-    public FrmAsiento getFrmAsiento() {return frmAsiento;}
-
-
-    public Object getTiposReservaList() {
-    return tipoReservas;}
-
-
-    private int activeIndex = 0;
-
-    public int getActiveIndex() {
-        return activeIndex;
+    @Override
+    protected FacesContext getContext() {
+        return facesContext;
     }
 
-    public void setActiveIndex(int activeIndex) {
-        this.activeIndex = activeIndex;
+    @Override
+    public Reserva buscarRegistroPorId(String id) {
+        return null;
     }
 
-    public void siguientePaso() {
-        activeIndex++;
-    }
-
-    public void anteriorPaso(){
-        activeIndex--;
-    }
-
-
-    public String getProgramacionLabel(Programacion programacion) {
-        if (programacion != null) {
-            String nombrePelicula = programacion.getIdPelicula().getNombre();
-            String sala = programacion.getIdSala().getNombre();
-            String sucursal= programacion.getIdSala().getIdSucursal().getNombre();
-            OffsetDateTime desde = programacion.getDesde();
-            OffsetDateTime hasta = programacion.getHasta();
-
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-            String formattedDesde = desde.format(timeFormatter);
-            String formattedHasta = hasta.format(timeFormatter);
-
-            return nombrePelicula + "," + sala + "-" + sucursal+"("+formattedDesde+"-"+formattedHasta+")";
-        }
+    @Override
+    public String buscarIdPorRegistro(Reserva entity) {
         return "";
     }
+
+
+    public Date getFechaSeleccionada() {
+        return fechaSeleccionada;
+    }
+
+    public void setFechaSeleccionada(Date fechaSeleccionada) {
+        this.fechaSeleccionada = fechaSeleccionada;
+    }
+
+    public Programacion getProgramacionSeleccionada() {
+        return programacionSeleccionada;
+    }
+
+    public void setProgramacionSeleccionada(Programacion programacionSeleccionada) {
+        this.programacionSeleccionada = programacionSeleccionada;
+        this.estado = ESTADO_CRUD.MODIFICAR;
+    }
+
+    public FrmProgramacion getFrmProgramacion() {
+        return frmProgramacion;
+    }
+
+    public void setFrmProgramacion(FrmProgramacion frmProgramacion) {
+        this.frmProgramacion = frmProgramacion;
+    }
+
+    public List<TipoReserva> getTipoReservaList() {
+        return tipoReservaList;
+    }
+
+    public List<Asiento> getAsientosDisponiblesList() {
+        return asientosDisponiblesList;
+    }
+
+    public void setAsientosDisponiblesList(List<Asiento> asientosDisponiblesList) {
+        this.asientosDisponiblesList = asientosDisponiblesList;
+    }
+
+    public List<Asiento> getAsientoOcupadosList() {
+        return asientoOcupadosList;
+    }
+
+    public void setAsientoOcupadosList(List<Asiento> asientoOcupadosList) {
+        this.asientoOcupadosList = asientoOcupadosList;
+    }
+
+    public Asiento getSeleccionadoReserva() {
+        return seleccionadoReserva;
+    }
+
+    public void setSeleccionadoReserva(Asiento seleccionadoReserva) {
+        this.seleccionadoReserva = seleccionadoReserva;
+    }
+
+    public Asiento getSeleccionadoOcupado() {
+        return seleccionadoOcupado;
+    }
+
+    public void setSeleccionadoOcupado(Asiento seleccionadoOcupado) {
+        this.seleccionadoOcupado = seleccionadoOcupado;
+    }
+
+    public void setTipoReservaList(List<TipoReserva> tipoReservaList) {
+        this.tipoReservaList = tipoReservaList;
+    }
+
+    public Integer getIdTipoReservaSeleccionado() {
+        return IdTipoReservaSeleccionado;
+    }
+
+    public void setIdTipoReservaSeleccionado(Integer idTipoReservaSeleccionado) {
+        this.IdTipoReservaSeleccionado = idTipoReservaSeleccionado;
+    }
+
+
+
+
+
 
 
     public List<Programacion> completeProgramacion(String query) {
@@ -223,46 +393,25 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
         return filteredProgramaciones;
     }
 
+    private List<Programacion> getProgramacionList() {
+    return getProgramacionList();}
 
-    public List<Programacion> getProgramacionList() {
+    public String getProgramacionLabel(Programacion programacion) {
+        if (programacion != null) {
+            String nombrePelicula = programacion.getIdPelicula().getNombre();
+            String sala = programacion.getIdSala().getNombre();
+            String sucursal= programacion.getIdSala().getIdSucursal().getNombre();
+            OffsetDateTime desde = programacion.getDesde();
+            OffsetDateTime hasta = programacion.getHasta();
 
-        return programacionList;
-    }
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            String formattedDesde = desde.format(timeFormatter);
+            String formattedHasta = hasta.format(timeFormatter);
 
-    public void setProgramacionList(List<Programacion> programacionList) {
-        this.programacionList = programacionList;
-    }
-
-
-
-
-
-
-
-    public Object getTipoReservaList() {
-    return tipoReservaList;}
-
-    public Integer getIdTipoReservaSeleccionado() {
-        if (this.registro != null && this.registro.getIdTipoReserva() != null) {
-            return this.registro.getIdTipoReserva().getIdTipoReserva();
+            return nombrePelicula + "," + sala + "-" + sucursal+"("+formattedDesde+"-"+formattedHasta+")";
         }
-        return null;
+        return "Programacion no disponible";
     }
-
-    public void setIdTipoReservaSeleccionado(final Integer idTipoReserva) {
-        if (this.registro != null && this.tipoReservaList != null && !this.tipoReservaList.isEmpty()) {
-            this.registro.setIdTipoReserva(this.tipoReservaList.stream().filter(r -> r.getIdTipoReserva().equals(idTipoReserva)).findFirst().orElse(null));
-        }
-    }
-
-    public Programacion getProgramacionSeleccionada() {
-        return programacionSeleccionada;
-    }
-
-    public void setProgramacionSeleccionada(Programacion programacionSeleccionada) {
-        this.programacionSeleccionada = programacionSeleccionada;
-    }
-
     public void onProgramacionSelect(SelectEvent<Programacion> event) {
         this.programacionSeleccionada = event.getObject();
     }

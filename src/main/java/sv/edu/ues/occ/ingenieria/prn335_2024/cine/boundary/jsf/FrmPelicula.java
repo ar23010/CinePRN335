@@ -68,6 +68,11 @@ public class FrmPelicula extends AbstractFormulario<Pelicula> implements Seriali
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public Pelicula buscarRegistroPorId(String id) {
         if (id != null && this.modelo != null) {
             return this.modelo.getWrappedData().stream()

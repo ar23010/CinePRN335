@@ -128,6 +128,11 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public Sala buscarRegistroPorId(String id) {
         if (id != null && this.modelo != null) {
             return this.modelo.getWrappedData().stream()

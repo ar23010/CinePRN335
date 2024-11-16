@@ -71,6 +71,11 @@ public class FrmProgramacion extends AbstractFormulario<Programacion> implements
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public Programacion buscarRegistroPorId(String id) {
         if (id != null && this.modelo != null) {
             return this.modelo.getWrappedData().stream()

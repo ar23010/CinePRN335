@@ -49,6 +49,11 @@ public class FrmTipoPago extends AbstractFormulario<TipoPago> implements Seriali
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public TipoPago buscarRegistroPorId(String id) {
         return null;
     }

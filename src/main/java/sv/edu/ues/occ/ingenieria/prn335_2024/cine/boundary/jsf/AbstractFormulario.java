@@ -27,6 +27,8 @@ public abstract class AbstractFormulario<T> implements Serializable {
 
     public abstract String buscarIdPorRegistro(T entity);
 
+    protected abstract FacesContext getContext();
+
     public abstract T buscarRegistroPorId(String id);
 
     public abstract String getTituloDePagina();
@@ -89,7 +91,9 @@ public abstract class AbstractFormulario<T> implements Serializable {
         };
         modelo.setPageSize(registrosEnPagina);
     }
-    
+
+
+
     public List<T> cargarDatos(int firstResult, int maxResult) {
         try {
             return getDataBean().findRange(firstResult, maxResult);

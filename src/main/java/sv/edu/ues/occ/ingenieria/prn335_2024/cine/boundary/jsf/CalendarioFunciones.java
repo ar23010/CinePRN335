@@ -224,6 +224,7 @@ public class CalendarioFunciones implements Serializable {
         return view;
     }
 
+
     public void setView(String view) {
         this.view = view;
     }

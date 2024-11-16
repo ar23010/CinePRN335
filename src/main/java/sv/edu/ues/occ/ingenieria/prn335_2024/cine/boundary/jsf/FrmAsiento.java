@@ -74,6 +74,11 @@ public class FrmAsiento extends AbstractFormulario<Asiento> implements Serializa
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public Asiento buscarRegistroPorId(String id) {
         return null;
     }
