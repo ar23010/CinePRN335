@@ -1,40 +1,48 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 import jakarta.annotation.ManagedBean;
 import jakarta.annotation.PostConstruct;
-import jakarta.el.MethodExpression;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.event.FlowEvent;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.PeliculaBean;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.ReservaBean;
-import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.TipoReservaBean;
+import org.primefaces.event.SelectEvent;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.*;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Pelicula;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Programacion;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Reserva;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.TipoReserva;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Named
 @ViewScoped
 @ManagedBean
 public class FrmReserva extends AbstractFormulario<Reserva> implements Serializable {
 
-
+    @Inject
+    ProgramacionBean programacionBean;
     @Inject
     ReservaBean reservaBean;
+
+    @Inject
+    TipoReservaBean trBean;
 
     @Inject
     FacesContext facesContext;
 
     @Inject
-    FrmAsiento frmAsiento;
+    FrmSalaCaracteristica frmSalaCaracteristica;
 
-    public FrmAsiento getFrmAsiento() {return frmAsiento;}
+
+
 
     @Override
     protected Object getId(Reserva Object) {
@@ -84,44 +92,178 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
 
     @Inject
     TipoReservaBean trbean;
-    private List<TipoReserva> tiposReserva;
+    private List<TipoReserva> tipoReservas;
 
     @Inject
     private PeliculaBean peliculaBean;
-
     private List<Pelicula> peliculas;
-    private String peliculasTexto;
+    private List<Programacion> programacionList;
+    private Programacion programacionSeleccionada;
+    private List<TipoReserva> tipoReservaList;
+    private Long idReserva;
+
 
     @PostConstruct
     public void init() {
-        tiposReserva = trbean.findRange(0,1000);
+        tipoReservas = trbean.findRange(0,1000);
         peliculas = peliculaBean.findRange(0,1000);
-        peliculasTexto = concatenarPeliculas(peliculas);
-    }
-
-    private String concatenarPeliculas(List<Pelicula> peliculas) {
-        StringBuilder sb = new StringBuilder();
-        for (Pelicula pelicula : peliculas) {
-            sb.append(pelicula.getNombre()).append("\n"); // Añadir el nombre de cada película y un salto de línea
+        super.inicializar();
+        try {
+            this.programacionList = programacionBean.findAll(0,Integer.MAX_VALUE);
+            this.tipoReservaList = trBean.findRange(0, Integer.MAX_VALUE);
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al cargar", "Error al cargar los tipos"));
         }
-        return sb.toString();
     }
 
-    public List<TipoReserva> getTiposReserva() {
-        return tiposReserva;
+
+
+
+    public List<Pelicula> getPeliculas() {
+        return peliculas;
     }
 
-    public String onFlowProcess(FlowEvent event) {
+    public List<TipoReserva> getTipoReservas() {
+        return tipoReservas;
+    }
+
+
+    public String onFlowProcess (FlowEvent event) {
         String pasoAnterior = event.getOldStep();
         String pasoNuevo = event.getNewStep();
 
-        if ("Fecha".equals(pasoAnterior) && (registro.getFechaReserva() == null || registro.getIdTipoReserva() == null)) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar una fecha y un tipo de reserva", null);
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return pasoAnterior; // No avanzar
+        FacesContext context =  FacesContext.getCurrentInstance();
+        if ("fecha".equals(pasoAnterior) && "funcion".equals(pasoNuevo)) {
+            if (this.getRegistro().getFechaReserva() == null) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar una fecha."));
+                return pasoAnterior;
+            }
         }
+
+        if ("funcion".equals(pasoAnterior) && "asientos".equals(pasoNuevo)) {
+            if (this.getRegistro().getIdProgramacion().getIdPelicula().getNombre() == null) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar una película."));
+                return pasoAnterior; // No permitir avanzar al siguiente paso
+            }
+        }
+        if ("asientos".equals(pasoAnterior) && "confirm".equals(pasoNuevo)) {
+            // Validación: Asegurarse de que haya asientos seleccionados
+            if (frmAsiento.getRegistro() == null || frmAsiento.getRegistro().equals("")) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar al menos un asiento."));
+                return pasoAnterior; // No permitir avanzar al siguiente paso
+            }
+        }
+
         return pasoNuevo;
     }
 
 
+
+
+
+    @Inject
+    FrmAsiento frmAsiento;
+
+    public FrmAsiento getFrmAsiento() {return frmAsiento;}
+
+
+    public Object getTiposReservaList() {
+    return tipoReservas;}
+
+
+    private int activeIndex = 0;
+
+    public int getActiveIndex() {
+        return activeIndex;
+    }
+
+    public void setActiveIndex(int activeIndex) {
+        this.activeIndex = activeIndex;
+    }
+
+    public void siguientePaso() {
+        activeIndex++;
+    }
+
+    public void anteriorPaso(){
+        activeIndex--;
+    }
+
+
+    public String getProgramacionLabel(Programacion programacion) {
+        if (programacion != null) {
+            String nombrePelicula = programacion.getIdPelicula().getNombre();
+            String sala = programacion.getIdSala().getNombre();
+            String sucursal= programacion.getIdSala().getIdSucursal().getNombre();
+            OffsetDateTime desde = programacion.getDesde();
+            OffsetDateTime hasta = programacion.getHasta();
+
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            String formattedDesde = desde.format(timeFormatter);
+            String formattedHasta = hasta.format(timeFormatter);
+
+            return nombrePelicula + "," + sala + "-" + sucursal+"("+formattedDesde+"-"+formattedHasta+")";
+        }
+        return "";
+    }
+
+
+    public List<Programacion> completeProgramacion(String query) {
+        List<Programacion> allProgramaciones = getProgramacionList();
+        List<Programacion> filteredProgramaciones = new ArrayList<>();
+
+        for (Programacion programacion : allProgramaciones) {
+            if (programacion != null && programacion.getIdPelicula() != null &&
+                    programacion.getIdPelicula().getNombre() != null &&
+                    programacion.getIdPelicula().getNombre().toLowerCase().contains(query.toLowerCase())) {
+                filteredProgramaciones.add(programacion);
+            }
+        }
+        return filteredProgramaciones;
+    }
+
+
+    public List<Programacion> getProgramacionList() {
+
+        return programacionList;
+    }
+
+    public void setProgramacionList(List<Programacion> programacionList) {
+        this.programacionList = programacionList;
+    }
+
+
+
+
+
+
+
+    public Object getTipoReservaList() {
+    return tipoReservaList;}
+
+    public Integer getIdTipoReservaSeleccionado() {
+        if (this.registro != null && this.registro.getIdTipoReserva() != null) {
+            return this.registro.getIdTipoReserva().getIdTipoReserva();
+        }
+        return null;
+    }
+
+    public void setIdTipoReservaSeleccionado(final Integer idTipoReserva) {
+        if (this.registro != null && this.tipoReservaList != null && !this.tipoReservaList.isEmpty()) {
+            this.registro.setIdTipoReserva(this.tipoReservaList.stream().filter(r -> r.getIdTipoReserva().equals(idTipoReserva)).findFirst().orElse(null));
+        }
+    }
+
+    public Programacion getProgramacionSeleccionada() {
+        return programacionSeleccionada;
+    }
+
+    public void setProgramacionSeleccionada(Programacion programacionSeleccionada) {
+        this.programacionSeleccionada = programacionSeleccionada;
+    }
+
+    public void onProgramacionSelect(SelectEvent<Programacion> event) {
+        this.programacionSeleccionada = event.getObject();
+    }
 }
