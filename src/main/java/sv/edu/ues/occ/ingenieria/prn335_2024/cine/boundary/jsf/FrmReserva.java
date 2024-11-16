@@ -139,59 +139,61 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
     }
 
 
+
     public String onFlowProcess(FlowEvent event) {
         String currentStep = event.getOldStep();
         String nextStep = event.getNewStep();
 
-        // Validación para el paso "asientos"
+        //SI EL SIGUIENTE TAB ES ASIENTOS
         if (nextStep.equals("asientos")) {
             if (this.programacionSeleccionada != null) {
+                //NO SE PODRA CONTINUAR SI LA PROGRAMACIÓN SELECCIONADA
                 OffsetDateTime fechaHoraActual = OffsetDateTime.now(ZoneOffset.of("-06:00"));
                 if (programacionSeleccionada.getDesde().isBefore(fechaHoraActual)) {
-                    FacesContext.getCurrentInstance().addMessage(null,
-                            new FacesMessage(FacesMessage.SEVERITY_WARN,
-                                    "Advertencia", "No puede seleccionar una programación pasada."));
-                    return currentStep; // Regresar al paso actual
+                    return currentStep;
                 } else if (asientosDisponiblesList.isEmpty() && asientoOcupadosList.isEmpty()) {
+                    //SI LA LISTA DE AMBOS ASIENTO ESTA VACIA QUE CARGUEN LOS ASIENTOS CON EL ID DE LA PROGRAMACION QUE HEMOS SELECCIONADO
                     cargarAsientos(this.programacionSeleccionada.getIdProgramacion());
                 }
             }
         }
-
-        // Validación para el paso "fecha"
         if (nextStep.equals("fecha")) {
+            //SI REGRESAMOS AL TAB DE FECHAS, TODAS LAS COSAS QUE SE HA SELECCIONADO SE HACE NULL
             this.programacionSeleccionada = null;
             this.seleccionadoReserva = null;
             this.seleccionadoOcupado = null;
         }
-
-        // Validación para el paso "Confirmar"
         if (nextStep.equals("Confirmar")) {
+
+            //PRIMERO VERIFICO QUE HAYAN ASIENTOS OCUPADOS
             if (asientoOcupadosList.isEmpty()) {
+                //MANDO UN MENSAJE DICIENDO QUE NO SE PUDE AVANZAR SI NO HAY ASIENTOS OCUPADOS
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN,
-                                "Advertencia", "Esos asientos ya no están disponibles."));
-                return currentStep; // Regresar al paso actual
+                                "Advertencia", "No puede avanzar porque hay asientos ocupados."));
+
+                // PERMANECEMOS EN EL ASIENTO ACTUAL
+                return currentStep;
             }
         }
-
-        // Validación para el paso "Funcion"
         if (nextStep.equals("Funcion")) {
+            //REINICIAMOS LA LISTA DE ASIENTOS
             asientosDisponiblesList.clear();
             asientoOcupadosList.clear();
+
+            //Obtenemos la fecha actual
             OffsetDateTime fechaHoraActual = OffsetDateTime.now(ZoneOffset.of("-06:00"));
             Date fechaActual = Date.from(fechaHoraActual.toLocalDate().atStartOfDay(ZoneOffset.of("-06:00")).toInstant());
-
-            // Asegúrate de que this.fechaSeleccionada sea del tipo correcto
-            if (this.fechaSeleccionada != null && this.fechaSeleccionada.before(fechaActual)) {
+            //Se verifica que la fecha seleccionada no sea previa a la fecha actual, de ser así, no se deja avanzar
+            if (this.fechaSeleccionada.before(fechaActual)) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN,
-                                "Advertencia", "No puede seleccionar una fecha anterior al día actual."));
-                return currentStep; // Regresar al paso actual
+                                "Advertencia", "Debe seleccionar una fecha actual o posterior."));
+                return currentStep;
             }
         }
 
-        return nextStep; // Avanzar al siguiente paso si no hay advertencias
+        return nextStep;
     }
 
 

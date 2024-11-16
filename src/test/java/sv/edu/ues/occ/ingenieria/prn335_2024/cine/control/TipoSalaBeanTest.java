@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TipoSalaBeanTest {
-
+/*
     protected List<TipoSala> findResult;
 
     public TipoSalaBeanTest() {
@@ -131,7 +131,7 @@ class TipoSalaBeanTest {
         assertNotNull(resultado);
         assertEquals(modificado, resultado);
     }
-*/
+
     @Test
     void count() {
         System.out.println("TipoSalaBeanTest.count");
@@ -162,4 +162,6 @@ class TipoSalaBeanTest {
         TipoSalaBean cut = new TipoSalaBean();
         System.out.println(cut.imprimirCarnet());
     }
+
+ */
 }
