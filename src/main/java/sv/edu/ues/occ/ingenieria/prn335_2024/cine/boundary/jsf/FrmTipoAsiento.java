@@ -48,6 +48,11 @@ public class FrmTipoAsiento extends AbstractFormulario<TipoAsiento> implements S
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public TipoAsiento buscarRegistroPorId(String id) {
         return null;
     }

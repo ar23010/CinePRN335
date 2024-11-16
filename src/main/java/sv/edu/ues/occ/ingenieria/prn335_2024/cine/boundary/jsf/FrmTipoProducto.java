@@ -49,6 +49,11 @@ public class FrmTipoProducto extends AbstractFormulario<TipoProducto> implements
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public TipoProducto buscarRegistroPorId(String id) {
         return null;
     }

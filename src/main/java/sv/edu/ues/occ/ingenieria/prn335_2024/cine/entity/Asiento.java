@@ -8,8 +8,10 @@ import java.util.List;
 @Entity
 @Table(name = "asiento", schema = "public")
 @NamedQueries({
-        @NamedQuery(name = "Asiento.findByIdSala", query = "SELECT asiento FROM Asiento asiento WHERE asiento.idSala.idSala=:idSala ORDER BY asiento.idAsiento ASC")
+        @NamedQuery(name = "Asiento.findByIdSala", query = "SELECT asiento FROM Asiento asiento WHERE asiento.idSala.idSala=:idSala ORDER BY asiento.idAsiento ASC"),
+        @NamedQuery(name = "Asiento.findDisponiblesByIdProgramacion", query = "SELECT a FROM Asiento a WHERE a.idSala.idSala IN (SELECT s.idSala FROM Programacion pr JOIN pr.idSala s WHERE pr.idProgramacion =:idProgramacion) AND a.idAsiento NOT IN (SELECT rd.idAsiento.idAsiento FROM ReservaDetalle rd WHERE rd.idReserva.idProgramacion.idProgramacion= :idProgramacion) ORDER BY a.idAsiento ASC" )
 })
+
 public class Asiento {
     @Id
     @Column(name = "id_asiento", nullable = false)

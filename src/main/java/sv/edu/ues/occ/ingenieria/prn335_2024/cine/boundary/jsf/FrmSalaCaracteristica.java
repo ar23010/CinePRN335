@@ -112,6 +112,11 @@ public class FrmSalaCaracteristica extends AbstractFormulario<SalaCaracteristica
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public SalaCaracteristica buscarRegistroPorId(String id) {
         if (id != null && this.modelo != null) {
             return this.modelo.getWrappedData().stream()

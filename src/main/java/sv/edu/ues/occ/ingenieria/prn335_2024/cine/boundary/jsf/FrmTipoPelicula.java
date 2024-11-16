@@ -48,6 +48,11 @@ public class FrmTipoPelicula extends AbstractFormulario<TipoPelicula> implements
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public TipoPelicula buscarRegistroPorId(String id) {
         return null;
     }

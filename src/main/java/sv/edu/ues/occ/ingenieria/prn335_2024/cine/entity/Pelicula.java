@@ -30,6 +30,7 @@ public class Pelicula {
     @Column(name = "sinopsis")
     private String sinopsis;
 
+
     public Pelicula(Long idPelicula) {
     this.idPelicula=idPelicula;
     }
@@ -63,4 +64,11 @@ public class Pelicula {
         this.sinopsis = sinopsis;
     }
 
+    public List<PeliculaCaracteristica> getPeliculaCaracteristicas() {
+        return PeliculaCaracteristicaList;
+    }
+
+    public void setPeliculaCaracteristica(List<PeliculaCaracteristica> peliculaCaracteristicas) {
+        this.PeliculaCaracteristicaList = PeliculaCaracteristicaList;
+    }
 }

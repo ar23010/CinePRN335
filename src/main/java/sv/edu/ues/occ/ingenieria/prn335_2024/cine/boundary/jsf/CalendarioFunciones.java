@@ -178,7 +178,6 @@ public class CalendarioFunciones implements Serializable {
         return eventModel;
     }
 
-    //Lanza un mensaje si la Fecha fin es menor que fecha inicio
     public void mensajeAdvertencia(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia", mensaje);
 
@@ -224,6 +223,7 @@ public class CalendarioFunciones implements Serializable {
         return view;
     }
 
+
     public void setView(String view) {
         this.view = view;
     }
@@ -232,6 +232,7 @@ public class CalendarioFunciones implements Serializable {
     public String getTimeFormat() {
         return timeFormat;
     }
+
 
     public void setTimeFormat(String timeFormat) {
         this.timeFormat = timeFormat;
@@ -242,8 +243,8 @@ public class CalendarioFunciones implements Serializable {
         return serverTimeZone;
     }
 
+
     public void setServerTimeZone(String serverTimeZone) {
         this.serverTimeZone = serverTimeZone;
     }
 }
-

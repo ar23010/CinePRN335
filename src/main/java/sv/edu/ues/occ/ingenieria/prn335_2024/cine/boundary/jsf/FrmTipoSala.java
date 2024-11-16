@@ -49,6 +49,11 @@ public class FrmTipoSala extends AbstractFormulario<TipoSala> implements Seriali
     }
 
     @Override
+    protected FacesContext getContext() {
+        return null;
+    }
+
+    @Override
     public TipoSala buscarRegistroPorId(String id) {
         return null;
     }

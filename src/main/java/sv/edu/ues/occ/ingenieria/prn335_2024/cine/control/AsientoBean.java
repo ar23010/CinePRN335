@@ -40,26 +40,16 @@ public class AsientoBean extends AbstractDataPersistence<Asiento> implements Ser
         }
         return List.of();
     }
-    public List<Asiento> obtenerAsientosDisponibles(Long idPelicula, String fecha) {
-        String queryStr = "SELECT a.* " +
-                "FROM asiento a " +
-                "JOIN sala s ON a.idSala = s.idSala " +
-                "JOIN reserva r ON s.idSala = r.idSala " +
-                "WHERE r.idPelicula = :idPelicula " +
-                "AND r.fecha = :fecha " +
-                "AND NOT EXISTS (" +
-                "    SELECT 1 " +
-                "    FROM reserva_detalle rd " +
-                "    WHERE rd.idAsiento = a.idAsiento " +
-                "    AND rd.estado = 'CREADO'" +
-                ")";
 
-        Query query = em.createNativeQuery(queryStr, Asiento.class);
-        query.setParameter("idPelicula", idPelicula);
-        query.setParameter("fecha", fecha);
-
-
-        List<Asiento> asientosDisponibles = query.getResultList();
-        return asientosDisponibles;
+    public List<Asiento> findDisponiblesByIdProgramacion(final Long idProgramacion) {
+        try {
+            TypedQuery<Asiento> q = em.createNamedQuery("Asiento.findDisponiblesByIdProgramacion", Asiento.class);
+            q.setParameter("idProgramacion", idProgramacion);
+            return q.getResultList();
+        }catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE,e.getMessage(),e);
+        }
+        return List.of();
     }
+
 }
