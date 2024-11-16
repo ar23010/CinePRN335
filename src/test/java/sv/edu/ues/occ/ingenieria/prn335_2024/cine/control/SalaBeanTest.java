@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class SalaBeanTest {
 
 /*
-   @Test
+  /* @Test
     void findById() {
         System.out.println("SalaBeanTest.findById");
         List<Sala> buscados = Arrays.asList(new Sala[]{new Sala(1), new Sala(2), new Sala(3), new Sala(4), new Sala(5)});
@@ -31,12 +31,12 @@ public class SalaBeanTest {
 
         List<Sala> encontrados = cut.findAll(0,100);
 
-        assertEquals(buscados.size(), encontrados.size());
+       assertEquals(buscados.size(), encontrados.size());
 
         //fail("Esto no funciona");
 
 
-    }
+    }*/
 
 
  */

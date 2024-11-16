@@ -8,6 +8,7 @@ import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TabChangeEvent;
 
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
@@ -203,5 +204,12 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
 
     public FrmSucursal getFrmSucursal() {
         return frmSucursal;
+    }
+
+    public void onSelect(SelectEvent<?> event) {
+        System.out.println("Leggoo hasta aqu");
+
+
+
     }
 }

@@ -1,5 +1,7 @@
 package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -13,6 +15,7 @@ import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.Sala;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.SalaCaracteristica;
 
 
+import javax.sql.RowSetEvent;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,14 +38,6 @@ public class FrmAsiento extends AbstractFormulario<Asiento> implements Serializa
 
 
 
-
-    public void cambiarTab(TabChangeEvent tce){
-        if(tce.getTab().getTitle().equals("Tipos")){
-            if(this.registro!=null && this.frmAsientoCaracteristica!=null){
-                this.frmAsientoCaracteristica.setIdAsiento(this.registro.getIdAsiento());
-            }
-        }
-    }
 
     @Override
     protected Object getId(Asiento Object) {
@@ -110,5 +105,9 @@ public class FrmAsiento extends AbstractFormulario<Asiento> implements Serializa
 
     public FrmAsientoCaracteristica getFrmAsientoCaracteristica() {
         return frmAsientoCaracteristica;
+    }
+
+    public void setFrmAsientoCaracteristica(FrmAsientoCaracteristica frmAsientoCaracteristica) {
+        this.frmAsientoCaracteristica = frmAsientoCaracteristica;
     }
 }

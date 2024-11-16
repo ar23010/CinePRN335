@@ -65,7 +65,7 @@
                                         <p:outputLabel value="Nombre" for="txtNombre"/>
                                         <p:inputText id="txtNombre" value="#{frmSala.registro.nombre}" size="70"/>
 
-                                        <p:outputLabel value="Sucursal" for="listaSucursal"/><!--Areglar esto-->
+                                        <p:outputLabel value="Sucursal" for="listaSucursal"/>
                                         <h:selectOneMenu id="listaSucursal" value="#{frmSala.idSucursalSeleccionado}">
                                             <f:selectItems value="#{frmSala.sucursalList}" var="tp"
                                                            itemLabel="#{tp.nombre}" itemValue="#{tp.idSucursal}"/>
@@ -179,7 +179,7 @@
                                         <p:ajax event="rowSelect"
                                                 update=":tabDetalle:pnlDetalleA :tabDetalle:pnlTablaA :tabDetalle:pnlListaAC :tabDetalle:pnlDetalleAC :tabDetalle:pnlSpplitter"
                                                 process="@this"
-                                                listener="#{frmSala.frmAsiento.cambioSeleccion}"/>
+                                                />
 
 
                                         <p:column headerText="ID">
@@ -233,32 +233,28 @@
                                 </h:panelGrid>
                             </h:panelGroup>
 
-                            <h:panelGrid columns="3" id="pnlSpplitter">
+                            <h:panelGrid  id="pnlSpplitter">
                                 <h:panelGroup rendered="#{frmSala.frmAsiento.estado=='MODIFICAR'}">
                                     <h2>Características de Asientos</h2>
 
                                     <p:splitter style="height: 300px" styleClass="mb-5" widgetVar="splitter">
                                         <p:splitterPanel styleClass="flex align-items-center justify-content-center">
                                             <h:panelGroup id="pnlListaAC">
+                                                <h:panelGrid>
                                                 <h:form id="frmListAC"
                                                         rendered="#{frmSala.frmAsiento.estado=='MODIFICAR'}">
 
 
-                                                    <h:selectOneListbox
-                                                            value="#{frmSala.frmAsiento.frmAsientoCaracteristica.idTipoAsientoSeleccionado}"
-                                                    >
+                                                    <p:selectOneListbox id="selectBox"
+                                                            value="#{frmSala.frmAsiento.frmAsientoCaracteristica.asientoCaracteristicaSeleccionado}"  >
                                                         <f:selectItems
-                                                                value="#{frmSala.frmAsiento.frmAsientoCaracteristica.acList}"
+                                                                value="#{frmSala.frmAsiento.frmAsientoCaracteristica.asientoCaracteristicasList}"
                                                                 var="ac"
                                                                 itemLabel="#{ac.idTipoAsiento.nombre}: #{ac.valor}"
-                                                                itemValue="#{ac.idTipoAsiento.idTipoAsiento}"
-                                                        />
+                                                                itemValue="#{ac.idAsientoCaracteristica}"/>
 
-                                                        <p:ajax event="change"
-                                                                listener="#{frmSala.frmAsiento.frmAsientoCaracteristica.idTipoAsientoSeleccionado}"
-                                                                update=":tabDetalle:frmListAC:pnlBotonesTop :tabDetalle:pnlDetalleAC"
-                                                                process="@this"/>
-                                                    </h:selectOneListbox>
+
+                                                    </p:selectOneListbox>
 
                                                     <h:panelGrid id="pnlBotonesTop">
                                                         <crud:botonesTop
@@ -266,6 +262,7 @@
                                                                 actualizar=":tabDetalle:frmListAC:pnlBotonesTop :tabDetalle:pnlDetalleAC :tabDetalle:frmListAC"/>
                                                     </h:panelGrid>
                                                 </h:form>
+                                                </h:panelGrid>
                                             </h:panelGroup>
                                         </p:splitterPanel>
                                         <p:splitterPanel styleClass="flex align-items-center justify-content-center">
@@ -275,7 +272,7 @@
                                                          sticky="true"/>
 
                                                 <h:panelGrid
-                                                        rendered="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado!='NINGUNO'}">
+                                                        rendered="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado=='CREAR'}">
                                                     <h:form id="frmDetalleAC">
                                                         <h:panelGrid>
                                                             <h:panelGrid columns="2">
@@ -305,6 +302,35 @@
                                                                              validator="#{frmSala.frmAsiento.frmAsientoCaracteristica.validarValor}"
                                                                 />
                                                                 <p:tooltip for="txtValorAC" id="tooltipValorAC"
+                                                                           value="#{frmSala.tooltip}"/>
+                                                            </h:panelGrid>
+                                                            <crud:botonesBottom
+                                                                    frm="#{frmSala.frmAsiento.frmAsientoCaracteristica}"
+                                                                    actualizar=":tabDetalle:pnlListaAC :tabDetalle:pnlDetalleAC :tabDetalle:frmListAC"/>
+
+                                                        </h:panelGrid>
+                                                    </h:form>
+
+                                                </h:panelGrid>
+                                                <h:panelGrid id="pnlDetalleACModificar"
+                                                        rendered="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado=='MODIFICAR'}">
+                                                    <h:form id="frmDetalleACModificar">
+                                                        <h:panelGrid>
+                                                            <h:panelGrid columns="2">
+
+
+
+                                                                <p:outputLabel value="Tipo de Asiento "/>
+                                                                <h:outputText
+                                                                        value="#{frmSala.frmAsiento.frmAsientoCaracteristica.registro.idTipoAsiento.nombre}"/>
+
+
+                                                                <p:outputLabel value="Valor" for="txtValorACModificable"/>
+                                                                <p:inputText size="30" id="txtValorACModificable"
+                                                                             value="#{frmSala.frmAsiento.frmAsientoCaracteristica.registro.valor}"
+                                                                             validator="#{frmSala.frmAsiento.frmAsientoCaracteristica.validarValor}"
+                                                                />
+                                                                <p:tooltip for="txtValorAC" id="tooltipValorACModificable"
                                                                            value="#{frmSala.tooltip}"/>
                                                             </h:panelGrid>
                                                             <crud:botonesBottom

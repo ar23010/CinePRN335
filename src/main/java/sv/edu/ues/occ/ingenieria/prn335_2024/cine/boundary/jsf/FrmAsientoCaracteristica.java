@@ -7,8 +7,11 @@ import jakarta.faces.component.UIComponent;
 import jakarta.faces.component.UIInput;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.AjaxBehaviorEvent;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AsientoCaracteristicaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.TipoAsientoBean;
@@ -22,9 +25,12 @@ import java.util.regex.Pattern;
 
 
 @Named
-@Dependent
+@ViewScoped
 public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracteristica> {
 
+
+  @Inject
+  FrmAsiento frmAsiento;
 
     @Inject
     AsientoCaracteristicaBean acBean;
@@ -35,9 +41,13 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
     @Inject
     TipoAsientoBean taBean;
 
+    List<AsientoCaracteristica>asientoCaracteristicasList;
+
     List<TipoAsiento> tipoAsientoList;
 
     Long idAsiento;
+
+
 
 
     @PostConstruct
@@ -46,6 +56,7 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
         super.inicializar();
         try{
             this.tipoAsientoList = taBean.findRange(0, Integer.MAX_VALUE);
+            System.out.println("Si llego el asiento? " + idAsiento);
         }catch (Exception e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
@@ -55,6 +66,7 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
     @Override
     public List<AsientoCaracteristica> cargarDatos(int firstResult, int maxResults){
         try{
+           this.idAsiento=this.frmAsiento.getRegistro().getIdAsiento();
             if(this.idAsiento != null && acBean!=null){
                 return acBean.findByIdAsiento(this.idAsiento,firstResult,maxResults);
             }
@@ -77,8 +89,6 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
 
         return 0;
     }
-
-
 
 
     @Override
@@ -154,6 +164,7 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
     }
 
     public Integer getIdTipoAsientoSeleccionado() {
+        System.out.println("WAZA");
         if(this.registro!=null && this.registro.getIdTipoAsiento()!=null){
             return this.registro.getIdTipoAsiento().getIdTipoAsiento();
         }
@@ -183,5 +194,53 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
         input.setValid(false);
     }
 
+    public List<AsientoCaracteristica> getAsientoCaracteristicasList() {
+        asientoCaracteristicasList=acBean.findByIdAsiento(this.idAsiento, 0, Integer.MAX_VALUE);
+        return asientoCaracteristicasList;
+    }
+
+    public void setAsientoCaracteristicasList(List<AsientoCaracteristica> asientoCaracteristicasList) {
+        this.asientoCaracteristicasList = asientoCaracteristicasList;
+    }
+
+
+
+    public long getAsientoCaracteristicaSeleccionado() {
+       if(this.registro!=null && this.registro.getIdAsientoCaracteristica()!=null){
+          System.out.println("Registro: " + registro.getIdAsientoCaracteristica());
+            return this.registro.getIdAsientoCaracteristica();
+
+        }
+        return 0;
+    }
+
+    public void setAsientoCaracteristicaSeleccionado(final long idAsientoCaracteristica) {
+        System.out.println("Registro: " + registro.getIdAsientoCaracteristica());
+        setEstado(ESTADO_CRUD.MODIFICAR);
+        if( this.asientoCaracteristicasList!=null && !this.asientoCaracteristicasList.isEmpty()){
+            setRegistro(this.asientoCaracteristicasList.stream().filter(r->r.getIdTipoAsiento().equals(idAsientoCaracteristica)).findFirst().orElse(null));
+
+        }
+    }
+
+    public void asientoSeleccionado(SelectEvent<?> event){
+        Asiento asientoSelect=(Asiento) event.getObject();
+        System.out.printf("este es el asiento" + asientoSelect.getIdAsiento());
+        if(asientoSelect!=null && asientoSelect.getIdAsiento()!=null){
+           this.idAsiento=asientoSelect.getIdAsiento();
+        }
+    }
+
+
+    public void onSelect(SelectEvent<?> event) {
+        setEstado(ESTADO_CRUD.MODIFICAR);
+        System.out.println("Estado" + getEstado());
+
+    }
+
+    public void onUnselect(UnselectEvent<String> event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject()));
+    }
 }
 

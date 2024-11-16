@@ -150,6 +150,7 @@ public class FrmPeliculaCaracteristica extends AbstractFormulario<PeliculaCaract
     }
 
     public Integer getIdTipoPeliculaSeleccionado() {
+
         if(this.registro!=null && this.registro.getIdTipoPelicula()!=null){
             return this.registro.getIdTipoPelicula().getIdTipoPelicula();
         }

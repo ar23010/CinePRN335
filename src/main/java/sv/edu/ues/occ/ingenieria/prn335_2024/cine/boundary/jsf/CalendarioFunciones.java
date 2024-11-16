@@ -69,7 +69,7 @@ public class CalendarioFunciones implements Serializable {
     }
 
     public void obtenerFechaFin(){
-        List<Pelicula> peliculas = frmProgramacion.frmPelicula.cargarDatos(0, 100000);
+        List<Pelicula> peliculas = frmProgramacion.frmPelicula.cargarDatos(0, Integer.MAX_VALUE);
         for(Pelicula p: peliculas){
             if(p.getNombre().equals(nombrePelicula)){
                 pelicula=p;
@@ -94,7 +94,7 @@ public class CalendarioFunciones implements Serializable {
             programacion.setHasta(event.getEndDate().atOffset(ZoneOffset.ofHours(-6)));
             if(programacion.getDesde().isBefore(programacion.getHasta())) {
                 frmProgramacion.prBean.create(programacion);
-                agregarProgramacion(frmProgramacion.cargarDatos(0, 100), frmSala.getRegistro().getIdSala());
+                agregarProgramacion(frmProgramacion.cargarDatos(0, Integer.MAX_VALUE), frmSala.getRegistro().getIdSala());
             }else{
                 mensajeAdvertencia("La fecha Fin no puede ser menor a la fecha de Inicio");
             }
@@ -116,7 +116,7 @@ public class CalendarioFunciones implements Serializable {
                 if(programacion.getDesde().isBefore(programacion.getHasta())) {
                     frmProgramacion.prBean.update(programacion);
 
-                    agregarProgramacion(frmProgramacion.cargarDatos(0, 100), frmSala.getRegistro().getIdSala());
+                    agregarProgramacion(frmProgramacion.cargarDatos(0, Integer.MAX_VALUE), frmSala.getRegistro().getIdSala());
                 }else{
                     mensajeAdvertencia("La fecha Fin no puede ser menor a la fecha de Inicio");
                 }
@@ -132,7 +132,7 @@ public class CalendarioFunciones implements Serializable {
                 if(event!=null && event.getId()!=null ){
                     programacion=frmProgramacion.prBean.findById(Long.parseLong(event.getId()));
                     frmProgramacion.prBean.delete(programacion);
-                    agregarProgramacion(frmProgramacion.cargarDatos(0,100), frmSala.getRegistro().getIdSala());
+                    agregarProgramacion(frmProgramacion.cargarDatos(0,Integer.MAX_VALUE), frmSala.getRegistro().getIdSala());
 
                 }
             } catch (Exception e) {
@@ -153,7 +153,7 @@ public class CalendarioFunciones implements Serializable {
     public List<String> completeText(String query) {
         String queryLowerCase = query.toLowerCase();
         List<String> peliculaList = new ArrayList<>();
-        List<Pelicula> pelicula = frmProgramacion.frmPelicula.cargarDatos(0, 100000);
+        List<Pelicula> pelicula = frmProgramacion.frmPelicula.cargarDatos(0, Integer.MAX_VALUE);
         for (Pelicula pelicula1 : pelicula) {
             peliculaList.add(pelicula1.getNombre());
         }
