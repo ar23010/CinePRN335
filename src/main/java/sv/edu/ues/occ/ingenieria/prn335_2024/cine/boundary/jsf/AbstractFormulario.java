@@ -24,7 +24,6 @@ public abstract class AbstractFormulario<T> implements Serializable {
     protected abstract T createNewRegistro();
     protected LazyDataModel<T> modelo;
 
-
     public abstract String buscarIdPorRegistro(T entity);
 
     protected abstract FacesContext getContext();
@@ -207,26 +206,21 @@ public abstract class AbstractFormulario<T> implements Serializable {
         return registro;
     }
 
-
     public void setRegistro(T registro) {
         this.registro = registro;
     }
-
 
     public ESTADO_CRUD getEstado() {
         return estado;
     }
 
-
     public void setEstado(ESTADO_CRUD estado) {
         this.estado = estado;
     }
 
-
     public LazyDataModel<T> getModelo() {
         return modelo;
     }
-
 
     public void setModelo(LazyDataModel<T> modelo) {
         this.modelo = modelo;

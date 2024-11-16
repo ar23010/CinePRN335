@@ -17,7 +17,6 @@ import java.util.Map;
 @SessionScoped
 public class SesionUsuario implements Serializable {
 
-
         @Inject
         FacesContext facesContext;
         Map<String, Locale> idiomas = new HashMap<>();

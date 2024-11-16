@@ -28,7 +28,7 @@ public class ProgramacionConverter implements Converter<Programacion> {
                    Long id = Long.parseLong(value);
                    return pBean.getProgramacionesAsMap().get(id);
                } catch (NumberFormatException e) {
-                   throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "ID de programación no válido."));
+                   throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al conversion", "Error en el ID de programacion"));
                }
            } else {
                return null;

@@ -23,9 +23,7 @@
                             <p:panel header="Seleccionar Fecha">
                                 <h:panelGrid columns="2" columnClasses="label, value">
                                     <h:outputText value="Tipo Reserva"/>
-
-
-                                    <h:selectOneListbox
+                                    <p:selectOneListbox
                                             value="#{frmReserva.idTipoReservaSeleccionado}" required="true"
                                     >
                                         <f:selectItems
@@ -34,11 +32,9 @@
                                                 itemLabel="#{r.nombre}"
                                                 itemValue="#{r.idTipoReserva}"
                                         />
-                                    </h:selectOneListbox>
-
+                                    </p:selectOneListbox>
                                     <h:outputText value="Seleccione un día"/>
                                     <p:datePicker id="time" value="#{frmReserva.fechaSeleccionada}" required="true"/>
-
                                 </h:panelGrid>
                             </p:panel>
                         </p:tab>
@@ -86,10 +82,6 @@
 
                         </p:tab>
 
-
-
-
-
                         <p:tab id="asientos" title="Asientos">
                             <p:panel id="pnlDetalles" header="Reserva de Asientos">
                                 <h:panelGrid columns="3" columnClasses="label, value">
@@ -98,7 +90,7 @@
                                         <br/>
                                         <h:outputText value="disponibles"/>
                                         <br/>
-                                        <h:selectOneListbox
+                                        <p:selectOneListbox
                                                 value="#{frmReserva.seleccionadoReserva}"
                                                 size="10">
                                             <f:selectItems value="#{frmReserva.asientosDisponiblesList}"
@@ -106,35 +98,43 @@
                                                            itemLabel="#{asiento.nombre}"
                                                            itemValue="#{asiento}"/>
                                             <p:ajax process="change" update="botones"/>
-                                        </h:selectOneListbox>
+                                        </p:selectOneListbox>
                                     </h:panelGroup>
                                     <h:panelGrid style="text-align: center;" id="botones">
-                                        <p:commandButton id="Reservar" icon="pi pi-arrow-right" value="Reserva"
+
+                                        <p:commandButton id="Reservar" icon="pi pi-arrow-right" value="Reservar"
                                                          process="@this" ajax="true"
-                                                         disabled="#{frmReserva.seleccionadoReserva==null or !frmReserva.seleccionadoReserva.activo}"
+
                                                          update="lstAsientosDisponibles lstAsientosReservados lstAsientosOcupados growl @this"
                                                          actionListener="#{frmReserva.btnReservarHandler}"/>
 
                                         <p:commandButton id="Eliminar" icon="pi pi-arrow-left" value="#{abstractform['abstractform.Delete']}"
                                                          process="@this" ajax="true"
-                                                         disabled="#{frmReserva.seleccionadoOcupado==null}"
+                                                         disabled="false"
                                                          update="lstAsientosDisponibles lstAsientosReservados lstAsientosOcupados growl @this"
                                                          actionListener="#{frmReserva.btnEliminarAsientoReserva}"/>
+
                                     </h:panelGrid>
                                     <h:panelGroup id="lstAsientosOcupados">
                                         <h:outputText value="Asientos"/>
                                         <br/>
                                         <h:outputText value="Ocupados"/>
                                         <br/>
-                                        <h:selectOneListbox
+                                        <p:selectOneListbox
                                                 value="#{frmReserva.seleccionadoOcupado}"
-                                                size="10">
+                                                size="10"
+                                                style="width: 150px;"
+
+                                        >
                                             <f:selectItems value="#{frmReserva.asientoOcupadosList}"
                                                            var="asiento"
                                                            itemLabel="#{asiento.nombre}"
-                                                           itemValue="#{asiento}"/>
-                                            <p:ajax process="change" update="botones"/>
-                                        </h:selectOneListbox>
+                                                           itemValue="#{asiento}"
+                                                           />
+
+                                            <p:ajax process="change" update="botones"  />
+                                        </p:selectOneListbox>
+
                                     </h:panelGroup>
                                 </h:panelGrid>
                             </p:panel>
@@ -176,9 +176,9 @@
                                         <br/>
                                     </h:panelGrid>
 
-                                    <h:commandButton value="Confirmar" action="#{frmReserva.btnConfirmarReserva}" >
+                                    <p:commandButton value="Confirmar" action="#{frmReserva.btnConfirmarReserva}" >
                                         <f:ajax event="click" update="growl"/>
-                                    </h:commandButton>
+                                    </p:commandButton>
                                 </p:panel>
                             </h:form>
                         </p:tab>

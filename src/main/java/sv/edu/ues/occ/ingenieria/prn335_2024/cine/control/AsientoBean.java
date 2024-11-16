@@ -27,7 +27,6 @@ public class AsientoBean extends AbstractDataPersistence<Asiento> implements Ser
     public EntityManager getEntityManager() { return em; }
 
 
-
     public List<Asiento> findByIdSala(final Integer idSala, int first, int max) {
         try{
             TypedQuery<Asiento> q = em.createNamedQuery("Asiento.findByIdSala", Asiento.class);

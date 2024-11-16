@@ -31,7 +31,6 @@ public class FrmSucursal extends AbstractFormulario<Sucursal> implements Seriali
 
     List<Sucursal> sucursalList;
 
-    Integer idSucursal;
 
     @PostConstruct
     @Override

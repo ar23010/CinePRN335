@@ -56,7 +56,6 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
         super.inicializar();
         try{
             this.tipoAsientoList = taBean.findRange(0, Integer.MAX_VALUE);
-            System.out.println("Si llego el asiento? " + idAsiento);
         }catch (Exception e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             enviarMensaje("Error al cargar los tipos", "Error al cargar" , FacesMessage.SEVERITY_ERROR);
@@ -164,7 +163,6 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
     }
 
     public Integer getIdTipoAsientoSeleccionado() {
-        System.out.println("WAZA");
         if(this.registro!=null && this.registro.getIdTipoAsiento()!=null){
             return this.registro.getIdTipoAsiento().getIdTipoAsiento();
         }
@@ -207,7 +205,6 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
 
     public long getAsientoCaracteristicaSeleccionado() {
        if(this.registro!=null && this.registro.getIdAsientoCaracteristica()!=null){
-          System.out.println("Registro: " + registro.getIdAsientoCaracteristica());
             return this.registro.getIdAsientoCaracteristica();
 
         }
@@ -215,7 +212,6 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
     }
 
     public void setAsientoCaracteristicaSeleccionado(final long idAsientoCaracteristica) {
-        System.out.println("Registro: " + registro.getIdAsientoCaracteristica());
         setEstado(ESTADO_CRUD.MODIFICAR);
         if( this.asientoCaracteristicasList!=null && !this.asientoCaracteristicasList.isEmpty()){
             setRegistro(this.asientoCaracteristicasList.stream().filter(r->r.getIdTipoAsiento().equals(idAsientoCaracteristica)).findFirst().orElse(null));
@@ -223,24 +219,9 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
         }
     }
 
-    public void asientoSeleccionado(SelectEvent<?> event){
-        Asiento asientoSelect=(Asiento) event.getObject();
-        System.out.printf("este es el asiento" + asientoSelect.getIdAsiento());
-        if(asientoSelect!=null && asientoSelect.getIdAsiento()!=null){
-           this.idAsiento=asientoSelect.getIdAsiento();
-        }
-    }
+   
 
 
-    public void onSelect(SelectEvent<?> event) {
-        setEstado(ESTADO_CRUD.MODIFICAR);
-        System.out.println("Estado" + getEstado());
 
-    }
-
-    public void onUnselect(UnselectEvent<String> event) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject()));
-    }
 }
 

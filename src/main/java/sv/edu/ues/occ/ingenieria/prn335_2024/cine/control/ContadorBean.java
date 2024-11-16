@@ -38,13 +38,11 @@ public class ContadorBean implements Serializable {
         JsonObjectBuilder cf = Json.createObjectBuilder();
         try{
             Thread.sleep(2000);
-            System.out.println("Desperto");
             cf.add("tipo_respuesta", TIPO_RESPUESTAS.EXITO.toString());
             cf.add("tipo_mensaje", TIPO_MENSAJE.CUENTA_RESPONSE.toString());
             cf.add("uuid", identificador.toString());
             cf.add("cuenta", ++actual);
             callBack.accept(cf.build());
-            System.out.println("Envio");
         }catch (Exception e){
             Logger.getLogger(getClass().getName()).log(Level.SEVERE,e.getMessage(),e);
             cf.add("tipo_respuesta", TIPO_RESPUESTAS.ERROR.toString());

@@ -89,8 +89,6 @@ public abstract class AbstractDataPersistence<T> {
         } catch(Exception e){
             throw new IllegalStateException("Error al aaceder al repositorio", e);
         }
-
-
     }
 
 
@@ -132,12 +130,6 @@ public abstract class AbstractDataPersistence<T> {
         }
 
     }
-
-
-    public String imprimirCarnet() {
-        return "AR23010";
-    }
-
 
 }
 

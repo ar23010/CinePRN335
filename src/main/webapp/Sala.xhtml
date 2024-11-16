@@ -179,7 +179,7 @@
                                         <p:ajax event="rowSelect"
                                                 update=":tabDetalle:pnlDetalleA :tabDetalle:pnlTablaA :tabDetalle:pnlListaAC :tabDetalle:pnlDetalleAC :tabDetalle:pnlSpplitter"
                                                 process="@this"
-                                                />
+                                        />
 
 
                                         <p:column headerText="ID">
@@ -218,7 +218,7 @@
                                                 <p:inputText size="70" id="txtNombreA"
                                                              value="#{frmSala.frmAsiento.registro.nombre}"
                                                              required="true"
-                                                             requiredMessage="El campo nombre debe ser llenado"/>
+                                                             requiredMessage="El campo no esta lleno"/>
 
                                                 <p:outputLabel for="chkActivoA" value="Activo"/>
                                                 <h:selectBooleanCheckbox id="chkActivoA"
@@ -241,27 +241,27 @@
                                         <p:splitterPanel styleClass="flex align-items-center justify-content-center">
                                             <h:panelGroup id="pnlListaAC">
                                                 <h:panelGrid>
-                                                <h:form id="frmListAC"
-                                                        rendered="#{frmSala.frmAsiento.estado=='MODIFICAR'}">
+                                                    <h:form id="frmListAC"
+                                                            rendered="#{frmSala.frmAsiento.estado=='MODIFICAR'}">
 
 
-                                                    <p:selectOneListbox id="selectBox"
-                                                            value="#{frmSala.frmAsiento.frmAsientoCaracteristica.asientoCaracteristicaSeleccionado}"  >
-                                                        <f:selectItems
-                                                                value="#{frmSala.frmAsiento.frmAsientoCaracteristica.asientoCaracteristicasList}"
-                                                                var="ac"
-                                                                itemLabel="#{ac.idTipoAsiento.nombre}: #{ac.valor}"
-                                                                itemValue="#{ac.idAsientoCaracteristica}"/>
+                                                        <p:selectOneListbox id="selectBox"
+                                                                            value="#{frmSala.frmAsiento.frmAsientoCaracteristica.asientoCaracteristicaSeleccionado}"  >
+                                                            <f:selectItems
+                                                                    value="#{frmSala.frmAsiento.frmAsientoCaracteristica.asientoCaracteristicasList}"
+                                                                    var="ac"
+                                                                    itemLabel="#{ac.idTipoAsiento.nombre}: #{ac.valor}"
+                                                                    itemValue="#{ac.idAsientoCaracteristica}"/>
 
 
-                                                    </p:selectOneListbox>
+                                                        </p:selectOneListbox>
 
-                                                    <h:panelGrid id="pnlBotonesTop">
-                                                        <crud:botonesTop
-                                                                frm="#{frmSala.frmAsiento.frmAsientoCaracteristica}"
-                                                                actualizar=":tabDetalle:frmListAC:pnlBotonesTop :tabDetalle:pnlDetalleAC :tabDetalle:frmListAC"/>
-                                                    </h:panelGrid>
-                                                </h:form>
+                                                        <h:panelGrid id="pnlBotonesTop">
+                                                            <crud:botonesTop
+                                                                    frm="#{frmSala.frmAsiento.frmAsientoCaracteristica}"
+                                                                    actualizar=":tabDetalle:frmListAC:pnlBotonesTop :tabDetalle:pnlDetalleAC :tabDetalle:frmListAC"/>
+                                                        </h:panelGrid>
+                                                    </h:form>
                                                 </h:panelGrid>
                                             </h:panelGroup>
                                         </p:splitterPanel>
@@ -313,7 +313,7 @@
 
                                                 </h:panelGrid>
                                                 <h:panelGrid id="pnlDetalleACModificar"
-                                                        rendered="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado=='MODIFICAR'}">
+                                                             rendered="#{frmSala.frmAsiento.frmAsientoCaracteristica.estado=='MODIFICAR'}">
                                                     <h:form id="frmDetalleACModificar">
                                                         <h:panelGrid>
                                                             <h:panelGrid columns="2">

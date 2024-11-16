@@ -54,7 +54,7 @@ public class ProgramacionBean extends AbstractDataPersistence<Programacion> impl
     }
 
     public Map<Long, Programacion> getProgramacionesAsMap() {
-        List<Programacion> programaciones = findAll(0,1000); // Obtén la lista de programaciones
+        List<Programacion> programaciones = findAll(0,1000);
         Map<Long, Programacion> programacionesMap = new HashMap<>();
 
         for (Programacion programacion : programaciones) {

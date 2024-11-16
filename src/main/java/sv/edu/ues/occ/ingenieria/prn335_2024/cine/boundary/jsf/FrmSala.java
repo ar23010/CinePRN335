@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 @ViewScoped
 public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
 
-
     @Inject
     SalaBean salaBean;
 
@@ -115,9 +114,6 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
             pc.setIdSucursal(new Sucursal(idSucursal));
         }
         return pc;
-
-
-
     }
 
     @Override
@@ -197,7 +193,7 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
         if (tipoSeleccionado != null) {
             this.tooltip = tipoSeleccionado.getExpresionRegular();
         } else {
-            this.tooltip = "No hay expresión regular disponible";
+            this.tooltip = "No hay expresión regular";
         }
     }
 
@@ -207,9 +203,6 @@ public class FrmSala extends AbstractFormulario<Sala> implements Serializable {
     }
 
     public void onSelect(SelectEvent<?> event) {
-        System.out.println("Leggoo hasta aqu");
-
-
 
     }
 }

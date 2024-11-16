@@ -39,8 +39,14 @@ public class Programacion {
     @Column(name = "comentarios")
     private String comentarios;
 
-    public Programacion(Long idProgramacion) {
+    public Programacion(Long idProgramacion, Sala idSala, Pelicula idPelicula, List<Reserva> reservaList, OffsetDateTime desde, OffsetDateTime hasta, String comentarios) {
         this.idProgramacion = idProgramacion;
+        this.idSala = idSala;
+        this.idPelicula = idPelicula;
+        ReservaList = reservaList;
+        this.desde = desde;
+        this.hasta = hasta;
+        this.comentarios = comentarios;
     }
 
     public Programacion() {

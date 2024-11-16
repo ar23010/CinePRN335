@@ -47,41 +47,31 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
     @Inject
     ReservaDetalleBean rdBean;
 
-
     Asiento seleccionadoReserva;
     Asiento seleccionadoOcupado;
 
-
     Integer IdTipoReservaSeleccionado;
 
-
     private List<TipoReserva> tipoReservaList;
-
 
     List<Asiento> asientosDisponiblesList = new ArrayList<>();
     List<Asiento> asientoOcupadosList = new ArrayList<>();
 
-
     private Date fechaSeleccionada;
 
-
     Programacion programacionSeleccionada;
+
 
     @PostConstruct
     public void inicializar() {
         super.inicializar();
-
         this.tipoReservaList = trBean.findRange(0, Integer.MAX_VALUE);
     }
 
-
     public String formatearLabel(Programacion programacion) {
         if (programacion != null) {
-
             String formatearDesde = formatearHora(programacion.getDesde());
             String formatearHasta = formatearHora(programacion.getHasta());
-
-
             return String.format("%s, %s - %s (%s-%s)",
                     programacion.getIdPelicula().getNombre(),
                     programacion.getIdSala().getNombre(),
@@ -93,28 +83,17 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
         return "";
     }
 
-
     public List<Programacion> completarTexto(String query) {
-
         String queryLowerCase = query.toLowerCase();
         try {
-
             LocalDate fechaSeleccionadaLocalDate = fechaSeleccionada.toInstant()
                     .atZone(ZoneId.of("UTC-6"))
                     .toLocalDate();
-
-
             LocalDateTime DiaInicio = fechaSeleccionadaLocalDate.atStartOfDay();
-
-
             OffsetDateTime desde = DiaInicio.atOffset(ZoneOffset.ofHours(-6));
-
             LocalDateTime DiaFin = fechaSeleccionadaLocalDate.atTime(23, 59, 59);
             OffsetDateTime hasta = DiaFin.atOffset(ZoneOffset.ofHours(-6));
-
-
             List<Programacion> programaciones = prBean.findByDate(desde, hasta);
-
             return programaciones.stream()
                     .filter(p -> p.getIdPelicula().getNombre().toLowerCase().startsWith(queryLowerCase)
                             || p.getIdSala().getNombre().toLowerCase().contains(queryLowerCase)
@@ -122,13 +101,11 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
                             || p.getHasta().toString().toLowerCase().contains(queryLowerCase)
                     )
                     .collect(Collectors.toList());
-
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error en cargar las programaciones", e);
         }
         return List.of();
     }
-
 
     public String formatearHora(OffsetDateTime dateTime) {
         if (dateTime != null) {
@@ -138,53 +115,37 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
         return "";
     }
 
-
-
     public String onFlowProcess(FlowEvent event) {
         String currentStep = event.getOldStep();
         String nextStep = event.getNewStep();
-
-        //SI EL SIGUIENTE TAB ES ASIENTOS
         if (nextStep.equals("asientos")) {
             if (this.programacionSeleccionada != null) {
-                //NO SE PODRA CONTINUAR SI LA PROGRAMACIÓN SELECCIONADA
                 OffsetDateTime fechaHoraActual = OffsetDateTime.now(ZoneOffset.of("-06:00"));
                 if (programacionSeleccionada.getDesde().isBefore(fechaHoraActual)) {
                     return currentStep;
                 } else if (asientosDisponiblesList.isEmpty() && asientoOcupadosList.isEmpty()) {
-                    //SI LA LISTA DE AMBOS ASIENTO ESTA VACIA QUE CARGUEN LOS ASIENTOS CON EL ID DE LA PROGRAMACION QUE HEMOS SELECCIONADO
                     cargarAsientos(this.programacionSeleccionada.getIdProgramacion());
                 }
             }
         }
         if (nextStep.equals("fecha")) {
-            //SI REGRESAMOS AL TAB DE FECHAS, TODAS LAS COSAS QUE SE HA SELECCIONADO SE HACE NULL
             this.programacionSeleccionada = null;
             this.seleccionadoReserva = null;
             this.seleccionadoOcupado = null;
         }
         if (nextStep.equals("Confirmar")) {
-
-            //PRIMERO VERIFICO QUE HAYAN ASIENTOS OCUPADOS
             if (asientoOcupadosList.isEmpty()) {
-                //MANDO UN MENSAJE DICIENDO QUE NO SE PUDE AVANZAR SI NO HAY ASIENTOS OCUPADOS
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN,
                                 "Advertencia", "No puede avanzar porque hay asientos ocupados."));
-
-                // PERMANECEMOS EN EL ASIENTO ACTUAL
                 return currentStep;
             }
         }
         if (nextStep.equals("Funcion")) {
-            //REINICIAMOS LA LISTA DE ASIENTOS
             asientosDisponiblesList.clear();
             asientoOcupadosList.clear();
-
-            //Obtenemos la fecha actual
             OffsetDateTime fechaHoraActual = OffsetDateTime.now(ZoneOffset.of("-06:00"));
             Date fechaActual = Date.from(fechaHoraActual.toLocalDate().atStartOfDay(ZoneOffset.of("-06:00")).toInstant());
-            //Se verifica que la fecha seleccionada no sea previa a la fecha actual, de ser así, no se deja avanzar
             if (this.fechaSeleccionada.before(fechaActual)) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -192,7 +153,6 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
                 return currentStep;
             }
         }
-
         return nextStep;
     }
 
@@ -375,12 +335,6 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
         this.IdTipoReservaSeleccionado = idTipoReservaSeleccionado;
     }
 
-
-
-
-
-
-
     public List<Programacion> completeProgramacion(String query) {
         List<Programacion> allProgramaciones = getProgramacionList();
         List<Programacion> filteredProgramaciones = new ArrayList<>();
@@ -405,7 +359,6 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
             String sucursal= programacion.getIdSala().getIdSucursal().getNombre();
             OffsetDateTime desde = programacion.getDesde();
             OffsetDateTime hasta = programacion.getHasta();
-
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
             String formattedDesde = desde.format(timeFormatter);
             String formattedHasta = hasta.format(timeFormatter);

@@ -24,13 +24,11 @@ import java.util.stream.Collectors;
 @ViewScoped
 public class CalendarioFunciones implements Serializable {
 
-
     private  Programacion programacion;
     private  Pelicula pelicula;
     private String estado="NINGUNO";
     private ScheduleModel eventModel;
     private ScheduleEvent<?> event = new DefaultScheduleEvent();
-
 
     private String timeFormat;
     private String serverTimeZone = ZoneId.systemDefault().toString();
@@ -64,8 +62,6 @@ public class CalendarioFunciones implements Serializable {
     @PostConstruct
     public void init() {
         eventModel = new DefaultScheduleModel();
-
-
     }
 
     public void obtenerFechaFin(){
@@ -102,20 +98,16 @@ public class CalendarioFunciones implements Serializable {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
         }
-
-
     }
 
     public void modificarProgramacion() {
         try {
-
             if (event != null && event.getId() != null) {
                 programacion = frmProgramacion.prBean.findById(Long.parseLong(event.getId()));
                 programacion.setDesde(event.getStartDate().atOffset(ZoneOffset.ofHours(-6)));
                 programacion.setHasta(event.getEndDate().atOffset(ZoneOffset.ofHours(-6)));
                 if(programacion.getDesde().isBefore(programacion.getHasta())) {
                     frmProgramacion.prBean.update(programacion);
-
                     agregarProgramacion(frmProgramacion.cargarDatos(0, Integer.MAX_VALUE), frmSala.getRegistro().getIdSala());
                 }else{
                     mensajeAdvertencia("La fecha Fin no puede ser menor a la fecha de Inicio");
@@ -128,17 +120,14 @@ public class CalendarioFunciones implements Serializable {
 
     public void eliminarProgramacion(){
             try {
-
                 if(event!=null && event.getId()!=null ){
                     programacion=frmProgramacion.prBean.findById(Long.parseLong(event.getId()));
                     frmProgramacion.prBean.delete(programacion);
                     agregarProgramacion(frmProgramacion.cargarDatos(0,Integer.MAX_VALUE), frmSala.getRegistro().getIdSala());
-
                 }
             } catch (Exception e) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);
             }
-
     }
 
 
@@ -173,24 +162,19 @@ public class CalendarioFunciones implements Serializable {
                     .build();
             eventModel.addEvent(event);
         }
-
         }
         return eventModel;
     }
 
     public void mensajeAdvertencia(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Advertencia", mensaje);
-
         PrimeFaces.current().dialog().showMessageDynamic(message);
     }
-
 
     public ScheduleModel getEventModel() {
         agregarProgramacion(frmProgramacion.cargarDatos(0,100), frmSala.getRegistro().getIdSala());
         return eventModel;
     }
-
-
 
     public ScheduleEvent<?> getEvent() {
         return event;
@@ -200,14 +184,11 @@ public class CalendarioFunciones implements Serializable {
         this.event = event;
     }
 
-
-
     public void onEventSelect(SelectEvent<ScheduleEvent<?>> selectEvent) {
        setEstado("MODIFICAR");
         event = selectEvent.getObject();
 
     }
-
 
     public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
       setEstado("CREAR");
@@ -216,7 +197,6 @@ public class CalendarioFunciones implements Serializable {
                 .endDate(selectEvent.getObject().plusHours(0))
                 .build();
     }
-
 
 
     public String getView() {
