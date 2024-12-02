@@ -2,9 +2,11 @@ package sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.jsf;
 
 
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ActionEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import sv.edu.ues.occ.ingenieria.prn335_2024.cine.boundary.websocket.server.TipoSalaEndpoint;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.AbstractDataPersistence;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.control.TipoSalaBean;
 import sv.edu.ues.occ.ingenieria.prn335_2024.cine.entity.TipoSala;
@@ -14,6 +16,10 @@ import java.io.Serializable;
 @Named
 @ViewScoped
 public class FrmTipoSala extends AbstractFormulario<TipoSala> implements Serializable {
+
+
+    @Inject
+    TipoSalaEndpoint tipoSalaEndpoint;
 
    @Inject
    TipoSalaBean tsBean;
@@ -61,6 +67,11 @@ public class FrmTipoSala extends AbstractFormulario<TipoSala> implements Seriali
     @Override
     public String getTituloDePagina() {
         return "Tipo de Sala";
+    }
+
+
+    public void btnGuardarHandler(ActionEvent ae) {
+        //Aqui falta código y ver porque da error el override ...
     }
 
 

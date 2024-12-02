@@ -219,6 +219,13 @@ public class FrmAsientoCaracteristica extends AbstractFormulario<AsientoCaracter
         }
     }
 
+    public void onSelect(SelectEvent<?> event) {
+        Asiento asiento=(Asiento)event.getObject();
+        this.idAsiento=asiento.getIdAsiento();
+        System.out.println("llego asiento"+asiento.getIdAsiento());
+
+    }
+
    
 
 
