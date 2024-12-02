@@ -74,4 +74,18 @@ public class Asiento {
         this.activo = activo;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Asiento asiento = (Asiento) obj;
+        return idAsiento != null && idAsiento.equals(asiento.idAsiento);
+    }
+
+    @Override
+    public int hashCode() {
+        return idAsiento != null ? idAsiento.hashCode() : 0;
+    }
+
+
 }

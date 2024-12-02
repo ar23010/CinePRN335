@@ -51,4 +51,8 @@ public class AsientoBean extends AbstractDataPersistence<Asiento> implements Ser
         return List.of();
     }
 
+    public Asiento find(Long idAsiento) {
+        return em.find(Asiento.class, idAsiento);
+    }
+
 }

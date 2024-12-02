@@ -13,12 +13,13 @@
     </ui:define>
 
     <ui:define name="cuerpo">
-        <h:panelGrid >
+        <h:panelGrid>
             <h:panelGroup id="pnlTab">
                 <h:form>
-                    <p:messages id="messages" autoUpdate="true" />
-                    <p:growl id="growl" showDetail="true" />
-                    <p:wizard flowListener="#{frmReserva.onFlowProcess}" widgetVar="wiz"  showStepStatus="true" id="wizardDetalle">
+                    <p:messages id="messages" autoUpdate="true"/>
+                    <p:growl id="growl" showDetail="true"/>
+                    <p:wizard flowListener="#{frmReserva.onFlowProcess}" widgetVar="wiz" showStepStatus="true"
+                              id="wizardDetalle">
                         <p:tab id="fecha" title="Fecha">
                             <p:panel header="Seleccionar Fecha">
                                 <h:panelGrid columns="2" columnClasses="label, value">
@@ -80,7 +81,8 @@
                                 </p:panel>
                             </h:panelGrid>
 
-                        </p:tab>
+                        </p:tab>z
+
 
                         <p:tab id="asientos" title="Asientos">
                             <p:panel id="pnlDetalles" header="Reserva de Asientos">
@@ -108,7 +110,8 @@
                                                          update="lstAsientosDisponibles lstAsientosReservados lstAsientosOcupados growl @this"
                                                          actionListener="#{frmReserva.btnReservarHandler}"/>
 
-                                        <p:commandButton id="Eliminar" icon="pi pi-arrow-left" value="#{abstractform['abstractform.Delete']}"
+                                        <p:commandButton id="Eliminar" icon="pi pi-arrow-left"
+                                                         value="#{abstractform['abstractform.Delete']}"
                                                          process="@this" ajax="true"
                                                          disabled="false"
                                                          update="lstAsientosDisponibles lstAsientosReservados lstAsientosOcupados growl @this"
@@ -130,18 +133,15 @@
                                                            var="asiento"
                                                            itemLabel="#{asiento.nombre}"
                                                            itemValue="#{asiento}"
-                                                           />
+                                            />
 
-                                            <p:ajax process="change" update="botones"  />
+                                            <p:ajax process="change" update="botones"/>
                                         </p:selectOneListbox>
 
                                     </h:panelGroup>
                                 </h:panelGrid>
                             </p:panel>
                         </p:tab>
-
-
-
 
 
                         <p:tab id="Confirmar" title="Confirmar">
@@ -176,7 +176,7 @@
                                         <br/>
                                     </h:panelGrid>
 
-                                    <p:commandButton value="Confirmar" action="#{frmReserva.btnConfirmarReserva}" >
+                                    <p:commandButton value="Confirmar" action="#{frmReserva.btnConfirmarReserva}">
                                         <f:ajax event="click" update="growl"/>
                                     </p:commandButton>
                                 </p:panel>

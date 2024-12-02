@@ -168,23 +168,44 @@ public class FrmReserva extends AbstractFormulario<Reserva> implements Serializa
         }
     }
 
-
     public void btnReservarHandler(ActionEvent event) {
-        if (asientosDisponiblesList != null && !asientosDisponiblesList.isEmpty()) {
+        System.out.println("btnReservarHandler invocado");
+        if (seleccionadoReserva != null) {
+            System.out.println("Asiento seleccionado: " + seleccionadoReserva.getNombre());
             asientoOcupadosList.add(seleccionadoReserva);
             asientosDisponiblesList.remove(seleccionadoReserva);
             seleccionadoReserva = null;
+
+            FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("lstAsientosDisponibles");
+            FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("lstAsientosOcupados");
+        } else {
+            System.out.println("No hay asiento seleccionado");
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Debe seleccionar un asiento para reservar."));
         }
     }
+
+
+
 
 
     public void btnEliminarAsientoReserva(ActionEvent event) {
-        if (getAsientoOcupadosList() != null && !asientoOcupadosList.isEmpty()) {
+        if (seleccionadoOcupado != null) {
             asientosDisponiblesList.add(seleccionadoOcupado);
             asientoOcupadosList.remove(seleccionadoOcupado);
             seleccionadoOcupado = null;
+
+            // Actualizar la interfaz de usuario
+            FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("lstAsientosDisponibles");
+            FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("lstAsientosOcupados");
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Debe seleccionar un asiento para eliminar."));
         }
     }
+
+
+
 
     public void btnConfirmarReserva() {
         try {
